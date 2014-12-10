@@ -11,6 +11,15 @@
 
         <title>Blog Template for Bootstrap</title>
 
+        {% block tags %}{% endblock %}
+
+        <meta property="og:locale" content="{{ Locale }}"/>
+        <meta property="og:type" content="{{ Type }}"/>
+        <meta property="og:title" content="{{ Title }}"/>
+        <meta property="og:description" content="{{ Descripcion }}"/>
+        <meta property="og:url" content="{{ Url }}"/>
+        <meta property="og:image" content="{{ Image }}"/>
+
         <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
         <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet">
 
@@ -100,8 +109,6 @@
                     <a href="#">Back to top</a>
                   </p>
                 </footer>
-
-
                 <!-- Bootstrap core JavaScript
                 ================================================== -->
                 <!-- Placed at the end of the document so the pages load faster -->

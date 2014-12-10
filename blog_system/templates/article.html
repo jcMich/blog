@@ -1,10 +1,16 @@
-{% extends 'base.html' %}\
+{% extends 'base.html' %}
+{% load bootstrap %}
+{% block tags %}
+    {% for tag in blog.tags.all %}
+        <meta name="{{ blog.title }}" content="{{ tag }}"/>
+    {% endfor %}
+
+{% endblock %}
 {% block contenido %}
     <div class="col-sm-9">
         <div class="main-content">
             <article id="post-1" class="post post-content">
                 <h1 class="entry-title">{{ blog.title }}</h1>
-
                 <div class="utilities">
                     <div class="firma">
                         <span class="nombre">Dubalu Factura Redacción</span>
@@ -75,6 +81,20 @@
                 </div>
             </article>
         </div>
-
+        {% if blog.comentar %}
+                <div class="col-sm-9">
+                    {% for comentario in comentarios %}
+                        <div class="coment">
+                            {{ comentario.nombre }}:{{ comentario.cuerpo }}
+                        </div>
+                    {% endfor %}
+                    <hr/>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ comentariosForm|bootstrap }}
+                        <input type="submit" value="Enviar"/>
+                    </form>
+                </div>
+            {% endif %}
     </div>
-{% endblock %}
+    {% endblock %}

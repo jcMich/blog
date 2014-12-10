@@ -1,11 +1,4 @@
-from blog_system.settings import (
-    SITE_DESCRIPTION,
-    SITE_LOCALE,
-    SITE_TYPE,
-    SITE_TITLE,
-    SITE_URL,
-    SITE_IMAGE,
-)
+from blog_system import settings
 from blog.models import Categorias
 from blog_system.settings import TEMA
 
@@ -19,12 +12,12 @@ def tema():
 
 def blog_context_processor(request):
     context = {
-        "Locale": SITE_LOCALE,
-        "Type": SITE_TYPE,
-        "Title": SITE_TITLE,
-        "Descripcion": SITE_DESCRIPTION,
-        "Url": SITE_URL,
-        "Image": SITE_IMAGE,
+        "Locale": settings.SITE_LOCALE,
+        "Type": settings.SITE_TYPE,
+        "Title": settings.SITE_TITLE,
+        "Descripcion": settings.SITE_DESCRIPTION,
+        "Url": settings.SITE_URL,
+        "Image": settings.SITE_IMAGE,
         "categorias": Categorias.objects.all(),
         "base": tema()
     }
