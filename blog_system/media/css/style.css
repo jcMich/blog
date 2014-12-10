@@ -16,26 +16,38 @@
 }
 
 #modalform form {
-	margin: 20px;
+    margin: 20px;
 }
 
 /* Tag manager
 -------------------------------------*/
 
 ul.id_tags_list{
-	position: relative;
-	list-style-type: none;
-	margin-bottom: 2em;
-	padding-left: 5px;
+    position: relative;
+    list-style-type: none;
+    margin-bottom: 2em;
+    padding-left: 5px;
+}
+
+
+#id_imagen{
+   position: relative;
+   padding: 10px;
+   -webkit-border-radius: 5px;
+   -moz-border-radius: 5px;
+   border: 1px dashed #BBB;
+   text-align: center;
+   background-color: #DDD;
+   cursor:pointer;
 }
 
 li.isTag{
-	position: relative;
-	color: #fff;
-	float:left;
-	padding: 0px 2px 0px 2px; 
-	margin-right: 4px;
-	margin-bottom: 4px;
+    position: relative;
+    color: #fff;
+    float:left;
+    padding: 2px 10px;
+    margin-right: 5px;
+    margin-bottom: 10px;
     background-color: #ff6b00;
     -moz-border-radius-topleft: 5px;
     -moz-border-radius-topright: 5px;
@@ -45,9 +57,17 @@ li.isTag{
     border-radius: 5px;
 }
 li b.delete{
-	color: #fff;
+    color: #fff;
 }
 
 li.isTag b:hover{
-	cursor: pointer;
+    cursor: pointer;
 }
+
+ul.archive ul{
+    display: none;
+}
+ul.archive li:hover ul{
+    display: block;
+}
+

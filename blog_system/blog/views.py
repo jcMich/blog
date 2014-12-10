@@ -39,13 +39,18 @@ def home(request):
         blogspaginados = paginator.page(page)
     except(EmptyPage, InvalidPage):
         blogspaginados = paginator.page(paginator.num_pages)
-    return TemplateResponse(request, "index.html", {'blogs': blogspaginados, 'cate': cate})
+    return TemplateResponse(request, "index.html", {'blogs': blogspaginados, 'cate': cate, 'archive':archive()})
+
+
+def archive():
+    archive = Blog.objects.filter(status='P').order_by('-time')
+    return archive
 
 def categoria(request, nombre_categoria):
     blogsCategoria = Blog.objects.filter(status='P', categoria__nombre=nombre_categoria).order_by('-time')
     categoria = nombre_categoria
     return TemplateResponse(request, "index.html",
-                            {'blogs': blogsCategoria, 'categoria' : categoria} )
+                            {'blogs': blogsCategoria, 'categoria' : categoria, 'archive':archive()} )
 
 def addpost(request, template_name='newpost.html'):
     # strics in a POST or rendes empty form
