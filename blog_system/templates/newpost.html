@@ -50,13 +50,17 @@
         </div>
         <div class="row">
             <div class="col-lg-11">
-                <form action="." method="POST" class="form-horizontal" role="form" enctype='multipart/form-data'>
+                <form action="" method="POST" class="form-horizontal" role="form" enctype='multipart/form-data'>
                     {% csrf_token %}
                     {{ form.media }}
                     {{ form|bootstrap_horizontal }}
-                    <input class="btn btn-primary" type="submit" name="save_exit" value="Agregar y Salir">
-                    <input class="btn btn-default" type="submit" name="save_continue" value="Agregar y Continua">
+                    <div class="col-lg-offset-2">
+                        <input class="btn btn-primary" type="submit" name="save_exit" value="Agregar y Salir">
+                        <input class="btn btn-default" type="submit" name="save_continue" value="Agregar y Continua">
+                    </div>
                 </form>
+            </div>
+            <div id="modalform">
             </div>
         </div>
     {% endif %}
