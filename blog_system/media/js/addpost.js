@@ -5,7 +5,7 @@ jQuery( document ).ready(function() {
 	var $tags_elements =  $tags.children("option");
 	var $modalform = $("div#modalform");
 
-	$("#id_categoria").after("<div><a href='#' id='categoria'>Agregar</a></div>")
+	$("#id_categoria").after("<div><a id='categoria'>Agregar</a></div>")
 	$modalform.hide();
 	$tags.siblings("p.help-block").remove()
 	//$tags.css("display", "none");
