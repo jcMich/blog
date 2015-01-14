@@ -29,10 +29,11 @@ class LoginForm(forms.Form):
 class addpostForm(ModelForm):
     content = forms.CharField(widget=CKEditorWidget(config_name='full_ckeditor'))
     perex = forms.CharField(widget=CKEditorWidget(config_name='basic_ckeditor'))
-
+    tags = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'inserta aqui los tags separados por , '}))
     class Meta:
         model = Blog
-        widgets = {'tags':forms.TextInput()}
+        exclude ={'tags'}
+        # widgets = {'tags':forms.TextInput()}
 
 class categoria_form(ModelForm):
     class Meta:
