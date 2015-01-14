@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Cear/Editar Post</title>
+
+	<script type="text/javascript" src="/media/js/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="/media/js/addpost.js"></script>
+	<!-- Style -->
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/media/img/favicon.ico">
+
+    <!-- CSS Global Compulsory -->
+    <link rel="stylesheet" href="/media/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/media/css/style.css">
+
+    <!-- CSS Implementing Plugins -->
+    <link rel="stylesheet" href="/media/css/line-icons.css">
+    <link rel="stylesheet" href="/media/css/font-awesome.min.css">
+
+    <!-- CSS Theme -->
+    <link rel="stylesheet" href="/media/css/default.css" id="style_color">
+
+</head>
+<body>
+	<!-- Header -->
+		<div class="container">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index.html">
+					<img id="logo-header" src="/media/img/logo.png" alt="Logo">
+				</a>
+				<br><br>
+			</div>
+		</div>
+	<!-- End Headder -->
+	<!-- Container -->
+		<div class="container">
+        	{% if user.is_superuser %}
+			<div class="text-center">
+				<legend>Crear una Entrada</legend>
+			</div>
+			<div class="row">
+				<div id="modalform">
+			        <form action="." method="POST" class="form-horizontal new_cate" role="form">
+			        	{% csrf_token %}
+			        	{% load bootstrap %}
+			        	{{ categoria.media }}
+						{{ categoria|bootstrap_horizontal }}
+       					<input class="btn-u" type="submit" name="new_cate" value="Agregar">
+       					<a href="#" id="cancel-cate">Cacelar<a>
+		       		 </form>
+	       		</div>
+ 				<div class="col-lg-10 col-lg-offset-1">
+			        <form action="." method="POST" class="form-horizontal" role="form" enctype='multipart/form-data'>
+			        	{% csrf_token %}
+			        	{% load bootstrap %}
+			        	{{ form.media }}
+						{{ form|bootstrap_horizontal }}
+       					<input class="btn-u" type="submit" name="save_exit" value="Agregar y Salir">
+       					<input class="btn-u" type="submit" name="save_continue" value="Agregar y Continua">
+		       		 </form>
+	       		</div>
+       		 </div>
+       		 {% endif %}
+		</div>
+		<br>
+	<!-- Container -->
+</body>
+</html>

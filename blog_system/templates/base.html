@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- This site is optimized with the Yoast WordPress SEO plugin v1.4.19 - http://yoast.com/wordpress/seo/ -->
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="description"
+          content="Latino iConnect is a digital marketing conference that it is going to be hosted at Sony Electronics Inc. in San Diego on March 5, 2014."/>
+    <link rel="canonical" href="http://latinoiconnect.com/"/>
+    <!--impresion de tags de cada uno de los blogs-->
+    <!-- blogs -->
+    {% if blogs %}
+        {% for blog in blogs %}{% for tag in blog.tags.all %}
+            <meta name="{{ blog.title }}" content="{{ tag }}"/>
+        {% endfor %}{% endfor %}{% endif %}
+    <!-- blogRecientes -->
+    {% if blogsRecientes %}
+        {% for blog in blogsRecientes %}{% for tag in blog.tags.all %}
+            <meta name="{{ blog.title }}" content="{{ tag }}"/>
+        {% endfor %}{% endfor %}{% endif %}
+
+    {% block tags %}{% endblock %}
+
+    <meta property="og:locale" content="{{ Locale }}"/>
+    <meta property="og:type" content="{{ Type }}"/>
+    <meta property="og:title" content="{{ Title }}"/>
+    <meta property="og:description" content="{{ Descripcion }}"/>
+    <meta property="og:url" content="{{ Url }}"/>
+    <meta property="og:image" content="{{ Image }}"/>
+
+    <!-- / Yoast WordPress SEO plugin. -->
+
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/media/img/favicon.ico">
+
+    <!-- CSS Global Compulsory -->
+    <link rel="stylesheet" href="/media/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/media/css/style.css">
+
+    <!-- CSS Implementing Plugins -->
+    <link rel="stylesheet" href="/media/css/line-icons.css">
+    <link rel="stylesheet" href="/media/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/media/css/flexslider.css">
+    <link rel="stylesheet" href="/media/css/parallax-slider.css">
+
+    <!-- CSS Theme -->
+    <link rel="stylesheet" href="/media/css/default.css" id="style_color">
+</head>
+<body>
+<div class="header">
+    <!-- Topbar -->
+    <div class="topbar">
+        <div class="container">
+            <!-- Topbar Navigation -->
+            <ul class="loginbar pull-right">
+                <li class="topbar-devider"></li>
+                <li><a href="page_faq.html">Help</a></li>
+                <li class="topbar-devider"></li>
+                {% if user.is_authenticated %}
+                    <li><a href="/logout/">Salir</a></li>
+                {%else%}
+                    <li><a href="/login/">Entrar</a></li>
+                {%endif%}
+            </ul>
+            <!-- End Topbar Navigation -->
+        </div>
+    </div>
+    <!-- End Topbar -->
+
+    <!-- Navbar -->
+    <div class="navbar navbar-default" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target=".navbar-responsive-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="fa fa-bars"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">
+                    <img id="logo-header" src="/media/img/logo.png" alt="Logo">
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-responsive-collapse">
+                <ul class="nav navbar-nav">
+                        {% if user.is_superuser %}
+                        <!-- admin -->
+                        <li>
+                            <a href="/addpost">
+                                Add Post
+                            </a>
+                        </li>
+                        {% endif %}
+                        <!-- Home -->
+                        <li class="active">
+                        <a href="/">
+                            Inicio
+                        </a>
+                    </li>
+                    <!-- End Home -->
+
+                    <!-- Blog -->
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
+                            Categorias
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% for categoria in categorias %}
+                                <li><a class="" href="/categorias/{{ categoria.id }}">{{ categoria.nombre }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <!-- End Blog -->
+
+                    <!-- Search Block -->
+                    <li>
+                        <a href="/busqueda">
+                            <i class="search fa fa-search search-btn">
+                            </i>
+                        </a>
+
+                        <div class="search-open">
+                            <div class="input-group animated fadeInDown">
+                                <input type="text" class="form-control" placeholder="Buscar">
+                                            <span class="input-group-btn">
+                                                <button class="btn-u" type="button">Ir</button>
+                                            </span>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- End Search Block -->
+                </ul>
+            </div>
+            <!--/navbar-collapse-->
+        </div>
+    </div>
+    <!-- End Navbar -->
+</div>
+
+<!--=== Content Part ===-->
+<div class="container content">
+    <!-- Info Blokcs -->
+    <div class="row margin-bottom-20">
+        {% block busqueda %}
+
+        {% endblock busqueda %}
+        {% block NoticiaPrincipal %}
+
+        {% endblock NoticiaPrincipal %}
+        <!-- Welcome Block -->
+        <!--Block andmin para mostrar las imagenes -->
+        {% block imagenesdeslizante %}{% endblock %}
+        <!--Block andmin para mostrar las imagenes -->
+
+    </div>
+    <!-- End Info Blokcs -->
+
+    <!-- Recent Works -->
+
+    {% block RecentWorks %}
+    {% endblock %}
+    {% block Comentarios %}
+
+    {% endblock Comentarios %}
+    {% block Contactar %}
+
+    {% endblock Contactar %}
+    <!-- End Recent Works -->
+</div>
+<!--/container-->
+<!-- End Content Part -->
+
+
+<!--=== Footer ===-->
+<div class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 md-margin-bottom-40">
+                <!-- About -->
+                <div class="headline"><h2>Acerca de</h2></div>
+                <p class="margin-bottom-25 md-margin-bottom-40">Unify is an incredibly beautiful responsive Bootstrap
+                    Template for corporate and creative professionals.</p>
+                <!-- End About -->
+
+                <!-- Monthly Newsletter -->
+                <div class="headline"><h2>Boletín Mensual</h2></div>
+                <p>Suscríbete a nuestro boletín para estar al día con las últimas noticias y ofertas</p>
+
+                <form class="footer-subsribe">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Email ">
+                                    <span class="input-group-btn">
+                                        <button class="btn-u" type="button">Subscribe</button>
+                                    </span>
+                    </div>
+                </form>
+                <!-- End Monthly Newsletter -->
+            </div>
+            <!--/col-md-4-->
+
+            <div class="col-md-4 md-margin-bottom-40">
+                {% block RecentBlogs %}{% endblock %}
+
+            </div>
+            <!--/col-md-4-->
+
+            <div class="col-md-4">
+                <!-- Contact Us -->
+                <div class="headline"><h2>Contacto</h2></div>
+                <address class="md-margin-bottom-40">
+                    AV. LAS CAÑADAS 501 INT 209. TRES MARIAS <br/>
+                    Morelia, Mich <br/>
+                    Teléfono: (443) 169 2062 <br/>
+                    Email: <a href="/contacto/" class="">pruebashordeipi@gmail.com</a>
+                </address>
+                <!-- End Contact Us -->
+
+                <!-- Social Links -->
+                <div class="headline"><h2>Comparte</h2></div>
+                <ul class="social-icons">
+                    <li><a href="http://www.facebook.com/sharer.php?u={{ Url }}" data-original-title="Facebook"
+                           class="social_facebook"></a></li>
+                    <li><a href="http://twitter.com/share?text={{ Title }}&url={{ Url }}" data-original-title="Twitter"
+                           class="social_twitter"></a></li>
+                    <li><a href="https://plus.google.com/share?url={{ Url }}" data-original-title="Goole Plus"
+                           class="social_googleplus"
+                           onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"></a>
+                    </li>
+                </ul>
+                <!-- End Social Links -->
+            </div>
+            <!--/col-md-4-->
+        </div>
+    </div>
+</div>
+<!--/footer-->
+<!--=== End Footer ===-->
+
+<!--=== Copyright ===-->
+<div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <p>
+                    2014 &copy; Deipi. ALL Rights Reserved.
+                    <a target="_blank" href="https://twitter.com/htmlstream">Htmlstream</a> | <a href="#">Privacy
+                    Policy</a> | <a href="#">Terms of Service</a>
+                </p>
+            </div>
+            <div class="col-md-6">
+                <a href="index.html">
+                    <img class="pull-right" id="logo-footer" src="/media/img/logo_foot.png" alt="">
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/copyright-->
+<!--=== End Copyright ===-->
+</div><!--/wrapper-->
+
+<!-- JS Global Compulsory -->
+<script type="text/javascript" src="/media/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="/media/js/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="/media/js/bootstrap.min.js"></script>
+<!-- JS Implementing Plugins -->
+<script type="text/javascript" src="/media/js/back-to-top.js"></script>
+<script type="text/javascript" src="/media/js/jquery.flexslider-min.js"></script>
+<script type="text/javascript" src="/media/js/modernizr.js"></script>
+<script type="text/javascript" src="/media/js/jquery.cslider.js"></script>
+<!-- JS Page Level -->
+<script type="text/javascript" src="/media/js/app.js"></script>
+<script type="text/javascript" src="/media/js/index.js"></script>
+
+<script src="/media/js/platform.js" async defer>
+    {
+        lang: 'es'
+    }
+</script>
+</body>
+</html>
+

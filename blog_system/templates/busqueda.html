@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block busqueda %}
+    <h1>Search</h1>
+    <form action="." method="GET">
+        <label for="q">Search: </label>
+        <input type="text" name="q" value="{{ query|escape }}">
+        <input class="btn-u" type="submit" value="Search">
+    </form>
+    {% if query %}
+        <h2>Resultados de la consulta "{{ query|escape }}"</h2>
+        {% if results %}
+            <ul>
+                {% for blog in results %}
+                    <div class="col-md-8 md-margin-bottom-40">
+                        <div class="headline"><h2><a href="/blog/{{ blog.id }}">{{ blog.title }}</a></h2></div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <img class="img-responsive margin-bottom-20" src="{{ blog.imagen.url }}" alt="">
+                            </div>
+                            <div class="col-sm-8">
+                                <h4>{{ blog.perex|safe|striptags|truncatewords:2 }}</h4>
+                            </div>
+                            <div>
+                                <p align="justify">
+                                <h6>{{ blog.content|safe|striptags|truncatewords:30 }}</h6>
+                                </p>
+                            </div>
+                        </div>
+                    </div><!--/col-md-8-->
+                    {# <li>{{ blog|escape }}</l1> #}
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No blogs found</p>
+        {% endif %}
+    {% endif %}
+{% endblock busqueda %}
+{% block RecentBlogs %}
+    <!-- Recent Blogs -->
+    <div class="posts">
+        <div class="headline"><h2>Lo más reciente</h2></div>
+
+        {% for blog in blogsRecientes %}
+            <dl class="dl-horizontal">
+                <dt><a href="#"><img src="{{ blog.imagen.url }}" alt=""></a></dt>
+                <dd>
+                    <p><a href="/blog/{{ blog.id }}">{{ blog }}</a></p>
+                </dd>
+            </dl>
+        {% endfor %}
+
+    </div>
+    <!-- End Recent Blogs -->
+{% endblock %}
