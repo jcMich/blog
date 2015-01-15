@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from taggit_autosuggest.managers import TaggableManager
 from taggit.models import TaggedItemBase, TagBase, GenericTaggedItemBase
@@ -11,11 +12,15 @@ STATUS_CHOICES = (
 class Categorias(models.Model):
     nombre  = models.CharField(max_length=30)
     descripcion = models.TextField()
+    class Meta:
+        verbose_name_plural = "stories"
     def __unicode__(self):
         return "%s" % (self.nombre)
 
 class Tags(models.Model):
     nombre = models.CharField(max_length=30)
+    class Meta:
+        verbose_name_plural = 'Tags'
     def __unicode__(self):
         return "%s" % (self.nombre)
 

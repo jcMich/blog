@@ -59,7 +59,7 @@ def addpost(request, template_name='newpost.html'):
         return HttpResponseRedirect('')
     if form.is_valid():
         blog = form.save(commit=False)
-        tags = str(form.cleaned_data['tags'])
+        tags = unicode(form.cleaned_data['tags'])
         tags = tags.split(',')
         lst_tgs = []
         for tag in tags:
