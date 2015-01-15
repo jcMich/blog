@@ -6,6 +6,7 @@ from .models import Blog, comentarios, rating, Tags, Categorias  # poner tag si 
 from django.shortcuts import render_to_response, render
 from forms import ComentarioForm, ContactForm, ratingForm, LoginForm, addpostForm, categoria_form, tags_form
 from django.template import RequestContext
+from django.utils.text import slugify
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django.db.models import Sum, Count
@@ -68,6 +69,8 @@ def addpost(request, template_name='newpost.html'):
         for tag in tags:
             t = Tags.objects.get_or_create(nombre=tag)
             lst_tgs.append(t[0])
+        slg = slugify(form.cleaned_data['title'])
+        blog.slug = slg
         blog.save()
         blog.tags = lst_tgs
         blog.save()

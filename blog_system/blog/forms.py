@@ -32,7 +32,7 @@ class addpostForm(ModelForm):
     tags = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'inserta aqui los tags separados por , '}))
     class Meta:
         model = Blog
-        exclude ={'tags'}
+        exclude ={'tags', 'slug'}
         # widgets = {'tags':forms.TextInput()}
 
 class categoria_form(ModelForm):

@@ -55,7 +55,7 @@ jQuery(document).ready(function () {
         var key = $thisInput.val().substr($thisInput.val().length - 1);
         if ((key == ",") && $thisInput.val().length > 1) {
             if (!checkIfExist($thisInput))
-                $tags_list.append("<li class='isTag'>" + $thisInput.val().slice(0, -1) + "<b class='delete'> ×</b></li>");
+                $tags_list.append("<li class='isTag'>" + $.trim($thisInput.val().slice(0, -1)).replace(/\s+/g,"_") + "<b class='delete'> ×</b></li>");
             $thisInput.val("");
         } else if (key == ",") {
             $thisInput.val("");
