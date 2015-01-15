@@ -45,8 +45,7 @@
             <div id="modalform">
                 <form action="." method="POST" class="form-horizontal new_cate" role="form">
                     {% csrf_token %}
-                    {{ categoria.media }}
-                    {{ categoria|bootstrap_horizontal }}
+                    {{ categoria|bootstrap }}
                     <input class="btn-u" type="submit" name="new_cate" value="Agregar">
                     <a id="cancel-cate">Cacelar<a>
                 </form>

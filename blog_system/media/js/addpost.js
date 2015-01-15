@@ -82,9 +82,9 @@ jQuery(document).ready(function () {
 
             var temp = $tags[i].innerHTML.substr(0, $tags[i].innerHTML.indexOf("<")).replace(/\s+/g,"_");
             if (i == 0)
-                tag_list += temp;
+                tag_list += temp.toLowerCase();
             else
-                tag_list += "," + temp;
+                tag_list += "," + temp.toLowerCase();
 		}
         $("#id_tags").val(tag_list);
 	});
