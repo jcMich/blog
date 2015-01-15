@@ -3,12 +3,13 @@ jQuery(document).ready(function () {
     var $tags = $("#id_tags");
     var $tags_elements = $tags.children("option");
     var $modalform = $("div#modalform");
+    var $formBlog = $("#id_title").closest("form");
 
     $("#id_categoria").after("<div><a id='categoria'>Agregar</a></div>")
     $modalform.hide();
     $tags.siblings("p.help-block").remove()
-    //$tags.css("display", "none");
-    $tags.after("<input class=' form-control' id='id_tags_add' maxlength='100' name='id_tags_tag' type='text'>");
+    $tags.css("display", "none");
+    $tags.after("<input class=' form-control' id='id_tags_add' name='id_tags_tag' type='text'>");
     $tags.after("<ul id='id_tags_list' class='id_tags_list'></ul>");
 
     $("#categoria").on("click", function () {
@@ -44,7 +45,6 @@ jQuery(document).ready(function () {
                     tagExist = true;
             });
         }
-        console.log(tagExist);
         return tagExist;
     }
 
@@ -77,11 +77,16 @@ jQuery(document).ready(function () {
 
 	$formBlog.on("submit", function(){
 		var $tags = $tags_list.find("li");
-		var tag_list;
+		var tag_list = "";
 		for (var i = 0; i < $tags.length ; i++) {
-			alert($tags[i].innerHTML);
+
+            var temp = $tags[i].innerHTML.substr(0, $tags[i].innerHTML.indexOf("<")).replace(/\s+/g,"_");
+            if (i == 0)
+                tag_list += temp;
+            else
+                tag_list += "," + temp;
 		}
-		$("#id_tags").val(tag_list);
+        $("#id_tags").val(tag_list);
 	});
 });
 

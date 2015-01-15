@@ -64,7 +64,6 @@ def addpost(request, template_name='newpost.html'):
         lst_tgs = []
         for tag in tags:
             t = Tags.objects.get_or_create(nombre=tag)
-            print(t)
             lst_tgs.append(t[0])
         blog.save()
         blog.tags = lst_tgs
