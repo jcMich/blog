@@ -28,8 +28,8 @@ class RatingAdmin(admin.ModelAdmin):
     list_display = ('Blog', 'calificacion')
 
 
-admin.site.register(Categorias)
 admin.site.register(Blog, BlogAdmin, )
 admin.site.register(comentarios, ComentariosAdmin)
 admin.site.register(rating, RatingAdmin)
 admin.site.register(Tags)
+admin.site.register(Categorias)

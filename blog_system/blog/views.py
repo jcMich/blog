@@ -2,7 +2,7 @@
 # Create your views here.
 from django.template.response import TemplateResponse
 from django.shortcuts import get_object_or_404
-from .models import Blog, comentarios, rating, Tags  # poner tag si se necesita, en el blog tag=blog.tag.all(), 'tag':tag
+from .models import Blog, comentarios, rating, Tags, Categorias  # poner tag si se necesita, en el blog tag=blog.tag.all(), 'tag':tag
 from django.shortcuts import render_to_response, render
 from forms import ComentarioForm, ContactForm, ratingForm, LoginForm, addpostForm, categoria_form, tags_form
 from django.template import RequestContext
@@ -55,7 +55,10 @@ def addpost(request, template_name='newpost.html'):
     addcategoria = categoria_form(request.POST or None)
     form = addpostForm(request.POST or None, request.FILES or None)
     if addcategoria.is_valid():
-        addcategoria.save()
+        cate_name = addcategoria.cleaned_data['nombre']
+        find_cate = Categorias.objects.filter(nombre=cate_name).count()
+        if find_cate == 0:
+            addcategoria.save()
         return HttpResponseRedirect('')
     if form.is_valid():
         blog = form.save(commit=False)
