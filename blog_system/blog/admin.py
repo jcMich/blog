@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 from ckeditor.widgets import CKEditorWidget
-from .models import Blog, comentarios, rating, Categorias, Tags
+from .models import Blog, comentarios, Categorias, Tags
 
 
 class BlogAdminForm(forms.ModelForm):
@@ -24,12 +24,8 @@ class ComentariosAdmin(admin.ModelAdmin):
     list_filter = ['fecha_pub']
 
 
-class RatingAdmin(admin.ModelAdmin):
-    list_display = ('Blog', 'calificacion')
-
 
 admin.site.register(Blog, BlogAdmin, )
 admin.site.register(comentarios, ComentariosAdmin)
-admin.site.register(rating, RatingAdmin)
 admin.site.register(Tags)
 admin.site.register(Categorias)

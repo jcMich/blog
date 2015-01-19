@@ -17,7 +17,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 
 
-
 def base(request):
     Descripcion = settings.SITE_DESCRIPTION
     Locale = settings.SITE_LOCALE
@@ -30,26 +29,23 @@ def base(request):
 
 def home(request):
     cate = Blog.categoria
-    # filtramos los blogs para no enviar todo a la pagina ordenamos 'time' para enviar los mas recientes
-    blogs = Blog.objects.filter(status='P').order_by('-time')
-    blogsRecientes = Blog.objects.filter(status='P').order_by('-time')[:4]
-    return TemplateResponse(request, "home.html", {'blogs': blogs, 'blogsRecientes': blogsRecientes, 'cate': cate})
-
-def blogs(request, pagina):
-    cate = Blog.categoria
-    blogsRecientes = Blog.objects.filter(status='P').order_by('-time')[:4]
-
     Lista= Blog.objects.filter(status='P').order_by('-time')
-    paginator = Paginator(Lista,3)
+    paginator = Paginator(Lista, 4)
+    try :
+        page = int(request.GET.get("page", '1'))
+    except ValueError:
+            page = 1
     try:
-        page = int(pagina)
-    except:
-        page = 1
-    try:
-        blogspaginados= paginator.page(page)
+        blogspaginados = paginator.page(page)
     except(EmptyPage, InvalidPage):
         blogspaginados = paginator.page(paginator.num_pages)
-    return TemplateResponse(request, "blogs.html", {'blogspaginados':blogspaginados, 'blogsRecientes': blogsRecientes, 'cate': cate})
+    return TemplateResponse(request, "index.html", {'blogs': blogspaginados, 'cate': cate})
+
+def categoria(request, nombre_categoria):
+    blogsCategoria = Blog.objects.filter(status='P', categoria__nombre=nombre_categoria).order_by('-time')
+    categoria = nombre_categoria
+    return TemplateResponse(request, "index.html",
+                            {'blogs': blogsCategoria, 'categoria' : categoria} )
 
 def addpost(request, template_name='newpost.html'):
     # strics in a POST or rendes empty form
@@ -140,31 +136,24 @@ def blog(request, id_blog):
                 ct.cuerpo = cuerpo
                 ct.save()
                 # info = 'se guardo satisfactoriamente'
-                return TemplateResponse(request, "blog.html", {'form':ComentarioForm(),'ct': ct, 'id_blog': id_blog, 'blog': blog, 'cate': cate,
+                return TemplateResponse(request, "article.html", {'form':ComentarioForm(), 'ct': ct, 'id_blog': id_blog, 'blog': blog, 'cate': cate,
                                                                'blogsRecientes': blogsRecientes, 'comentarios': comenta, 'Star': Star})
             # else:
             # info = ' informacion con datos incorrectos'
             form = ComentarioForm()
-            ctx = {'form': form, 'id_blog': id_blog, 'blog': blog, 'cate': cate, 'blogsRecientes': blogsRecientes,
-                   'comentarios': comenta, 'Star': Star}
-            return render_to_response('blog.html', ctx, context_instance=RequestContext(request))
+            ctx = {'form': form, 'id_blog': id_blog, 'blog': blog, 'cate': cate,
+                   'comentarios': comenta}
+            return render_to_response('article.html', ctx, context_instance=RequestContext(request))
         else:
             form = ComentarioForm()
-            ctx = {'form': form, 'id_blog': id_blog, 'blog': blog, 'cate': cate, 'blogsRecientes': blogsRecientes,
-                   'comentarios': comenta, 'Star': Star}
-        return render_to_response('blog.html', ctx, context_instance=RequestContext(request))
+            ctx = {'form': form, 'id_blog': id_blog, 'blog': blog, 'cate': cate,
+                   'comentarios': comenta}
+        return render_to_response('article.html', ctx, context_instance=RequestContext(request))
     else:
         comenta = ''
-    return TemplateResponse(request, "blog.html",
-                            {'blog': blog, 'cate': cate, 'blogsRecientes': blogsRecientes, 'comentarios': comenta, 'Star': Star})
+    return TemplateResponse(request, "article.html",
+                            {'blog': blog, 'cate': cate, 'comentarios': comenta})
 
-
-def categorias(request, id_categoria):
-    blogsCategoria = Blog.objects.filter(status='P', categoria=id_categoria).order_by('-time')
-    blogsRecientes = Blog.objects.filter(status='P').order_by('-time')[:4]
-    cate = Blog.categoria
-    return TemplateResponse(request, "categorias.html",
-                            {'cate': cate, 'blogsCategoria': blogsCategoria,'blogsRecientes': blogsRecientes})
 
 
 def demo(request):
