@@ -118,6 +118,5 @@ jQuery(document).ready(function () {
         var imagenName = $(this).val().replace(/C:\\fakepath\\/i, '');
         $fakeimage.val($this.val());
     });
-
 });
 
