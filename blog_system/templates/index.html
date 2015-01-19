@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block contenido %}
+    <div class="col-sm-9 blog-main">
+        <div class="row">
+            <div class="blog-post">
+                {% if categoria %}
+                     <h1>{{ categoria|title }}</h1>
+                {% endif %}
+                <!--  POST  -->
+                {% for blog in blogs %}
+                    <div class="col-md-6">
+                        <div class="post-entry">
+                            <div class="post-body entry-content" id="post-body">
+                                <span>
+                                    <div class="entry-image">
+                                        <a href="/blog/{{ blog.id }}">
+                                            <img class="thumb img-responsive" src="{{ blog.imagen.url }}" style="max-height:200px;">
+                                        </a>
+                                    </div>
+                                </span>
+                                <script type="text/javascript">var x="Duis quis erat non nunc fringilla",y="http://perk-mistry-soratemplates.blogspot.mx/2014/07/duis-quis-erat-non-nunc-fringilla_3.html",t="Thursday, July 03, 2014",u="4";rm("p6774134534047760335")</script>
+                                <div class="article-container">
+                                    <div class="inner-content">
+                                        <div class="article-category">
+                                            <a href="/categoria/{{ blog.categoria }}" rel="tag"> {{blog.categoria}} </a>
+                                        </div>
+                                        <div class="clr"></div>
+                                        <script type="text/javascript">
+                                            var timestamp = "Thursday, July 03, 2014";
+                                            if (timestamp != '') {
+                                                    var timesplit = timestamp.split(",");
+                                                    var date_yyyy = timesplit[2];
+                                                    var timesplit = timesplit[1].split(" ");
+                                                    var date_dd = timesplit[2];
+                                                    var date_mmm = timesplit[1].substring(0, 3);
+                                                }
+                                        </script>
+                                        <div class="post-date">
+                                            <span class="post-month"><script type="text/javascript">document.write(date_mmm);</script></span>
+                                            <strong class="post-day"><script type="text/javascript">document.write(date_dd);</script></strong>
+                                        </div>
+                                        <div class="inner-shadow">
+                                        <h2 class="article-title"><a href="/blog/{{ blog.id }}">{{ blog.title }}</a></h2>
+                                        </div>
+                                        <div class="body-post">{{ blog.parex }}</div>
+                                    </div>
+                                </div>
+                                <div style="clearfix"></div>
+                            </div>
+                            <div class="post-footer">
+                                <div class="post-footer-line post-footer-line-1"></div>
+                                <div class="clr"></div>
+                                <div class="post-footer-line post-footer-line-2"></div>
+                                <div class="post-footer-line post-footer-line-3">
+                                    <span class="post-location"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <!--  END POST  -->
+            </div>
+        </div>
+        <nav>
+            <ul class="pagination">
+                {% if blogs.has_previous %}
+                <li>
+                    <a href="/?page={{ blogs.previous_page_number}}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                </li>
+                {% endif %}
+                {% for b in blogs.paginator.page_range %}
+                    {% if b == blogs.number %}
+                    <li class="active"><a href="/?page={{ b }}">{{ b }} <span class="sr-only">(current)</span></a></li>
+                    {% else %}
+                    <li><a href="/?page={{ b }}">{{ b }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if blogs.has_next %}
+                <li>
+                    <a href="/?page={{ blogs.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Script redimenciona el texto del titulo-->
+    <script type="text/javascript">
+        var $title = $("h2.article-title");
+        $title.each( function(){
+            var $thisTitle = $(this);
+            if ($thisTitle.children().text().length > 60)
+                $thisTitle.css("font-size", "20px")
+            if ($thisTitle.children().text().length >= 80)
+                $thisTitle.css("font-size", "19px")
+        });
+    </script>
+
+ {% endblock %}
