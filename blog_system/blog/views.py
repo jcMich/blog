@@ -2,50 +2,63 @@
 # Create your views here.
 from django.template.response import TemplateResponse
 from django.shortcuts import get_object_or_404
-from .models import Blog, comentarios, rating, Tags, Categorias  # poner tag si se necesita, en el blog tag=blog.tag.all(), 'tag':tag
+from django.views.generic import ListView, DetailView, CreateView
+from .models import Blog, comentarios, Tags, Categorias  # poner tag si se necesita, en el blog tag=blog.tag.all(), 'tag':tag
 from django.shortcuts import render_to_response, render
-from forms import ComentarioForm, ContactForm, ratingForm, LoginForm, addpostForm, categoria_form, tags_form
+from forms import ComentarioForm, ContactForm, LoginForm, addpostForm, categoria_form
 from django.template import RequestContext
 from django.utils.text import slugify
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
-from django.db.models import Sum, Count
-from django.db.models import Q
-from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.views.generic.edit import FormView
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 
 
-def base(request):
-    Descripcion = settings.SITE_DESCRIPTION
-    Locale = settings.SITE_LOCALE
-    Type = settings.SITE_TYPE
-    Title = settings.SITE_TITLE
-    Url = settings.SITE_URL
-    Image = settings.SITE_IMAGE
-    return TemplateResponse(request, "base.html")
+class Home(ListView):
+    model = Blog
+    context_object_name = 'blogs'
+    paginate_by = 4
+    page_kwarg = 'page'
+    template_name = 'index.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(Home, self).get_context_data(**kwargs)
+        if self.request.GET.get('category'):
+            ctx['category'] = self.request.GET.get('category')
+        return ctx
+
+    def get(self, request, *args, **kwargs):
+        c = request.GET.get('category')
+        if c:
+            self.queryset = Blog.objects.filter(categoria__nombre=c).order_by('-time')
+        else:
+            self.queryset = Blog.objects.order_by('-time')
+        return super(Home, self).get(request, *args, **kwargs)
 
 
-def home(request):
-    cate = Blog.categoria
-    Lista= Blog.objects.filter(status='P').order_by('-time')
-    paginator = Paginator(Lista, 4)
-    try :
-        page = int(request.GET.get("page", '1'))
-    except ValueError:
-            page = 1
-    try:
-        blogspaginados = paginator.page(page)
-    except(EmptyPage, InvalidPage):
-        blogspaginados = paginator.page(paginator.num_pages)
-    return TemplateResponse(request, "index.html", {'blogs': blogspaginados, 'cate': cate})
+class AddPost(CreateView):
+    form_class = addpostForm
+    template_name = 'newpost.html'
+    success_url = '/'
+    context_object_name = 'form'
 
-def categoria(request, nombre_categoria):
-    blogsCategoria = Blog.objects.filter(status='P', categoria__nombre=nombre_categoria).order_by('-time')
-    categoria = nombre_categoria
-    return TemplateResponse(request, "index.html",
-                            {'blogs': blogsCategoria, 'categoria' : categoria} )
+    def get_context_data(self, **kwargs):
+        ctx = super(AddPost, self).get_context_data(**kwargs)
+        ctx['categoria'] = categoria_form
+        return ctx
+
+    def post(self, request, *args, **kwargs):
+        cform = categoria_form(request.POST)
+        form = addpostForm(request.POST, request.FILES)
+        if cform.is_valid():
+            nombre = cform.cleaned_data['nombre']
+            descripcion = cform.cleaned_data['descripcion']
+            cate = Categorias.objects.get_or_create(nombre=nombre, descripcion=descripcion)
+            cate.save()
+        if form.is_valid():
+            pass
+
 
 def addpost(request, template_name='newpost.html'):
     # strics in a POST or rendes empty form
@@ -77,7 +90,8 @@ def addpost(request, template_name='newpost.html'):
             return HttpResponseRedirect('')
     return render(request, template_name, {'form':form, 'categoria': categoria_form})
 
-#### BORRAR Y AGREGAR EL FORMULARIO A LA VIEW ADDPOST
+
+# BORRAR Y AGREGAR EL FORMULARIO A LA VIEW ADDPOST
 def addCategoria(request, template_name='tagsandcate.html'):
     form = categoria_form(request.POST or None)
     if form.is_valid():
@@ -89,76 +103,29 @@ def addCategoria(request, template_name='tagsandcate.html'):
             return HttpResponseRedirect('')
     return render(request, template_name, {'form':form})
 
-#############
-def addtags(request, template_name='tagsandcate.html'):
-    form = tags_form(request.POST or None)
-    if form.is_valid():
-        form.save()
-        if request.POST.get("save_exit"):
-            return HttpResponseRedirect('/')
-        elif request.POST.get("save_continue"):
-            form.clean()
-            return HttpResponseRedirect('')
-    return render(request, template_name, {'form':form})
 
-def blog(request, id_blog):
-    blogsRecientes = Blog.objects.filter(status='P').order_by('-time')[:4]
-    blog = get_object_or_404(Blog, id=id_blog)
-    cate = Blog.categoria
-    numCalifblog = rating.objects.filter(Blog=id_blog).aggregate(Count('Blog')).values()[0]
+class BlogDetail(DetailView):
+    model = Blog
+    template_name = 'article.html'
+    context_object_name = 'blog'
 
-    sumCalifblog = rating.objects.filter(Blog=blog.id).aggregate(Sum('calificacion')).values()[0]
+    def get_context_data(self, **kwargs):
+        ctx = super(BlogDetail, self).get_context_data(**kwargs)
+        ctx['comentarios'] = comentarios.objects.filter(Blog__id=self.kwargs['pk'])
+        ctx['comentariosForm'] = ComentarioForm()
+        return ctx
 
-    if sumCalifblog > 0:
-        numStarsblog = (sumCalifblog)/numCalifblog
-        Star = [i + 1 for i in range(numStarsblog)]
-    else:
-        Star = [i + 1 for i in range(0)]
-
-    if blog.comentar:
-        comenta = comentarios.objects.filter(Blog=blog.id).order_by('fecha_pub').reverse()[:5]
-        if request.method == "POST":
-            form = ComentarioForm(request.POST)
-            formR = ratingForm(request.POST)
-            if formR.is_valid():
-                calificacion= formR.cleaned_data['calificacion']
-                ctR = rating()
-                ctR.Blog = Blog.objects.get(id=id_blog)
-                ctR.calificacion = calificacion
-                ctR.save()
-            # info = 'inicializando'
-            if form.is_valid():
-                nombre = form.cleaned_data['nombre']
-                cuerpo = form.cleaned_data['cuerpo']
-                ct = comentarios()
-                ct.nombre = nombre
-                ct.Blog = Blog.objects.get(id=id_blog)
-                ct.cuerpo = cuerpo
-                ct.save()
-                # info = 'se guardo satisfactoriamente'
-                return TemplateResponse(request, "article.html", {'form':ComentarioForm(), 'ct': ct, 'id_blog': id_blog, 'blog': blog, 'cate': cate,
-                                                               'blogsRecientes': blogsRecientes, 'comentarios': comenta, 'Star': Star})
-            # else:
-            # info = ' informacion con datos incorrectos'
-            form = ComentarioForm()
-            ctx = {'form': form, 'id_blog': id_blog, 'blog': blog, 'cate': cate,
-                   'comentarios': comenta}
-            return render_to_response('article.html', ctx, context_instance=RequestContext(request))
+    def post(self, request, *args, **kwargs):
+        form = ComentarioForm(request.POST)
+        if form.is_valid():
+            comentario = form.save(commit=False)
+            comentario.Blog = Blog.objects.get(pk=self.kwargs['pk'])
+            comentario.nombre = form.cleaned_data['nombre']
+            comentario.cuerpo = form.cleaned_data['cuerpo']
+            comentario.save()
+            return HttpResponseRedirect('/blog/%s' % self.kwargs['pk'])
         else:
-            form = ComentarioForm()
-            ctx = {'form': form, 'id_blog': id_blog, 'blog': blog, 'cate': cate,
-                   'comentarios': comenta}
-        return render_to_response('article.html', ctx, context_instance=RequestContext(request))
-    else:
-        comenta = ''
-    return TemplateResponse(request, "article.html",
-                            {'blog': blog, 'cate': cate, 'comentarios': comenta})
-
-
-
-def demo(request):
-    cate = Blog.categoria
-    return TemplateResponse(request, "demo.html", {'blogs': Blog.objects, 'cate': cate})
+            return HttpResponseRedirect('/blog/%s' % self.kwargs['pk'])
 
 
 def contacto_view(request):
@@ -189,22 +156,6 @@ def contacto_view(request):
     ctx = {'form': formulario, 'email': email, 'titulo': titulo, 'texto': texto, 'info_enviado': info_enviado,
            'blogsRecientes': blogsRecientes, 'cate': cate}
     return render_to_response('contacto.html', ctx, context_instance=RequestContext(request))
-
-
-def busqueda(request):
-    cate = Blog.categoria
-    blogsRecientes = Blog.objects.filter(status='P').order_by('-time')[:4]
-    query = request.GET.get('q', '')
-    if query:
-        qset = (
-            Q(title__icontains=query)|
-            Q(perex__icontains=query)|
-            Q(content__icontains=query)
-        )
-        results = Blog.objects.filter(qset).distinct()
-    else:
-        results = []
-    return render_to_response("busqueda.html", {"results": results, "query": query, 'cate':cate, 'blogsRecientes':blogsRecientes})
 
 
 class LoginView(FormView):

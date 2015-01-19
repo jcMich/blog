@@ -1,4 +1,11 @@
 {% extends 'base.html' %}
+{% block tags %}
+        {% for blog in blogs %}
+            {% for tag in blog.tags.all %}
+                <meta name="{{ blog.title }}" content="{{ tag }}"/>
+            {% endfor %}
+        {% endfor %}
+{% endblock %}
 {% block contenido %}
     <div class="col-sm-9 blog-main">
         <div class="row">
@@ -22,7 +29,7 @@
                                 <div class="article-container">
                                     <div class="inner-content">
                                         <div class="article-category">
-                                            <a href="/categoria/{{ blog.categoria }}" rel="tag"> {{blog.categoria}} </a>
+                                            <a href="/?category={{ blog.categoria }}" rel="tag"> {{blog.categoria}} </a>
                                         </div>
                                         <div class="clr"></div>
                                         <script type="text/javascript">
@@ -63,21 +70,22 @@
         </div>
         <nav>
             <ul class="pagination">
-                {% if blogs.has_previous %}
+                {% if page_obj.has_previous %}
                 <li>
-                    <a href="/?page={{ blogs.previous_page_number}}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                    <a href="/?page={{ page_obj.previous_page_number}}{% if category %}&category={{ category }}
+                    {% endif %} " aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
                 </li>
                 {% endif %}
-                {% for b in blogs.paginator.page_range %}
-                    {% if b == blogs.number %}
-                    <li class="active"><a href="/?page={{ b }}">{{ b }} <span class="sr-only">(current)</span></a></li>
+                {% for b in page_obj.paginator.page_range %}
+                    {% if b == page_obj.number %}
+                    <li class="active"><a href="/?page={{ b }}{% if category%}&category={{ category }}{% endif %}">{{ b }} <span class="sr-only">(current)</span></a></li>
                     {% else %}
-                    <li><a href="/?page={{ b }}">{{ b }}</a></li>
+                    <li><a href="/?page={{ b }}{% if category%}&category={{ category }}{% endif %} ">{{ b }}</a></li>
                     {% endif %}
                 {% endfor %}
-                {% if blogs.has_next %}
+                {% if page_obj.has_next %}
                 <li>
-                    <a href="/?page={{ blogs.next_page_number }}" aria-label="Next">
+                    <a href="/?page={{ page_obj.next_page_number }}{% if category%}&category={{ category }}{% endif %} " aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>

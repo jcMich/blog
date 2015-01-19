@@ -15,12 +15,14 @@ class Categorias(models.Model):
     def __unicode__(self):
         return "%s" % (self.nombre)
 
+
 class Tags(models.Model):
     nombre = models.CharField(max_length=30)
     class Meta:
         verbose_name_plural = 'Tags'
     def __unicode__(self):
         return "%s" % (self.nombre)
+
 
 class Blog(models.Model):
     time = models.DateTimeField(auto_now_add=True)
@@ -51,8 +53,3 @@ class comentarios(models.Model):
     nombre = models.CharField(max_length=200, blank=True, null=True)
     cuerpo = models.TextField(verbose_name="Comentario", max_length=80)
     fecha_pub = models.DateTimeField(auto_now_add=True, editable=False)
-
-
-class rating(models.Model):
-    Blog = models.ForeignKey(Blog)
-    calificacion = models.IntegerField(default=0)
