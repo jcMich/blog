@@ -91,7 +91,7 @@ def addpost(request, template_name='newpost.html'):
     return render(request, template_name, {'form':form, 'categoria': categoria_form})
 
 
-# BORRAR Y AGREGAR EL FORMULARIO A LA VIEW ADDPOST
+# BORRAR Y AGREGAR EL FORMULARIO LA VIEW ADDPOST
 def addCategoria(request, template_name='tagsandcate.html'):
     form = categoria_form(request.POST or None)
     if form.is_valid():
