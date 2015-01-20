@@ -162,9 +162,21 @@ CKEDITOR_UPLOAD_PATH = MEDIA_URL + 'ckeditor/'
 CKEDITOR_CONFIGS = {
     'basic_ckeditor': {
         'toolbar': 'Basic',
+        'height': '100px',
     },
     'full_ckeditor': {
-        'toolbar': 'Full',
+        'toolbar': [["Format", "Bold", "Italic", 'TextColor'],
+                    ['codeSnippet', 'NumberedList', 'BulletedList', "Indent", "Outdent", 'JustifyLeft', 'JustifyCenter',
+                        'JustifyRight', 'JustifyBlock'],
+                    ['HorizontalRule', 'SpecialChar', "Table", "Subscript", "Superscript"],
+                    ['Undo', 'Redo'],
+                    ["Source"]],
+        # 'height': 200,
+        # 'width': 480,
+        'emailProtection': 'encode',
+        'toolbarLocation': 'top',
+        'defaultLanguage': 'es',
+        'toolbarCanCollapse': False,
         #'uiColor': '#666565'
     },
 }

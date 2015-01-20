@@ -1,15 +1,11 @@
-# -*- coding: utf-8 -*-
 # Create your views here.
-from django.template.response import TemplateResponse
-from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView
-from .models import Blog, comentarios, Tags, Categorias  # poner tag si se necesita, en el blog tag=blog.tag.all(), 'tag':tag
+from .models import Blog, comentarios, Tags, Categorias
 from django.shortcuts import render_to_response, render
 from forms import ComentarioForm, ContactForm, LoginForm, addpostForm, categoria_form
 from django.template import RequestContext
 from django.utils.text import slugify
 from django.core.mail import EmailMultiAlternatives
-from django.conf import settings
 from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
