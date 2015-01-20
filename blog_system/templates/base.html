@@ -83,12 +83,7 @@
                                     {% regroup year.list by time|date:"F" as month_list %}
                                     {% for month in month_list %}
                                     <li>
-                                        {{ month.grouper }} / {{ year.grouper }}
-                                        <ul>
-                                        {% for post in month.list %}
-                                            <li style="font-size: 12px;"><a href="/blog/{{post.id}}">{{ post.title }}</a></li>
-                                        {% endfor %}
-                                        </ul>
+                                        <a href="/month/{{ year.grouper }}/{{ month.grouper }}">{{ month.grouper }} - {{ year.grouper }}</a>
                                     </li>
                                     {% endfor %}
                                 {% endfor %}

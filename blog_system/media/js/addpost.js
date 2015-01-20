@@ -68,10 +68,9 @@ jQuery(document).ready(function () {
 
 
     // Agregar categorias Categorias.
-    //var $modalform = $("div#modalform");
+    var $modalform = $("div#modalform");
     $("#id_categoria").after("<div><a id='categoria'>Agregar</a></div>")
-
-    //$modalform.hide();
+    $modalform.hide();
 
     $("#categoria").on("click", function () {
         $modalform.show("slow");

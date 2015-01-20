@@ -27,6 +27,7 @@
         <link href="{% static 'css/blog.css'%}" rel="stylesheet">
     </head>
     <body>
+<<<<<<< HEAD
         <!-- Header -->
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -35,6 +36,40 @@
                     <img id="logo-header" src="/media/img/logo.png" alt="Logo">
                 </a>
                 <br><br>
+=======
+
+<body>
+<!-- Header -->
+<div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/">
+            <img id="logo-header" src="/media/img/logo.png" alt="Logo">
+        </a>
+        <br><br>
+    </div>
+</div>
+<!-- End Headder -->
+<!-- Container -->
+<div class="container">
+    {% if user.is_superuser %}
+        <div class="text-center">
+            <legend>Crear una Entrada</legend>
+        </div>
+        <div class="row">
+            <div class="col-lg-11">
+                <form action="" method="POST" class="form-horizontal" role="form" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    {{ form.media }}
+                    {{ form|bootstrap_horizontal }}
+                    <div class="col-lg-offset-2">
+                        <input class="btn btn-primary" type="submit" name="save_exit" value="Agregar y Salir">
+                        <input class="btn btn-default" type="submit" name="save_continue" value="Agregar y Continua">
+                    </div>
+                </form>
+>>>>>>> d64cca526338c8f8612104d7ee938fb90d152723
+            </div>
+            <div id="modalform">
             </div>
         </div>
         <!-- End Headder -->

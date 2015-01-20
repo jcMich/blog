@@ -7,7 +7,7 @@ from django.template import RequestContext
 from django.utils.text import slugify
 from django.core.mail import EmailMultiAlternatives
 from django.views.generic.edit import FormView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 
 
@@ -55,6 +55,15 @@ class AddPost(CreateView):
         if form.is_valid():
             pass
 
+def month(request, year, month):
+    def month_names(month):
+        return {
+            "Enero":1, "Febrero":2, "Marzo":3, "Abril":4, "Mayo":5, "Junio":6,
+            "Julio":7, "Agosto":8,"Septiembre":9, "Octubre":10, "Noviembre":11, "Diciembre":12
+            }[month]
+    posts = Blog.objects.filter(time__year=int(year), time__month=month_names(month)).order_by('-time')
+    return render(request, "index.html", {"blogs":posts})
+
 
 def addpost(request, template_name='newpost.html'):
     # strics in a POST or rendes empty form
@@ -77,7 +86,7 @@ def addpost(request, template_name='newpost.html'):
         elif request.POST.get("save_continue"):
             form.clean()
             return HttpResponseRedirect('')
-    return render(request, template_name, {'form':form, 'categoria': categoria_form})
+    return render(request, template_name, {'form':form})
 
 
 # BORRAR Y AGREGAR EL FORMULARIO LA VIEW ADDPOST
