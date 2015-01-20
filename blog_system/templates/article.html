@@ -94,7 +94,7 @@
                     </div>
                     <div class="media-body">
                         <h4 class="media-heading">{{ comentario.nombre }}</h4>
-                        <span class="comm-date">dijo el  {{ comentario.fecha_pub|date:"D d M Y"}}</span>
+                        <span class="comm-date">dijo el  {{ comentario.fecha_pub|date:"d D M Y"}} - {{ comentario.fecha_pub|time:"H:i" }}</span>
                             <p>{{ comentario.cuerpo }}</p>
                     </div>
                 </div>
