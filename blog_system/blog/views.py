@@ -1,15 +1,11 @@
-# -*- coding: utf-8 -*-
 # Create your views here.
-from django.template.response import TemplateResponse
-from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView
-from .models import Blog, comentarios, Tags, Categorias  # poner tag si se necesita, en el blog tag=blog.tag.all(), 'tag':tag
+from .models import Blog, comentarios, Tags, Categorias
 from django.shortcuts import render_to_response, render
 from forms import ComentarioForm, ContactForm, LoginForm, addpostForm, categoria_form
 from django.template import RequestContext
 from django.utils.text import slugify
 from django.core.mail import EmailMultiAlternatives
-from django.conf import settings
 from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
@@ -120,7 +116,7 @@ class BlogDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super(BlogDetail, self).get_context_data(**kwargs)
-        ctx['comentarios'] = comentarios.objects.filter(Blog__id=self.kwargs['pk'])
+        ctx['comentarios'] = comentarios.objects.filter(Blog__id=self.kwargs['pk']).order_by('-fecha_pub')
         ctx['comentariosForm'] = ComentarioForm()
         return ctx
 

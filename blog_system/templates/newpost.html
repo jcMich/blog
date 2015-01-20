@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
-        <link rel="icon" href="../../favicon.ico">
+        <link rel="icon" href="">
 
         <title>Blog Template for Bootstrap</title>
 
@@ -27,8 +27,6 @@
         <!-- Custom styles for this template -->
         <link href="{% static 'css/blog.css'%}" rel="stylesheet">
     </head>
-
-    <body>
 
 <body>
 <!-- Header -->
@@ -49,23 +47,21 @@
             <legend>Crear una Entrada</legend>
         </div>
         <div class="row">
-        <div id="modalform">
+            <div id="modalform">
                 <form action="." method="POST" class="form-horizontal new_cate" role="form" onsubmit="return false">
                     {% csrf_token %}
-                    {{ cform|bootstrap }}
+                    {{ categoria|bootstrap }}
                     <input class="btn-u" type="submit" id="save_data" value="Agregar">
-                    <a id="cancel-cate">Cacelar<a>
+                    <a id="cancel-cate">Cacelar</a>
                 </form>
             </div>
             <div class="col-lg-11">
-                <form action="" method="POST" class="form-horizontal" role="form" enctype='multipart/form-data'>
+                <form action="." method="POST" class="form-horizontal" role="form" enctype='multipart/form-data'>
                     {% csrf_token %}
                     {{ form.media }}
                     {{ form|bootstrap_horizontal }}
-                    <div class="col-lg-offset-2">
-                        <input class="btn btn-primary" type="submit" name="save_exit" value="Agregar y Salir">
-                        <input class="btn btn-default" type="submit" name="save_continue" value="Agregar y Continua">
-                    </div>
+                    <input class="btn-u" type="submit" name="save_exit" value="Agregar y Salir">
+                    <input class="btn-u" type="submit" name="save_continue" value="Agregar y Continua">
                 </form>
             </div>
         </div>

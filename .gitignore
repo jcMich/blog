@@ -1,4 +1,5 @@
 *.pyc
 blog_system/.idea
 blog_system/media/photos
+blog_system/db.db
 
