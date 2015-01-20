@@ -32,24 +32,14 @@
                                             <a href="/?category={{ blog.categoria }}" rel="tag"> {{blog.categoria}} </a>
                                         </div>
                                         <div class="clr"></div>
-                                        <script type="text/javascript">
-                                            var timestamp = "Thursday, July 03, 2014";
-                                            if (timestamp != '') {
-                                                    var timesplit = timestamp.split(",");
-                                                    var date_yyyy = timesplit[2];
-                                                    var timesplit = timesplit[1].split(" ");
-                                                    var date_dd = timesplit[2];
-                                                    var date_mmm = timesplit[1].substring(0, 3);
-                                                }
-                                        </script>
                                         <div class="post-date">
-                                            <span class="post-month"><script type="text/javascript">document.write(date_mmm);</script></span>
-                                            <strong class="post-day"><script type="text/javascript">document.write(date_dd);</script></strong>
+                                            <span class="post-month">{{blog.time|date:"M"}}</span>
+                                            <strong class="post-day">{{blog.time|date:"d"}}</strong>
                                         </div>
                                         <div class="inner-shadow">
                                         <h2 class="article-title"><a href="/blog/{{ blog.id }}">{{ blog.title }}</a></h2>
                                         </div>
-                                        <div class="body-post">{{ blog.parex }}</div>
+                                        <div class="body-post">{{ blog.perex|striptags }}</div>
                                     </div>
                                 </div>
                                 <div style="clearfix"></div>

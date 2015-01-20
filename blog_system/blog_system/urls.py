@@ -19,7 +19,7 @@ urlpatterns = patterns('',
                        url(r'^feeds/$', EntradasFeed()),
                        url(r'^ckeditor/', include('ckeditor.urls')),
                        url(r'^addpost/$', 'blog.views.addpost', name='nuevo_post'),
-                       # url(r'^addpost/$', AddPost.as_view(), name='nuevo_post'),
+                       #url(r'^addpost/$', AddPost.as_view(), name='nuevo_post'),
                        url(r'^addcategoria/$', 'blog.views.addCategoria', name='addCategoria'),
                        url(r'^month/(?P<year>\d+)/(?P<month>\w+)/$', 'blog.views.month', name='month')
 )

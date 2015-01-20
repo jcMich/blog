@@ -68,8 +68,8 @@ jQuery(document).ready(function () {
 
 
     // Agregar categorias Categorias.
-    var $modalform = $("div#modalform");
     $("#id_categoria").after("<div><a id='categoria'>Agregar</a></div>")
+    var $modalform = $("div#modalform");
     $modalform.hide();
 
     $("#categoria").on("click", function () {
@@ -90,17 +90,12 @@ jQuery(document).ready(function () {
         if (fieldVoid){
             return false;
         } else {
-            $.ajax({
-                type: $(this).attr('method'),
-                url: $(this).attr("action"),
-                data: $(this).serialize(),
-                success: function(response) {
-                    $("body").html(response);
-                }
-            });
+            $.post($(this).attr('action'), $(this).serialize(), function(data){
+                // $("body").after(data);
+            },'json');
             $modalform.hide("slow");
-            return false;
         }
+        return false;
     });
 
     // FileField
