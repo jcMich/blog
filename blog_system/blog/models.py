@@ -51,5 +51,5 @@ class Blog(models.Model):
 class comentarios(models.Model):
     Blog = models.ForeignKey(Blog)
     nombre = models.CharField(max_length=200, blank=True, null=True)
-    cuerpo = models.TextField(verbose_name="Comentario", max_length=80)
+    cuerpo = models.TextField(verbose_name="Comentario", max_length=120)
     fecha_pub = models.DateTimeField(auto_now_add=True, editable=False)
