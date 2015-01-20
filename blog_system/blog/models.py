@@ -9,7 +9,7 @@ STATUS_CHOICES = (
 
 
 class Categorias(models.Model):
-    nombre  = models.CharField(max_length=30)
+    nombre  = models.CharField(max_length=30, primary_key=True, unique=True)
     descripcion = models.TextField()
     class Meta:
         verbose_name_plural = "Categorias"

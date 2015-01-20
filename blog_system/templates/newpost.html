@@ -49,6 +49,14 @@
             <legend>Crear una Entrada</legend>
         </div>
         <div class="row">
+        <div id="modalform">
+                <form action="." method="POST" class="form-horizontal new_cate" role="form" onsubmit="return false">
+                    {% csrf_token %}
+                    {{ cform|bootstrap }}
+                    <input class="btn-u" type="submit" id="save_data" value="Agregar">
+                    <a id="cancel-cate">Cacelar<a>
+                </form>
+            </div>
             <div class="col-lg-11">
                 <form action="" method="POST" class="form-horizontal" role="form" enctype='multipart/form-data'>
                     {% csrf_token %}
@@ -59,8 +67,6 @@
                         <input class="btn btn-default" type="submit" name="save_continue" value="Agregar y Continua">
                     </div>
                 </form>
-            </div>
-            <div id="modalform">
             </div>
         </div>
     {% endif %}
