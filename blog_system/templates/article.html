@@ -7,7 +7,7 @@
 
 {% endblock %}
 {% block contenido %}
-    <div class="col-sm-9">
+    <div class="col-lg-9">
         <div class="main-content">
             <article id="post-1" class="post post-content">
                 <h1 class="entry-title">{{ blog.title }}</h1>
@@ -81,32 +81,35 @@
                 </div>
             </article>
         </div>
-        {% if blog.comentar %}
-                <div class="col-sm-9 hidden-print">
-                    {% for comentario in comentarios %}
-                        <div class="coment">
-                            {{ comentario.nombre }}:{{ comentario.cuerpo }}
+        <!--  Comments  -->
+        {% if blog.comentar%}
+        <div class="post comments">
+            <h2>Comentarios</h2>
+                {% for comentario in comentarios %}
+                <div class="media comment">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object" src="http://www.twcdi.ie/images/avatars/default_set/default-avatar.png" width="64px" height="64px" alt="...">
+                         </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading">{{ comentario.nombre }}</h4>
+                        <span class="comm-date">dijo el  {{ comentario.fecha_pub|date:"D d M Y"}}</span>
+                            <p>{{ comentario.cuerpo }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="post form-comment">
+                    <h2>Deja un comentario</h2>
+                    <form action="" method="post" id="comments-form" class="comment-form" novalidate="novalidate">
+                        <div class="row">
+                            {% csrf_token %}
+                            {{ comentariosForm|bootstrap }}
+                            <input type="submit" value="Enviar"/>
                         </div>
-                    {% endfor %}
-                    <hr/>
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ comentariosForm|bootstrap }}
-                        <input type="submit" value="Enviar"/>
                     </form>
                 </div>
-                <script type="text/javascript">
-                    jQuery(document).ready(function () {
-                        $("div.coment").each( function(){
-                            var $this = $(this);
-                            coment = $this.text();
-                            $this.empty();
-                            $this.append("<img src='http://www.scientiamarketing.com/wp-content/uploads/general-icons-03.png' width='90px' height='90px' style='float:left;'/>");
-                            $this.append("<h4 style='float:left;'> " + coment.substr(0, coment.indexOf(":")) + "</h4><span style='color:gray; font-size=10px;'>, dijo...</span><hr/>");
-                            $this.append("<p>"+coment.substr(coment.indexOf(':') + 1, coment.length -1 )+"</p><br/>")
-                        });
-                    });
-                </script>
-            {% endif %}
+        </div>
+        {% endif %}
     </div>
     {% endblock %}

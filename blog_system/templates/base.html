@@ -49,6 +49,9 @@
                 <a class="blog-nav-item" href="#">Press</a>
                 <a class="blog-nav-item" href="#">New hires</a>
                 <a class="blog-nav-item" href="#">About</a>
+                {% if user.is_authenticated %}
+                <a class="blog-nav-item" href="/logout" style="float: right">Logout</a>
+                {% endif %}
                 {% if user.is_superuser %}
                 <a class="blog-nav-item" href="/addpost" style="float: right">Nueva Publicacón</a>
                 {% endif %}

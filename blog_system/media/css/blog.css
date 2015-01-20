@@ -334,7 +334,7 @@ h1.article-title,h2.article-title {
         float: right;
         margin-top: 3px;
     }
-    .utilities .redesSociales, 
+    .utilities .redesSociales,
     .utilities .mediosClasicos {
         display:inline-block;
         list-style-type: none;
@@ -381,6 +381,26 @@ h1.article-title,h2.article-title {
         font-weight: bold;
         padding: 0 0.5em .25ex;
     }
+
+
+/******   Comments   ********/
+.comments,
+.form-comment {
+    padding: 30px 26px;
+}
+.comments .comment .media-heading {
+    margin: 0;
+}
+.comments .comment .comm-date {
+    color: #ccc;
+    font-size: 12px;
+}
+.form-comment textarea {
+    height: 130px;
+}
+.form-comment .form-submit {
+    text-align: right;
+}
 
 
 /*

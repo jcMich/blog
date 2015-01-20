@@ -62,14 +62,7 @@ class AddPost(CreateView):
 
 def addpost(request, template_name='newpost.html'):
     # strics in a POST or rendes empty form
-    addcategoria = categoria_form(request.POST or None)
     form = addpostForm(request.POST or None, request.FILES or None)
-    if addcategoria.is_valid():
-        cate_name = addcategoria.cleaned_data['nombre']
-        find_cate = Categorias.objects.filter(nombre=cate_name).count()
-        if find_cate == 0:
-            addcategoria.save()
-        return HttpResponseRedirect('')
     if form.is_valid():
         blog = form.save(commit=False)
         tags = unicode(form.cleaned_data['tags'])

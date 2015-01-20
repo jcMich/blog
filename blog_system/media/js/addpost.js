@@ -68,9 +68,10 @@ jQuery(document).ready(function () {
 
 
     // Agregar categorias Categorias.
-    var $modalform = $("div#modalform");
+    //var $modalform = $("div#modalform");
     $("#id_categoria").after("<div><a id='categoria'>Agregar</a></div>")
-    $modalform.hide();
+
+    //$modalform.hide();
 
     $("#categoria").on("click", function () {
         $modalform.show("slow");
@@ -102,6 +103,7 @@ jQuery(document).ready(function () {
             return false;
         }
     });
+
     // FileField
     var $imagen = $("#id_imagen");
     $imagen.before("<input class='btn btn-default' type='button' value='Imagen' style='float:left'><input type='text' placeholder='Buscar...' class='form-control' id='id_imagen_add' style='width: 500px; float:left;'></input>");
@@ -115,7 +117,7 @@ jQuery(document).ready(function () {
     });
     $imagen.change(function() {
         var $this = $(this);
-        var imagenName = $(this).val().replace(/C:\\fakepath\\/i, '');
+        var imagenName = $(this).val();
         $fakeimage.val($this.val());
     });
 });

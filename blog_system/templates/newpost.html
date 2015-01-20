@@ -49,21 +49,13 @@
             <legend>Crear una Entrada</legend>
         </div>
         <div class="row">
-            <div id="modalform">
-                <form action="." method="POST" class="form-horizontal new_cate" role="form" onsubmit="return false">
-                    {% csrf_token %}
-                    {{ categoria|bootstrap }}
-                    <input class="btn-u" type="submit" id="save_data" value="Agregar">
-                    <a id="cancel-cate">Cacelar<a>
-                </form>
-            </div>
             <div class="col-lg-11">
                 <form action="." method="POST" class="form-horizontal" role="form" enctype='multipart/form-data'>
                     {% csrf_token %}
                     {{ form.media }}
                     {{ form|bootstrap_horizontal }}
-                    <input class="btn-u" type="submit" name="save_exit" value="Agregar y Salir">
-                    <input class="btn-u" type="submit" name="save_continue" value="Agregar y Continua">
+                    <input class="btn btn-primary" type="submit" name="save_exit" value="Agregar y Salir">
+                    <input class="btn btn-default" type="submit" name="save_continue" value="Agregar y Continua">
                 </form>
             </div>
         </div>
