@@ -39,7 +39,11 @@
                                         <div class="inner-shadow">
                                         <h2 class="article-title"><a href="/blog/{{ blog.id }}">{{ blog.title }}</a></h2>
                                         </div>
-                                        <div class="body-post">{{ blog.perex|striptags }}</div>
+                                        <div class="body-post">
+                                            {% autoescape off %}
+                                                {{ blog.perex|truncatechars:150 }}
+                                            {% endautoescape %}
+                                        </div>
                                     </div>
                                 </div>
                                 <div style="clearfix"></div>
@@ -83,17 +87,5 @@
             </ul>
         </nav>
     </div>
-
-    <!-- Script redimenciona el texto del titulo-->
-    <script type="text/javascript">
-        var $title = $("h2.article-title");
-        $title.each( function(){
-            var $thisTitle = $(this);
-            if ($thisTitle.children().text().length > 50)
-                $thisTitle.css("font-size", "20px")
-            if ($thisTitle.children().text().length >= 75)
-                $thisTitle.css("font-size", "19px")
-        });
-    </script>
 
  {% endblock %}

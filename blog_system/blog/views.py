@@ -71,14 +71,14 @@ def month(request, year, month):
 
 def addpost(request, template_name='newpost.html'):
     # strics in a POST or rendes empty form
+    cform = categoria_form(request.POST or None)
     form = addpostForm(request.POST or None, request.FILES or None)
-    if request.method=='POST' and request.is_ajax():
-        if cform.is_valid():
-            cate_name = cform.cleaned_data['nombre']
-            find_cate = Categorias.objects.filter(nombre=cate_name).count()
-            if find_cate == 0:
-                cform.save()
-            return HttpResponse(json.dumps(),context_type='aplicattion/json')
+    if cform.is_valid():
+        nombre = cform.cleaned_data['nombre']
+        descripcion = cform.cleaned_data['descripcion']
+        cate = Categorias.objects.get_or_create(nombre=nombre, descripcion=descripcion)
+        cate.save()
+        return HttpResponseRedirect('')
     if form.is_valid():
         blog = form.save(commit=False)
         tags = unicode(form.cleaned_data['tags'])

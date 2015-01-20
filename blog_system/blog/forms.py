@@ -25,7 +25,7 @@ class addpostForm(ModelForm):
     content = forms.CharField(widget=CKEditorWidget(config_name='full_ckeditor'))
     perex = forms.CharField(widget=CKEditorWidget(config_name='basic_ckeditor'))
     tags = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'inserta aqui los tags separados por , '}))
-    comentar = forms.BooleanField()
+    comentar = forms.BooleanField(required=False)
     class Meta:
         model = Blog
         exclude ={'tags', 'slug'}

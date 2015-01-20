@@ -93,7 +93,12 @@ jQuery(document).ready(function () {
             $.post($(this).attr('action'), $(this).serialize(), function(data){
                 // $("body").after(data);
             },'json');
+            var categoria = $("div#modalform #id_nombre").val();
+            $("#id_categoria").append("<option value='" + categoria + "'>" + categoria + "</option>")
             $modalform.hide("slow");
+            $modalform.find("input:text, textarea").each(function(){
+                $(this).val("");
+            })
         }
         return false;
     });
