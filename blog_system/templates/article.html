@@ -17,10 +17,10 @@
                         <span class="fecha">{{ blog.time|date:"d/m/y" }} - <strong>{{ blog.time|time:"H:i" }}</strong>
                         </span>
                     </div>
-                    <div class="compartirNoticia">
+                    <div class="compartirNoticia hidden-print">
                         <ul class="redesSociales">
                             <li>
-                                <a class="twitter" title="Comparte en Twitter" href="#">
+                                <a class="twitter" title="Comparte en Twitter" target="_blank" href="http://twitter.com/share?text={{ blog.title }}&url={{ Url }}{{ blog.get_absolute_url }}">
                                     <span class="fa-stack">
                                       <i class="fa fa-circle fa-stack-2x"></i>
                                       <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
@@ -28,7 +28,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="facebook" href="#" title="Comparte en Facebook">
+                                <a class="facebook" target="_blank" href="http://www.facebook.com/sharer.php?u={{ Url }}{{ blog.get_absolute_url }}" title="Comparte en Facebook">
                                     <span class="fa-stack">
                                       <i class="fa fa-circle fa-stack-2x"></i>
                                       <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
@@ -36,7 +36,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a id="googleplus" class="googlePlus" title="Comparte en Google+"  href="">
+                                <a id="googleplus" class="googlePlus" target="_blank" title="Comparte en Google+"  href="https://plus.google.com/share?url={{ Url }}{{ blog.get_absolute_url }}">
                                     <span class="fa-stack">
                                       <i class="fa fa-circle fa-stack-2x"></i>
                                       <i class="fa fa-google-plus fa-stack-1x fa-inverse"></i>
@@ -46,7 +46,7 @@
                         </ul>
                         <ul class="mediosClasicos">
                             <li class="envia">
-                                <a class="enviar" href="#" title="Enviar noticia">
+                                <a class="enviar" href="" title="Enviar noticia">
                                     <span class="fa-stack">
                                       <i class="fa fa-circle fa-stack-2x"></i>
                                       <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
@@ -54,7 +54,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="imprimir" href="#" title="Imprimir noticia">
+                                <a class="imprimir" title="Imprimir noticia" onclick="window.print()">
                                     <span class="fa-stack">
                                       <i class="fa fa-circle fa-stack-2x"></i>
                                       <i class="fa fa-print fa-stack-1x fa-inverse"></i>
@@ -64,7 +64,7 @@
                             <li class="comentario">
                                 <div class="comenta">
                                     <div class="comentarios">
-                                        <a href="#">231</a>
+                                        <a href="#">{{ comentarios.count }}</a>
                                     </div>
                                 </div>
                             </li>
@@ -82,7 +82,7 @@
             </article>
         </div>
         {% if blog.comentar %}
-                <div class="col-sm-9">
+                <div class="col-sm-9 hidden-print">
                     {% for comentario in comentarios %}
                         <div class="coment">
                             {{ comentario.nombre }}:{{ comentario.cuerpo }}

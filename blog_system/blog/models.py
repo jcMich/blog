@@ -7,6 +7,7 @@ STATUS_CHOICES = (
     (u'H', (u'Hidden')),
 )
 
+
 class Categorias(models.Model):
     nombre  = models.CharField(max_length=30)
     descripcion = models.TextField()
@@ -37,9 +38,8 @@ class Blog(models.Model):
     tags = models.ManyToManyField(Tags)
     tags.help_text=None
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('blog', (self.slug))
+        return '/blog/%s' % self.slug
 
     def __unicode__(self):
         return self.title
