@@ -1,7 +1,7 @@
 from blog_system import settings
 from blog.models import Categorias
 from blog_system.settings import TEMA
-
+from blog.models import Blog
 
 def tema():
     if TEMA == 'principal':
@@ -19,6 +19,7 @@ def blog_context_processor(request):
         "Url": settings.SITE_URL,
         "Image": settings.SITE_IMAGE,
         "categorias": Categorias.objects.all(),
-        "base": tema()
+        "base": tema(),
+        "archive": Blog.objects.filter(status='P').order_by('-time')
     }
     return context

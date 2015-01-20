@@ -102,5 +102,21 @@ jQuery(document).ready(function () {
             return false;
         }
     });
+    // FileField
+    var $imagen = $("#id_imagen");
+    $imagen.before("<input class='btn btn-default' type='button' value='Imagen' style='float:left'><input type='text' placeholder='Buscar...' class='form-control' id='id_imagen_add' style='width: 500px; float:left;'></input>");
+    $imagen.hide();
+    var $fakeimage = $("#id_imagen_add");
+    $fakeimage.on( "click", function(){
+        $imagen.click();
+    });
+    $fakeimage.prev().on( "click", function(){
+        $imagen.click();
+    });
+    $imagen.change(function() {
+        var $this = $(this);
+        var imagenName = $(this).val().replace(/C:\\fakepath\\/i, '');
+        $fakeimage.val($this.val());
+    });
 });
 

@@ -95,6 +95,19 @@
                         <input type="submit" value="Enviar"/>
                     </form>
                 </div>
+
+                <script type="text/javascript">
+                    jQuery(document).ready(function () {
+                        $("div.coment").each( function(){
+                            var $this = $(this);
+                            coment = $this.text();
+                            $this.empty();
+                            $this.append("<img src='imagen.jpg' width='80px' height='80px' style='float:left;'/>");
+                            $this.append("<h4> " + coment.substr(0, coment.indexOf(":")) + "</h4> <span> dijo...</span><br/>");
+                            $this.append("<p>"+coment.substr(coment.indexOf(':'), coment.length -1 )+"</p>")
+                        });
+                    });
+                </script>
             {% endif %}
     </div>
     {% endblock %}
