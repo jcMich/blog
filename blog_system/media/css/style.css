@@ -72,3 +72,33 @@ ul.archive li:hover ul{
 }
 
 
+/* Tags slim
+------------------------*/
+
+ul.tags_list{
+    list-style-type: none;
+    max-width: 300px;
+    margin-left: -40px;
+}
+
+li.isTags{
+    font-size: 9pt;
+    position: relative;
+    color: #fff;
+    float:left;
+    padding: 2px 6px;
+    margin: 5px;
+    background-color: #ff6b00;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    border-radius: 5px;
+    border-radius: 5px;
+}
+
+
+
+
+
+

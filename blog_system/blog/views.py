@@ -1,6 +1,6 @@
 # Create your views here.
 from django.views.generic import ListView, DetailView, CreateView
-from .models import Blog, comentarios, Tags, Categorias
+from .models import Blog, comentarios, Tags, Categorias, STATUS_CHOICES
 from django.shortcuts import render_to_response, render
 from forms import ComentarioForm, ContactForm, LoginForm, addpostForm, categoria_form
 from django.template import RequestContext
@@ -96,6 +96,9 @@ def addpost(request, template_name='newpost.html'):
     return render(request, template_name, {'form':form, 'cform': cform})
 
 
+def editposts(request, template_name='editposts.html'):
+    posts = Blog.objects.all()
+    return render(request, template_name, {'blogs':posts, 'status':STATUS_CHOICES})
 
 
 # BORRAR Y AGREGAR AL FORMULARIO LA VIEW ADDPOST
