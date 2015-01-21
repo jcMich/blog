@@ -61,7 +61,7 @@
                     </tr>
                     {% for blog in blogs %}
                     <tr>
-                        <td><img src="{{ blog.imagen.url }}" width="30px" height="30px"></td>
+                        <td><img src="{{ blog.imagen.url }}" width="50px" height="50px"></td>
                         <td><p>{{ blog.title|truncatechars:50 }}</p></td>
                         <td>
                            <ul class="tags_list">
@@ -71,7 +71,7 @@
                             </ul>
                         </td>
                         <td>
-                            <select name="categorias" id="id_categorias">
+                            <select class ="form-control" name="categorias" id="id_categorias">
                                 {% for categoria in categorias %}
                                     {% if categoria == blog.categoria %}
                                     <option selected value="{{ categoria }}">{{ categoria }}</option>
@@ -82,7 +82,7 @@
                             </select>
                         </td>
                         <td>
-                            <select name="statis" id="id_status">
+                            <select class ="form-control" name="statis" id="id_status">
                                 {% autoescape off %}
                                 {% for state in status %}
                                     {% if state.0 == blog.status %}
@@ -109,13 +109,11 @@
             var $buttons = $("input.savedata");
             $("#id_categorias, #id_status").on("change", function(){
                 var $this = $(this);
-                $this.closest("tr").find("input.savedata").removeAttr("disabled");
+                $this.closest("tr").find("input.savedata")
+                    .removeAttr("disabled")
+                    .removeClass("btn-success")
+                    .addClass("btn-default");
             });
-
-
-
-
-
             $buttons.on("click", function(event){
                 event.preventDefault();
                 var $this = $(this);
