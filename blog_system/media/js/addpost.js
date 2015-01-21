@@ -78,7 +78,8 @@ jQuery(document).ready(function () {
     $("#cancel-cate").on("click", function () {
         $modalform.hide("slow");
     });
-   $("form.new_cate").on("submit", function () {
+   $("form.new_cate").on("submit", function (event) {
+        event.preventDefault();
         var fieldVoid = false;
         $(this).find("input, textarea").not(":submit").each(function () {
             var $this = $(this)
@@ -95,12 +96,12 @@ jQuery(document).ready(function () {
             },'json');
             var categoria = $("div#modalform #id_nombre").val();
             $("#id_categoria").append("<option value='" + categoria + "'>" + categoria + "</option>")
+            $("#id_categoria").val(categoria);
             $modalform.hide("slow");
             $modalform.find("input:text, textarea").each(function(){
                 $(this).val("");
             })
         }
-        return false;
     });
 
     // FileField
