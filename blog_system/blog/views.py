@@ -15,7 +15,7 @@ import json
 class Home(ListView):
     model = Blog
     context_object_name = 'blogs'
-    paginate_by = 4
+    paginate_by = 8
     page_kwarg = 'page'
     template_name = 'index.html'
 
@@ -164,9 +164,9 @@ def contacto_view(request):
             texto = formulario.cleaned_data['Texto']
 
             # enviando gmail
-            to_admin = 'pruebashordeipi@gmail.com'
-            html_content = "Informacion recibida <br><br><br>***Mensaje**<br><br>%s" % (texto)
-            msg = EmailMultiAlternatives('correo de contacto', html_content, 'from@server.com', [to_admin])
+            to_admin = 'jc.fie.umich@gmail.com'
+            html_content = "Informacion recibida <br><br><br>***Mensaje**<br><br>%s<br><br>Responde a: %s" % (texto, email)
+            msg = EmailMultiAlternatives('Correo de contacto blog', html_content, 'from@server.com', [to_admin])
             msg.attach_alternative(html_content, "text/html")
             msg.send()
 
@@ -194,3 +194,21 @@ class LoginView(FormView):
 def log_out(request):
     logout(request)
     return HttpResponseRedirect('/')
+
+
+def about(request):
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['Email']
+            titulo = form.cleaned_data['Titulo']
+            texto = form.cleaned_data['Texto']
+
+            to_admin = 'jc.fie.umich@gmail.com'
+            html_context = "Informacion recibida <br><br><br>***Mensaje**<br><br>%s<br><br>Responde a: %s" % (texto, email)
+            msg = EmailMultiAlternatives('Coreo de contacto bog', html_context, 'from@server.com', [to_admin])
+            msg.attach_alternative(html_context, "text/html")
+            msg.send()
+            return HttpResponseRedirect('/')
+        return render_to_response('about.html', {'form': form}, context_instance= RequestContext(request))
+    return render_to_response('about.html', {'form': ContactForm()}, context_instance=RequestContext(request))

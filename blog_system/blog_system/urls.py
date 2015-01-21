@@ -10,6 +10,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
                        url(r'login/$', LoginView.as_view(), name='login'),
                        url(r'logout/$', 'blog.views.log_out', name='logout'),
+                       url(r'about/$', 'blog.views.about', name='about'),
                        url(r'^$', Home.as_view(), name='home'),
                        url(r'^blog/(?P<slug>.*)/$', BlogDetail.as_view(), name='blog'),
                        url(r'^contacto/$', 'blog.views.contacto_view', name='vista_contacto'),

@@ -61,13 +61,15 @@
                                     </span>
                                 </a>
                             </li>
-                            <li class="comentario">
-                                <div class="comenta">
-                                    <div class="comentarios">
-                                        <a href="#">{{ comentarios.count }}</a>
+                            {% if blog.comentar %}
+                                <li class="comentario">
+                                    <div class="comenta">
+                                        <div class="comentarios">
+                                            <a href="#">{{ comentarios.count }}</a>
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>

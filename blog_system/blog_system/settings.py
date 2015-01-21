@@ -144,9 +144,9 @@ TEMPLATE_DIRS = (
 #Email Config
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER ='pruebashordeipi@gmail.com'
-EMAIL_HOST_PASSWORD ='tumamaeshombre'
-EMAIL_USE_LTS =True
+EMAIL_HOST_USER = 'yezdotickets@gmail.com'
+EMAIL_HOST_PASSWORD ='yezdotickets.com'
+EMAIL_USE_TLS =True
 
 
 #Dynamic meta tags
@@ -165,12 +165,13 @@ CKEDITOR_CONFIGS = {
         'height': '100px',
     },
     'full_ckeditor': {
-        'toolbar': [["Format", "Bold", "Italic", 'TextColor'],
-                    ['codeSnippet', 'NumberedList', 'BulletedList', "Indent", "Outdent", 'JustifyLeft', 'JustifyCenter',
-                        'JustifyRight', 'JustifyBlock'],
-                    ['HorizontalRule', 'SpecialChar', "Table", "Subscript", "Superscript"],
-                    ['Undo', 'Redo'],
-                    ["Source"]],
+        'full': True,
+        # 'toolbar': [["Format", "Bold", "Italic", 'TextColor'],
+        #             ['codeSnippet', 'NumberedList', 'BulletedList', "Indent", "Outdent", 'JustifyLeft', 'JustifyCenter',
+        #                 'JustifyRight', 'JustifyBlock'],
+        #             ['HorizontalRule', 'SpecialChar', "Table", "Subscript", "Superscript"],
+        #             ['Undo', 'Redo'],
+        #             ["Source"]],
         # 'height': 200,
         # 'width': 480,
         'emailProtection': 'encode',
