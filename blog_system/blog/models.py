@@ -44,7 +44,7 @@ class Blog(models.Model):
     categoria = models.ForeignKey(Categorias)
     comentar = models.BooleanField(default=False)
     tags = models.ManyToManyField(Tags)
-    tags.help_text=None
+    tags.help_text = None
 
     def get_absolute_url(self):
         return '/blog/%s' % self.slug
