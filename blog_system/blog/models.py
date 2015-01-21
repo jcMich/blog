@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
+import os
+from datetime import datetime
 from django.db import models
+from django.utils.text import slugify
 
 STATUS_CHOICES = (
     (u'D', (u'Draft')),
@@ -26,12 +29,17 @@ class Tags(models.Model):
 
 
 class Blog(models.Model):
+    def url(self, filename):
+        filename, ext = os.path.splitext(filename.lower())
+        filename = "%s->%s%s" % (slugify(filename), datetime.now().strftime('%Y-%m-%d.%H-%M-%S'), ext)
+        return 'photos/%s' % filename
+
     time = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100)
     slug = models.SlugField()
     perex = models.TextField(unique=True)
     content = models.TextField()
-    imagen = models.ImageField(upload_to='photos')
+    imagen = models.ImageField(upload_to=url)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
     categoria = models.ForeignKey(Categorias)
     comentar = models.BooleanField(default=False)

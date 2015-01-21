@@ -20,12 +20,11 @@
                             <div class="post-body entry-content" id="post-body">
                                 <span>
                                     <div class="entry-image">
-                                        <a href="/blog/{{ blog.id }}">
+                                        <a href="/blog/{{ blog.slug }}">
                                             <img class="thumb img-responsive" src="{{ blog.imagen.url }}" style="max-height:200px;">
                                         </a>
                                     </div>
                                 </span>
-                         <!--       <script type="text/javascript">var x="Duis quis erat non nunc fringilla",y="http://perk-mistry-soratemplates.blogspot.mx/2014/07/duis-quis-erat-non-nunc-fringilla_3.html",t="Thursday, July 03, 2014",u="4";rm("p6774134534047760335")</script>-->
                                 <div class="article-container">
                                     <div class="inner-content">
                                         <div class="article-category">
@@ -37,7 +36,7 @@
                                             <strong class="post-day">{{blog.time|date:"d"}}</strong>
                                         </div>
                                         <div class="inner-shadow">
-                                        <h2 class="article-title"><a href="/blog/{{ blog.id }}">{{ blog.title }}</a></h2>
+                                        <h2 class="article-title"><a href="/blog/{{ blog.slug }}">{{ blog.title }}</a></h2>
                                         </div>
                                         <div class="body-post">
                                             {% autoescape off %}
