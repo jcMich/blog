@@ -22,9 +22,5 @@ urlpatterns = patterns('',
                        # url(r'^addpost/$', AddPost.as_view(), name='nuevo_post'),
                        url(r'^addcategoria/$', 'blog.views.addCategoria', name='addCategoria'),
                        url(r'^month/(?P<year>\d+)/(?P<month>\w+)/$', 'blog.views.month', name='month'),
-<<<<<<< HEAD
                        url(r'^editposts/$','blog.views.editposts', name='editposts')
-=======
-                       # url(r'^editposts/$','blog.views.editposts', name='editposts'),
->>>>>>> 49a5bd188eb27d5494c6bd79af53438e551fdb18
 )

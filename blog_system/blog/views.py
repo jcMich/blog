@@ -9,6 +9,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
+import json
 
 
 class Home(ListView):
@@ -95,9 +96,17 @@ def addpost(request, template_name='newpost.html'):
             return HttpResponseRedirect('')
     return render(request, template_name, {'form':form, 'cform': cform})
 
-
 def editposts(request, template_name='editposts.html'):
     posts = Blog.objects.all()
+    if request.method == 'POST':
+        postid = request.POST.get('id')
+        newcate = request.POST.get('categoria')
+        newstatus = request.POST.get('estado')
+        post = Blog.objects.get(pk=postid)
+        post.categoria = Categorias.objects.get(nombre=newcate)
+        post.status = newstatus
+        post.save()
+        return HttpResponse( json.dumps({"Success":"Success"}), content_type="application/json")
     return render(request, template_name, {'blogs':posts, 'status':STATUS_CHOICES})
 
 

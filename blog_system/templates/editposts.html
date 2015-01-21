@@ -51,7 +51,7 @@
         <div class="row">
             <div>
                 <table class="table table-striped">
-                    <tr>
+                <tr>
                         <th>Img</th>
                         <th>Titulo</th>
                         <th>Tags</th>
@@ -60,7 +60,6 @@
                         <th>Guardar</th>
                     </tr>
                     {% for blog in blogs %}
-                    <input type="hidden" value="{{ blog.id }}">
                     <tr>
                         <td><img src="{{ blog.imagen.url }}" width="30px" height="30px"></td>
                         <td><p>{{ blog.title|truncatechars:50 }}</p></td>
@@ -95,17 +94,49 @@
                                 {% endautoescape %}
                             </select>
                         </td>
-                        <td><input class="btn btn-default savedata" type="submit" id="save_data" value="Guardar"></td>
+                        <td>
+                            <input type="hidden" value="{{ blog.id }}">
+                            <input class="btn btn-default savedata" type="submit" value="Guardar" disabled="true">
+                        </td>
                     </tr>
                     {% endfor %}
                 </table>
             </div>
         </div>
+        <!-- csrfmiddlewaretoken:> {{ csrf_token }} -->
         <script type="text/javascript">
         $(document).ready(function(){
             var $buttons = $("input.savedata");
-            $buttons.on("click", function(){
-                console.log("It works!... for now...");
+            $("#id_categorias, #id_status").on("change", function(){
+                var $this = $(this);
+                $this.closest("tr").find("input.savedata").removeAttr("disabled");
+            });
+
+
+
+
+
+            $buttons.on("click", function(event){
+                event.preventDefault();
+                var $this = $(this);
+                $.ajax({
+                    type: "POST",
+                    url: "/editposts/",
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        id: $this.siblings("input:hidden").val(),
+                        categoria: $this.closest("tr").find("#id_categorias option:selected").text(),
+                        estado: $this.closest("tr").find("#id_status option:selected").val()
+                    },
+                    success: function(result){
+                        $this.removeClass("btn-default");
+                        $this.addClass("btn-success");
+                    },
+                    error: function(xhr, result, err){
+                        console.log("ERROR")
+                    }
+                });
+                $this.attr("disabled", "true");
             });
         });
         </script>
