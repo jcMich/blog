@@ -28,9 +28,9 @@ class Home(ListView):
     def get(self, request, *args, **kwargs):
         c = request.GET.get('category')
         if c:
-            self.queryset = Blog.objects.filter(categoria__nombre=c).order_by('-time')
+            self.queryset = Blog.objects.filter(categoria__nombre=c).filter(status='P').order_by('-time')
         else:
-            self.queryset = Blog.objects.order_by('-time')
+            self.queryset = Blog.objects.filter(status='P').order_by('-time')
         return super(Home, self).get(request, *args, **kwargs)
 
 

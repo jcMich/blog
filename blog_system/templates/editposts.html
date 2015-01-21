@@ -27,122 +27,133 @@
         <!-- Custom styles for this template -->
         <link href="{% static 'css/blog.css'%}" rel="stylesheet">
     </head>
-
     <body>
-
-<body>
-<!-- Header -->
-<div class="container">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-        <a class="navbar-brand" href="/">
-            <img id="logo-header" src="/media/img/logo.png" alt="Logo">
-        </a>
-        <br><br>
-    </div>
-</div>
-<!-- End Headder -->
-<!-- Container -->
-<div class="container">
-    {% if user.is_superuser %}
-        <div class="text-center">
-            <legend>Crear una Entrada</legend>
-        </div>
-        <div class="row">
-            <div>
-                <table class="table table-striped">
-                <tr>
-                        <th>Img</th>
-                        <th>Titulo</th>
-                        <th>Tags</th>
-                        <th>Categoria</th>
-                        <th>Estado</th>
-                        <th>Guardar</th>
-                    </tr>
-                    {% for blog in blogs %}
-                    <tr>
-                        <td><img src="{{ blog.imagen.url }}" width="50px" height="50px"></td>
-                        <td><p>{{ blog.title|truncatechars:50 }}</p></td>
-                        <td>
-                           <ul class="tags_list">
-                            {% for tag in blog.tags.all %}
-                                <li class="isTags">{{ tag }}</li>
-                            {% endfor %}
-                            </ul>
-                        </td>
-                        <td>
-                            <select class ="form-control" name="categorias" id="id_categorias">
-                                {% for categoria in categorias %}
-                                    {% if categoria == blog.categoria %}
-                                    <option selected value="{{ categoria }}">{{ categoria }}</option>
-                                    {% else %}
-                                    <option value="{{ categoria }}">{{ categoria }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td>
-                            <select class ="form-control" name="statis" id="id_status">
-                                {% autoescape off %}
-                                {% for state in status %}
-                                    {% if state.0 == blog.status %}
-                                    <option selected value="{{ state.0}}">{{ state.1 }}</option>
-                                    {% else %}
-                                    <option value="{{ state.0 }}">{{ state.1 }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                                {% endautoescape %}
-                            </select>
-                        </td>
-                        <td>
-                            <input type="hidden" value="{{ blog.id }}">
-                            <input class="btn btn-default savedata" type="submit" value="Guardar" disabled="true">
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </table>
+        <!-- Header -->
+        <div class="blog-masthead hidden-print">
+            <div class="container">
+                <nav class="blog-nav">
+                    <a class="blog-nav-item active" href="/">Home</a>
+                    <a class="blog-nav-item" href="#">New features</a>
+                    <a class="blog-nav-item" href="#">Press</a>
+                    <a class="blog-nav-item" href="#">New hires</a>
+                    <a class="blog-nav-item" href="{% url 'about' %}">About</a>
+                    {% if user.is_authenticated %}
+                    <a class="blog-nav-item" href="{% url 'logout' %}" style="float: right">Logout</a>
+                    {% endif %}
+                    {% if user.is_superuser %}
+                    <a class="blog-nav-item" href="{% url 'nuevo_post' %}" style="float: right">Nueva Publicacón</a>
+                    {% endif %}
+                </nav>
             </div>
         </div>
-        <!-- csrfmiddlewaretoken:> {{ csrf_token }} -->
-        <script type="text/javascript">
-        $(document).ready(function(){
-            var $buttons = $("input.savedata");
-            $("#id_categorias, #id_status").on("change", function(){
-                var $this = $(this);
-                $this.closest("tr").find("input.savedata")
-                    .removeAttr("disabled")
-                    .removeClass("btn-success")
-                    .addClass("btn-primary");
-            });
-            $buttons.on("click", function(event){
-                event.preventDefault();
-                var $this = $(this);
-                $.ajax({
-                    type: "POST",
-                    url: "/editposts/",
-                    data: {
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                        id: $this.siblings("input:hidden").val(),
-                        categoria: $this.closest("tr").find("#id_categorias option:selected").text(),
-                        estado: $this.closest("tr").find("#id_status option:selected").val()
-                    },
-                    success: function(result){
-                        $this.removeClass("btn-default primary");
-                        $this.addClass("btn-success");
-                    },
-                    error: function(xhr, result, err){
-                        console.log("ERROR")
-                    }
+        <!-- End Headder -->
+        <!-- Container -->
+        <div class="container">
+            {% if user.is_superuser %}
+                <div class="text-center">
+                    <legend>Administrar</legend>
+                </div>
+                <div class="row">
+                    <div>
+                        <table class="table table-striped">
+                        <tr>
+                                <th>Img</th>
+                                <th>Titulo</th>
+                                <th>Tags</th>
+                                <th>Categoria</th>
+                                <th>Estado</th>
+                                <th>Guardar</th>
+                            </tr>
+                            {% for blog in blogs %}
+                            <tr>
+                                <td><img src="{{ blog.imagen.url }}" width="50px" height="50px"></td>
+                                <td><p>{{ blog.title|truncatechars:50 }}</p></td>
+                                <td>
+                                   <ul class="tags_list">
+                                    {% for tag in blog.tags.all %}
+                                        <li class="isTags">{{ tag }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                </td>
+                                <td>
+                                    <select class ="form-control" name="categorias" id="id_categorias">
+                                        {% for categoria in categorias %}
+                                            {% if categoria == blog.categoria %}
+                                            <option selected value="{{ categoria }}">{{ categoria }}</option>
+                                            {% else %}
+                                            <option value="{{ categoria }}">{{ categoria }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class ="form-control" name="statis" id="id_status">
+                                        {% autoescape off %}
+                                        {% for state in status %}
+                                            {% if state.0 == blog.status %}
+                                            <option selected value="{{ state.0}}">{{ state.1 }}</option>
+                                            {% else %}
+                                            <option value="{{ state.0 }}">{{ state.1 }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% endautoescape %}
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="hidden" value="{{ blog.id }}">
+                                    <input class="btn btn-default savedata" type="submit" value="Guardar" disabled="true">
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                <!-- csrfmiddlewaretoken:> {{ csrf_token }} -->
+                <script type="text/javascript">
+                $(document).ready(function(){
+                    var $buttons = $("input.savedata");
+                    $("#id_categorias, #id_status").on("change", function(){
+                        var $this = $(this);
+                        $this.closest("tr").find("input.savedata")
+                            .removeAttr("disabled")
+                            .removeClass("btn-success")
+                            .addClass("btn-primary");
+                    });
+                    $buttons.on("click", function(event){
+                        event.preventDefault();
+                        var $this = $(this);
+                        $.ajax({
+                            type: "POST",
+                            url: "/editposts/",
+                            data: {
+                                csrfmiddlewaretoken: '{{ csrf_token }}',
+                                id: $this.siblings("input:hidden").val(),
+                                categoria: $this.closest("tr").find("#id_categorias option:selected").text(),
+                                estado: $this.closest("tr").find("#id_status option:selected").val()
+                            },
+                            success: function(result){
+                                $this.removeClass("btn-default primary");
+                                $this.addClass("btn-success");
+                            },
+                            error: function(xhr, result, err){
+                                console.log("ERROR")
+                            }
+                        });
+                        $this.attr("disabled", "true");
+                    });
                 });
-                $this.attr("disabled", "true");
-            });
-        });
-        </script>
-    {% else %}
-    <div class="text-center"><p>¡ERROR! no tiene los permisos necesarios, Contacte al Administrador </p></div>
-    {% endif %}
-</div>
-<br>
-<!-- Container -->
-</body>
+                </script>
+            {% else %}
+            <div class="text-center"><p>¡ERROR! no tiene los permisos necesarios, Contacte al Administrador </p></div>
+            {% endif %}
+        </div>
+        <br>
+        <!-- Container -->
+        <footer class="blog-footer">
+            <p>Blog template by <a href="https://www.deipi.com">Deipi.com</a>.</p>
+            <p>
+                <a href="#">Back to top</a>
+            </p>
+        </footer>
+    </body>
 </html>
