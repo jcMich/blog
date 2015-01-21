@@ -11,7 +11,7 @@ urlpatterns = patterns('',
                        url(r'login/$', LoginView.as_view(), name='login'),
                        url(r'logout/$', 'blog.views.log_out', name='logout'),
                        url(r'^$', Home.as_view(), name='home'),
-                       url(r'^blog/(?P<pk>\d+)/$', BlogDetail.as_view(), name='blog'),
+                       url(r'^blog/(?P<slug>.*)/$', BlogDetail.as_view(), name='blog'),
                        url(r'^contacto/$', 'blog.views.contacto_view', name='vista_contacto'),
                        url(r'^admin/', include(admin.site.urls)),
                        url(r'^media/(?P<path>.*)$', 'django.views.static.serve',
@@ -21,6 +21,6 @@ urlpatterns = patterns('',
                        url(r'^addpost/$', 'blog.views.addpost', name='nuevo_post'),
                        #url(r'^addpost/$', AddPost.as_view(), name='nuevo_post'),
                        url(r'^addcategoria/$', 'blog.views.addCategoria', name='addCategoria'),
-                       url(r'^month/(?P<year>\d+)/(?P<month>\w+)/$', 'blog.views.month', name='month')
-                       url(r'^editposts/$','blog.views.editposts', name='editposts')
+                       url(r'^month/(?P<year>\d+)/(?P<month>\w+)/$', 'blog.views.month', name='month'),
+                       # url(r'^editposts/$','blog.views.editposts', name='editposts'),
 )
