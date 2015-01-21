@@ -112,7 +112,7 @@
                 $this.closest("tr").find("input.savedata")
                     .removeAttr("disabled")
                     .removeClass("btn-success")
-                    .addClass("btn-default");
+                    .addClass("btn-primary");
             });
             $buttons.on("click", function(event){
                 event.preventDefault();
@@ -127,7 +127,7 @@
                         estado: $this.closest("tr").find("#id_status option:selected").val()
                     },
                     success: function(result){
-                        $this.removeClass("btn-default");
+                        $this.removeClass("btn-default primary");
                         $this.addClass("btn-success");
                     },
                     error: function(xhr, result, err){
