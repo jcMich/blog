@@ -97,11 +97,12 @@ def addpost(request, template_name='newpost.html'):
 
 def editposts(request, template_name='editposts.html'):
     posts = Blog.objects.all()
-    if request.method == 'POST' and request.is_ajax():
+    if request.method == 'POST':
         postid = request.POST.get('id')
         newcate = request.POST.get('categoria')
         newstatus = request.POST.get('estado')
-        coment = request.POST.get('comentario')
+        coment = request.POST.get('comentario') == 'true'
+        print(coment)
         post = Blog.objects.get(pk=postid)
         post.comentar = coment
         post.categoria = Categorias.objects.get(nombre=newcate)
