@@ -53,22 +53,33 @@
                 <table class="table table-striped">
                 <tr>
                         <th>Img</th>
-                        <th>Titulo</th>
-                        <th>Tags</th>
+                        <th>Información</th>
+                        <th>Coment</th>
                         <th>Categoria</th>
                         <th>Estado</th>
                         <th>Guardar</th>
                     </tr>
                     {% for blog in blogs %}
                     <tr>
-                        <td><img src="{{ blog.imagen.url }}" width="50px" height="50px"></td>
-                        <td><p>{{ blog.title|truncatechars:50 }}</p></td>
-                        <td>
+                        <td><img src="{{ blog.imagen.url }}" width="100px" height="100px"></td>
+                        <td><div class="title">{{ blog.title|truncatechars:60 }}</div>
+                            {% autoescape off %}
+                                <div class="perex">{{ blog.perex|truncatechars:150 }}</div>
+                            {% endautoescape %}
                            <ul class="tags_list">
                             {% for tag in blog.tags.all %}
-                                <li class="isTags">{{ tag }}</li>
+                                <li class="isTag">{{ tag }}</li>
                             {% endfor %}
                             </ul>
+                        </td>
+                        <td>
+                            <center>
+                                {% if blog.comentar == True %}
+                                <input id="id_comentar" name="comentar" type="checkbox" checked>
+                                {% else %}
+                                <input id="id_comentar" name="comentar" type="checkbox">
+                                {% endif %}
+                            </center>
                         </td>
                         <td>
                             <select class ="form-control" name="categorias" id="id_categorias">
@@ -107,7 +118,7 @@
         <script type="text/javascript">
         $(document).ready(function(){
             var $buttons = $("input.savedata");
-            $("#id_categorias, #id_status").on("change", function(){
+            $("#id_categorias, #id_status, #id_comentar").on("change", function(){
                 var $this = $(this);
                 $this.closest("tr").find("input.savedata")
                     .removeAttr("disabled")
@@ -123,11 +134,12 @@
                     data: {
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                         id: $this.siblings("input:hidden").val(),
+                        comentario: $this.closest("tr").find("#id_comentar").prop('checked'),
                         categoria: $this.closest("tr").find("#id_categorias option:selected").text(),
                         estado: $this.closest("tr").find("#id_status option:selected").val()
                     },
                     success: function(result){
-                        $this.removeClass("btn-default primary");
+                        $this.removeClass("btn-default btn-primary");
                         $this.addClass("btn-success");
                     },
                     error: function(xhr, result, err){

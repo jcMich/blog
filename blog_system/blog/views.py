@@ -11,7 +11,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 import json
 
-
 class Home(ListView):
     model = Blog
     context_object_name = 'blogs'
@@ -98,11 +97,13 @@ def addpost(request, template_name='newpost.html'):
 
 def editposts(request, template_name='editposts.html'):
     posts = Blog.objects.all()
-    if request.method == 'POST':
+    if request.method == 'POST' and request.is_ajax():
         postid = request.POST.get('id')
         newcate = request.POST.get('categoria')
         newstatus = request.POST.get('estado')
+        coment = request.POST.get('comentario')
         post = Blog.objects.get(pk=postid)
+        post.comentar = coment
         post.categoria = Categorias.objects.get(nombre=newcate)
         post.status = newstatus
         post.save()
