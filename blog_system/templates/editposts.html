@@ -18,7 +18,6 @@
         <link rel="stylesheet" href="/media/css/style.css">
         <!-- Template -->
         <script type="text/javascript" src="/media/js/jquery-1.11.2.min.js"></script>
-        <script type="text/javascript" src="/media/js/addpost.js"></script>
         <!-- Style -->
         <!-- Favicon -->
         <link rel="shortcut icon" href="/media/img/favicon.ico">
@@ -69,8 +68,14 @@
                     </tr>
                     {% for blog in blogs %}
                     <tr>
-                        <td><img src="{{ blog.imagen.url }}" width="100px" height="100px"></td>
-                        <td><div class="title">{{ blog.title|truncatechars:60 }}</div>
+                        <td>
+                            <img src="{{ blog.imagen.url }}" id='postimg' width="100px" height="100px">
+                            <input type="file" id="id_imagen">
+                        </td>
+                        <td>
+                            <div class="title">
+                                <a href="/edit/{{ blog.slug }}">{{ blog.title|truncatechars:60 }}</a>
+                            </div>
                             {% autoescape off %}
                                 <div class="perex">{{ blog.perex|truncatechars:150 }}</div>
                             {% endautoescape %}
@@ -122,16 +127,19 @@
                 </table>
             </div>
         </div>
-        <!-- csrfmiddlewaretoken:> {{ csrf_token }} -->
+        <!-- Script -->
         <script type="text/javascript">
         $(document).ready(function(){
             var $buttons = $("input.savedata");
-            $("#id_categorias, #id_status, #id_comentar").on("change", function(){
+            $("#id_categorias, #id_status, #id_comentar, #id_imagen").on("change", function(){
                 var $this = $(this);
                 $this.closest("tr").find("input.savedata")
                     .removeAttr("disabled")
                     .removeClass("btn-success")
                     .addClass("btn-primary");
+            });
+            $("#postimg").on("click", function(){
+                $("#id_imagen").click();
             });
             $buttons.on("click", function(event){
                 event.preventDefault();
@@ -144,8 +152,7 @@
                         id: $this.siblings("input:hidden").val(),
                         comentario: $this.closest("tr").find("#id_comentar").prop('checked'),
                         categoria: $this.closest("tr").find("#id_categorias option:selected").text(),
-                        estado: $this.closest("tr").find("#id_status option:selected").val()
-                    },
+                        estado: $this.closest("tr").find("#id_status option:selected").val()                    },
                     success: function(result){
                         $this.removeClass("btn-default btn-primary");
                         $this.addClass("btn-success");
@@ -158,6 +165,7 @@
             });
         });
         </script>
+        <!-- End Javascript -->
     {% else %}
     <div class="text-center"><p>¡ERROR! no tiene los permisos necesarios, Contacte al Administrador </p></div>
     {% endif %}

@@ -29,18 +29,6 @@ ul.id_tags_list{
     padding-left: 5px;
 }
 
-
-#id_imagen{
-   position: relative;
-   padding: 10px;
-   -webkit-border-radius: 5px;
-   -moz-border-radius: 5px;
-   border: 1px dashed #BBB;
-   text-align: center;
-   background-color: #DDD;
-   cursor:pointer;
-}
-
 li.isTag{
     position: relative;
     color: #fff;
@@ -110,6 +98,9 @@ td div.perex{
 td div.title{
     margin-bottom: 5px;
     font-weight: bold;
+}
+td #id_imagen{
+    display: none;
 }
 
 

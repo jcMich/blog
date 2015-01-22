@@ -105,20 +105,22 @@ jQuery(document).ready(function () {
     });
 
     // FileField
-    var $imagen = $("#id_imagen");
-    $imagen.before("<input class='btn btn-default' type='button' value='Imagen' style='float:left'><input type='text' placeholder='Buscar...' class='form-control' id='id_imagen_add' style='width: 500px; float:left;'></input>");
-    $imagen.hide();
-    var $fakeimage = $("#id_imagen_add");
-    $fakeimage.on( "click", function(){
-        $imagen.click();
-    });
-    $fakeimage.prev().on( "click", function(){
-        $imagen.click();
-    });
-    $imagen.change(function() {
-        var $this = $(this);
-        var imagenName = $(this).val();
-        $fakeimage.val($this.val());
-    });
+    if ( $formBlog.length > 0) {
+        var $imagen = $("#id_imagen");
+        $imagen.before("<input class='btn btn-default' type='button' value='Imagen' style='float:left'><input type='text' placeholder='Buscar...' class='form-control' id='id_imagen_add' style='width: 500px; float:left;'></input>");
+        $imagen.hide();
+        var $fakeimage = $("#id_imagen_add");
+        $fakeimage.on( "click", function(){
+            $imagen.click();
+        });
+        $fakeimage.prev().on( "click", function(){
+            $imagen.click();
+        });
+        $imagen.change(function() {
+            var $this = $(this);
+            var imagenName = $(this).val();
+            $fakeimage.val($this.val());
+        });
+    }
 });
 

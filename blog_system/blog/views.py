@@ -1,7 +1,7 @@
 # Create your views here.
 from django.views.generic import ListView, DetailView, CreateView
 from .models import Blog, comentarios, Tags, Categorias, STATUS_CHOICES
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render_to_response, render, get_object_or_404
 from forms import ComentarioForm, ContactForm, LoginForm, addpostForm, categoria_form
 from django.template import RequestContext
 from django.utils.text import slugify
@@ -65,16 +65,23 @@ def month(request, year, month):
     return render(request, "index.html", {"blogs":posts})
 
 
-def addpost(request, template_name='newpost.html'):
+def addpost(request, template_name='newpost.html', slug=None):
     # strics in a POST or rendes empty form
     cform = categoria_form(request.POST or None)
-    form = addpostForm(request.POST or None, request.FILES or None)
+    try:
+        post = Blog.objects.get(slug=slug)
+    except:
+        post = False
+    if slug == None:
+        form = addpostForm(request.POST or None, request.FILES or None)
+    else:
+        form = addpostForm(request.POST or None, request.FILES or None, instance=post)
     if cform.is_valid():
         nombre = cform.cleaned_data['nombre']
         descripcion = cform.cleaned_data['descripcion']
         cate = Categorias.objects.get_or_create(nombre=nombre, descripcion=descripcion)
         cate.save()
-        return HttpResponseRedirect('')
+        return HttpResponse( json.dumps({"Success":"Success"}), content_type="application/json")
     if form.is_valid():
         blog = form.save(commit=False)
         tags = unicode(form.cleaned_data['tags'])
@@ -88,21 +95,21 @@ def addpost(request, template_name='newpost.html'):
         blog.save()
         blog.tags = lst_tgs
         blog.save()
-        if request.POST.get("save_exit"):
+        if slug != None:
+            return HttpResponseRedirect("/editposts/")
+        elif request.POST.get("save_exit"):
             return HttpResponseRedirect('/')
         elif request.POST.get("save_continue"):
-            form.clean()
             return HttpResponseRedirect('')
-    return render(request, template_name, {'form':form, 'cform': cform})
+    return render(request, template_name, {'form':form, 'cform': cform, 'post':post})
 
 def editposts(request, template_name='editposts.html'):
     posts = Blog.objects.all()
-    if request.method == 'POST':
+    if request.method == 'POST' and request.is_ajax():
         postid = request.POST.get('id')
         newcate = request.POST.get('categoria')
         newstatus = request.POST.get('estado')
         coment = request.POST.get('comentario') == 'true'
-        print(coment)
         post = Blog.objects.get(pk=postid)
         post.comentar = coment
         post.categoria = Categorias.objects.get(nombre=newcate)
@@ -110,19 +117,6 @@ def editposts(request, template_name='editposts.html'):
         post.save()
         return HttpResponse( json.dumps({"Success":"Success"}), content_type="application/json")
     return render(request, template_name, {'blogs':posts, 'status':STATUS_CHOICES})
-
-
-# BORRAR Y AGREGAR AL FORMULARIO LA VIEW ADDPOST
-def addCategoria(request, template_name='tagsandcate.html'):
-    form = categoria_form(request.POST or None)
-    if form.is_valid():
-        form.save()
-        if request.POST.get("save_exit"):
-            return HttpResponseRedirect('/')
-        elif request.POST.get("save_continue"):
-            form.clean()
-            return HttpResponseRedirect('')
-    return render(request, template_name, {'form':form})
 
 
 class BlogDetail(DetailView):
