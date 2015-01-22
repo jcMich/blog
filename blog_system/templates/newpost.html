@@ -69,9 +69,12 @@
                             {{ form|bootstrap_horizontal }}
                             <div class="col-lg-offset-2">
                                 <input class="btn btn-primary" type="submit" name="save_exit" value="Agregar y Salir">
-                                {% if post == False %}
+                            {% if post == False %}
                                 <input class="btn btn-default" type="submit" name="save_continue" value="Agregar y Continua">
-                                {% endif %}
+                                <a href="/"><input class="btn btn-danger" type="button" value="Cancelar"></a>
+                            {% else %}
+                                <a href="/editposts/"><input class="btn btn-danger" type="button" value="Cancelar"></a>
+                            {% endif %}
                             </div>
                         </form>
                     </div>

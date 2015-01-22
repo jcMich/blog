@@ -103,6 +103,8 @@ td #id_imagen{
     display: none;
 }
 
-
+form input.btn-danger{
+    float: right;
+}
 
 
