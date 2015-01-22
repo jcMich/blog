@@ -70,7 +70,6 @@
                     <tr>
                         <td>
                             <img src="{{ blog.imagen.url }}" id='postimg' width="100px" height="100px">
-                            <input type="file" id="id_imagen">
                         </td>
                         <td>
                             <div class="title">
@@ -131,15 +130,12 @@
         <script type="text/javascript">
         $(document).ready(function(){
             var $buttons = $("input.savedata");
-            $("#id_categorias, #id_status, #id_comentar, #id_imagen").on("change", function(){
+            $("#id_categorias, #id_status, #id_comentar").on("change", function(){
                 var $this = $(this);
                 $this.closest("tr").find("input.savedata")
                     .removeAttr("disabled")
                     .removeClass("btn-success")
                     .addClass("btn-primary");
-            });
-            $("#postimg").on("click", function(){
-                $("#id_imagen").click();
             });
             $buttons.on("click", function(event){
                 event.preventDefault();
