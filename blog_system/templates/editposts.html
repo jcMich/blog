@@ -143,7 +143,6 @@
                 var $this = $(this);
                 $this.closest("tr").find("input.savedata")
                     .removeAttr("disabled")
-                    .removeClass("btn-success")
                     .addClass("btn-primary");
             });
             $buttons.on("click", function(event){
@@ -159,8 +158,8 @@
                         categoria: $this.closest("tr").find("#id_categorias option:selected").text(),
                         estado: $this.closest("tr").find("#id_status option:selected").val()                    },
                     success: function(result){
-                        $this.removeClass("btn-default btn-primary");
-                        $this.addClass("btn-success");
+                        $this.removeClass("btn-primary");
+                        $this.addClass("btn-default");
                     },
                     error: function(xhr, result, err){
                         console.log("ERROR")

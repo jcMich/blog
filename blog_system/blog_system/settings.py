@@ -37,6 +37,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     "blog.context_processors.blog_context_processor",
+    'django.core.context_processors.request',
 )
 
 # List of callables that know how to import templates from various sources.
@@ -82,6 +83,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'bootstrapform',
     'ckeditor',
+    'endless_pagination'
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )

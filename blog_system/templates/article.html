@@ -82,8 +82,9 @@
                         </ul>
                     </div>
                 </div>
+                <div>
 
-
+                </div>
                 <div class="post-thumb"><img itemprop='image' src="{{ blog.imagen.url }}" class="img-responsive center-block" alt="04"></div>
                 <div class="entry-content" itemprop="articleBody">
                     {% autoescape off %}
@@ -123,4 +124,13 @@
         </div>
         {% endif %}
     </div>
-    {% endblock %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.redesSociales').find("a").click(function(e) {
+            e.preventDefault();
+            window.open($(this).attr('href'), 'twitter', 'height=450, width=550, top=' + ($(window).height() / 2 - 275) + ', left=' + ($(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
+            return false;
+        });
+    });
+</script>
+{% endblock %}

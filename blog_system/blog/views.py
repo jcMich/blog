@@ -74,7 +74,7 @@ def addpost(request, template_name='newpost.html', slug=None):
     except:
         post = False
     if slug == None:
-        form = addpostForm(request.POST or None, request.FILES or None)
+        form = addpostForm(request.POST or None, request.FILES or None, initial={'status':'D'})
     else:
         form = addpostForm(request.POST or None, request.FILES or None, instance=post)
     if cform.is_valid():

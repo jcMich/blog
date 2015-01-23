@@ -16,6 +16,8 @@
                      <h1>{{ categoria|title }}</h1>
                 {% endif %}
                 <!--  POST  -->
+                {% load endless %}
+                {% paginate blogs %}
                 {% for blog in blogs %}
                     <div class="col-md-6">
                         <div class="post-entry">

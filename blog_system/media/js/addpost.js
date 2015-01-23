@@ -4,17 +4,18 @@ jQuery(document).ready(function () {
     var $tags_elements = $tags.children("option");
     var $formBlog = $("#id_title").closest("form");
 
+    /*Motor de tags
+    ----------------------------------------------*/
     $tags.siblings("p.help-block").remove()
     $tags.css("display", "none");
     $tags.after("<input class=' form-control' id='id_tags_add' name='id_tags_tag' type='text'>");
     $tags.after("<ul id='id_tags_list' class='id_tags_list'></ul>");
-
     // Funcion que almacena en una lista los tags.
     function checkIfExist($thisInput) {
         var tagExist = false;
         if ($thisInput.val().substr($thisInput.val().length - 1) == ",") {
             $tags_list.find("li").each(function () {
-                if ($(this).text().slice(0, -2) == $thisInput.val().slice(0, -1))
+                if ($(this).text().slice(0, -2) == $.trim($thisInput.val().slice(0, -1).toLowerCase()))
                     tagExist = true;
             });
         } else {
@@ -25,7 +26,6 @@ jQuery(document).ready(function () {
         }
         return tagExist;
     }
-
     // Se agregan las tag con comas.
     var $tags_list = $("#id_tags_list");
     $("#id_tags_add").on("keyup", function () {
@@ -33,7 +33,7 @@ jQuery(document).ready(function () {
         var key = $thisInput.val().substr($thisInput.val().length - 1);
         if ((key == ",") && $thisInput.val().length > 1) {
             if (!checkIfExist($thisInput))
-                $tags_list.append("<li class='isTag'>" + $.trim($thisInput.val().slice(0, -1)) + "<b class='delete'> ×</b></li>");
+                $tags_list.append("<li class='isTag'>" + $.trim($thisInput.val().slice(0, -1).toLowerCase()) + "<b class='delete'> ×</b></li>");
             $thisInput.val("");
         } else if (key == ",") {
             $thisInput.val("");
@@ -65,13 +65,11 @@ jQuery(document).ready(function () {
         }
         $("#id_tags").val(tag_list);
     });
-
-
-    // Agregar categorias Categorias.
+    /* Categorias.
+    ----------------------------------------*/
     $("#id_categoria").after("<div><a id='categoria'>Agregar</a></div>")
     var $modalform = $("div#modalform");
     $modalform.hide();
-
     $("#categoria").on("click", function () {
         $modalform.show("slow");
     });
@@ -103,8 +101,8 @@ jQuery(document).ready(function () {
             })
         }
     });
-
-    // FileField
+    /* FileField
+    ----------------------------*/
     if ( $formBlog.length > 0) {
         var $imagen = $("#id_imagen");
         $imagen.before("<input class='btn btn-default' type='button' value='Imagen' style='float:left'><input type='text' placeholder='Buscar...' class='form-control' id='id_imagen_add' style='width: 500px; float:left;'></input>");
