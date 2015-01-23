@@ -67,13 +67,45 @@
         <div class="row">
             <div>
                 <table class="table table-striped">
-                <tr>
+                    <tr>
                         <th>Img</th>
                         <th>Información</th>
                         <th>Coment</th>
                         <th>Categoria</th>
                         <th>Estado</th>
                         <th>Guardar</th>
+                    </tr>
+                    <tr>
+                        <form>
+                        <td></td>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="filter" id="search-nav-input" placeholder="Buscar">
+                            </div>
+                        </td>
+                        <td>
+                            <center>
+                                <input id="id_comentar" name="comentar" type="checkbox">
+                            </center>
+                        </td>
+                        <td>
+                            <select class ="form-control" name="categorias" id="id_categorias">
+                                {% for categoria in categorias %}
+                                    <option value="{{ categoria }}">{{ categoria }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <select class ="form-control" name="statis" id="id_status">
+                                {% autoescape off %}
+                                {% for state in status %}
+                                    <option value="{{ state.0 }}">{{ state.1 }}</option>
+                                {% endfor %}
+                                {% endautoescape %}
+                            </select>
+                        </td>
+                        <td><input type="submit" value="Buscar"></td>
+                        <form>
                     </tr>
                     {% for blog in blogs %}
                     <tr>

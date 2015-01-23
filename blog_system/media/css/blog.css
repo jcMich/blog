@@ -402,6 +402,11 @@ h1.article-title,h2.article-title {
     text-align: right;
 }
 
+/* Images in post */
+
+.entry-content img{
+    width: 100%;
+}
 
 /*
  * Footer
