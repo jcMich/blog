@@ -12,12 +12,11 @@
 
         <title>Blog Template for Bootstrap</title>
 
-        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-        <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="/media/css/font-awesome.min.css">
         <link rel="stylesheet" href="/media/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/media/css/style.css">
         <!-- Template -->
         <script type="text/javascript" src="/media/js/jquery-1.11.2.min.js"></script>
+        <script type="text/javascript" src="/media/js/bootstrap.min.js"></script>
         <!-- Style -->
         <!-- Favicon -->
         <link rel="shortcut icon" href="/media/img/favicon.ico">
@@ -25,6 +24,8 @@
 
         <!-- Custom styles for this template -->
         <link href="{% static 'css/blog.css'%}" rel="stylesheet">
+        <link rel="stylesheet" href="/media/css/style.css">
+
     </head>
 
     <body>
@@ -54,6 +55,18 @@
     {% if user.is_superuser %}
         <div class="text-center">
             <legend>Publicaciones</legend>
+        </div>
+        <div class="row">
+        <div class="col-lg-3 pull-right">
+            <form class="navbar-form" role="search">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Buscar..." name="search">
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" type="submit">Buscar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
         </div>
         <div class="row">
             <div>

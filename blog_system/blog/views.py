@@ -9,6 +9,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
+from django.db.models import Q
 import json
 
 class Home(ListView):
@@ -116,6 +117,12 @@ def editposts(request, template_name='editposts.html'):
         post.status = newstatus
         post.save()
         return HttpResponse( json.dumps({"Success":"Success"}), content_type="application/json")
+    if request.method == 'GET':
+        query = request.GET.get('search')
+        if query:
+            posts = Blog.objects.filter(Q(content__icontains=query) | Q(tags__nombre__icontains=query)).distinct().order_by('-time')
+    else:
+        posts = Blog.objects.all()
     return render(request, template_name, {'blogs':posts, 'status':STATUS_CHOICES})
 
 

@@ -12,7 +12,7 @@ def tema():
 
 def blog_context_processor(request):
     context = {
-        "Locale": settings.SITE_LOCALE,
+        "Locale": settings.LANGUAGE_CODE,
         "Type": settings.SITE_TYPE,
         "Title": settings.SITE_TITLE,
         "Descripcion": settings.SITE_DESCRIPTION,

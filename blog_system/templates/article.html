@@ -1,20 +1,29 @@
 {% extends 'base.html' %}
 {% load bootstrap %}
-{% block tags %}
+{% block snippets %}
+        <title>{{ blog.title }}</title>
+        <meta property="og:locale" content="{{ Locale }}"/>
+        <meta property="og:type" content="Article"/>
+        <meta property="og:title" content="{{ blog.title }}"/>
+        {% autoescape off %}
+        <meta property="og:description" content="{{ blog.perex|striptags }}"/>
+        {% endautoescape %}
+        <meta property="og:url" content="{{ Url }}{{ blog.get_absolute_url }}"/>
+        <meta property="og:image" content="{{ Url }}{{ blog.imagen.url }}"/>
     {% for tag in blog.tags.all %}
-        <meta name="{{ blog.title }}" content="{{ tag }}"/>
+        <meta property="article:tag" content="{{ tag }}"/>
     {% endfor %}
-
 {% endblock %}
 {% block contenido %}
-    <div class="col-lg-9">
+    <div class="col-lg-9" itemscope itemref="publusher" itemtype="http://schema.org/Article">
         <div class="main-content">
             <article id="post-1" class="post post-content">
-                <h1 class="entry-title">{{ blog.title }}</h1>
+                <h1 class="entry-title" itemprop='name'>{{ blog.title }}</h1>
                 <div class="utilities">
                     <div class="firma">
-                        <span class="nombre">Dubalu Factura Redacción</span>
-                        <span class="fecha">{{ blog.time|date:"d/m/y" }} - <strong>{{ blog.time|time:"H:i" }}</strong>
+                        <span class="nombre" itemprop='creator'>Dubalu Factura Redacción </span><span>|</span>
+                        <span class="nombre" itemprop='articleSection'> {{ blog.categoria}} </span><span>|</span>
+                        <span class="fecha" itemprop='datePublished '>{{ blog.time|date:"d/m/y" }} - <strong>{{ blog.time|time:"H:i" }}</strong>
                         </span>
                     </div>
                     <div class="compartirNoticia hidden-print">
@@ -75,8 +84,8 @@
                 </div>
 
 
-                <div class="post-thumb"><img src="{{ blog.imagen.url }}" class="img-responsive center-block" alt="04"></div>
-                <div class="entry-content">
+                <div class="post-thumb"><img itemprop='image' src="{{ blog.imagen.url }}" class="img-responsive center-block" alt="04"></div>
+                <div class="entry-content" itemprop="articleBody">
                     {% autoescape off %}
                         {{ blog.content|safe}}
                     {% endautoescape %}

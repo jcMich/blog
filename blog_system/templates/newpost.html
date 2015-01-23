@@ -41,7 +41,7 @@
                     <a class="blog-nav-item" href="{% url 'logout' %}" style="float: right">Logout</a>
                     {% endif %}
                     {% if user.is_superuser %}
-                    <a class="blog-nav-item" href="{% url 'nuevo_post' %}" style="float: right">Nueva Publicacón</a>
+                    <a class="blog-nav-item" href="{% url 'editposts' %}" style="float: right">Publicaciones</a>
                     {% endif %}
                 </nav>
             </div>

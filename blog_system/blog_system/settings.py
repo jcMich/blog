@@ -150,12 +150,12 @@ EMAIL_USE_TLS =True
 
 
 #Dynamic meta tags
-SITE_DESCRIPTION = 'en_US'
-SITE_LOCALE = 'article'
-SITE_TYPE = 'Blog Dubalu'
+SITE_DESCRIPTION = 'Basic Blog by Deipi.com'
+SITE_LOCALE = LANGUAGE_CODE
+SITE_TYPE = 'News blog'
 SITE_TITLE = 'Blog Dubalu'
 SITE_URL = 'http://www.dubalu.com'
-SITE_IMAGE ='http://www.dubalu.com'
+SITE_IMAGE ='http://www.deipi.com/static/images/html/deipi/deipi_logo.png?'
 
 
 CKEDITOR_UPLOAD_PATH = MEDIA_URL + 'ckeditor/'
