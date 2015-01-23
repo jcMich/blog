@@ -106,5 +106,38 @@ td #id_imagen{
 form input.btn-danger{
     float: right;
 }
-
+.blog-nav form{
+    float: right;
+    position: relative;
+    margin-top: 5px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.blog-nav form input{
+    max-width: 60px;
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 0px;
+    margin: 0px;
+    font-size: 14px;
+}
+.blog-nav form input:focus{
+    max-width: 200px;
+}
+.blog-nav form button{
+    color: #cdddeb;
+    background: #000;
+}
+.blog-nav form input[type="text"]:-moz-placeholder {
+  color: #cdddeb;
+}
+.blog-nav form input[type="text"]::-moz-placeholder {
+  color: #cdddeb;
+}
+.blog-nav form input[type="text"]:-ms-input-placeholder {
+  color: #cdddeb;
+}
+.blog-nav form input[type="text"]::-webkit-input-placeholder {
+  color: #cdddeb;
+}
 
