@@ -141,13 +141,13 @@ class BlogDetail(DetailView):
         form = ComentarioForm(request.POST)
         if form.is_valid():
             comentario = form.save(commit=False)
-            comentario.Blog = Blog.objects.get(pk=self.kwargs['pk'])
+            comentario.Blog = Blog.objects.get(slug=self.kwargs['slug'])
             comentario.nombre = form.cleaned_data['nombre']
             comentario.cuerpo = form.cleaned_data['cuerpo']
             comentario.save()
-            return HttpResponseRedirect('/blog/%s' % self.kwargs['pk'])
+            return HttpResponseRedirect('/blog/%s' % self.kwargs['slug'])
         else:
-            return HttpResponseRedirect('/blog/%s' % self.kwargs['pk'])
+            return HttpResponseRedirect('/blog/%s' % self.kwargs['slug'])
 
 
 def contacto_view(request):
