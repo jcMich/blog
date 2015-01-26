@@ -2,7 +2,7 @@
 from django.views.generic import ListView, DetailView, CreateView
 from .models import Blog, comentarios, Tags, Categorias, STATUS_CHOICES
 from django.shortcuts import render_to_response, render, get_object_or_404
-from forms import ComentarioForm, ContactForm, LoginForm, addpostForm, categoria_form
+from forms import ComentarioForm, ContactForm, LoginForm, addpostForm, categoria_form, filter_form
 from django.template import RequestContext
 from django.utils.text import slugify
 from django.core.mail import EmailMultiAlternatives
@@ -112,6 +112,7 @@ def addpost(request, template_name='newpost.html', slug=None):
     return render(request, template_name, {'form':form, 'cform': cform, 'post':post})
 
 def editposts(request, template_name='editposts.html'):
+    form = filter_form()
     posts = Blog.objects.all()
     if request.method == 'POST' and request.is_ajax():
         postid = request.POST.get('id')
@@ -125,13 +126,19 @@ def editposts(request, template_name='editposts.html'):
         post.save()
         return HttpResponse( json.dumps({"Success":"Success"}), content_type="application/json")
     if request.method == 'GET':
-        query = request.GET.get('search')
-        qfilter = request.GET.get('filter')
-        if query:
-            posts = Blog.objects.filter(Q(content__icontains=query) | Q(tags__nombre__icontains=query)).distinct().order_by('-time')
-    else:
-        posts = Blog.objects.all()
-    return render(request, template_name, {'blogs':posts, 'status':STATUS_CHOICES})
+        gfilter = request.GET.get('search')
+        gcate = request.GET.get('categoria')
+        gstatus = request.GET.get('status')
+        if gfilter:
+            posts = posts.filter(Q(content__icontains=gfilter) | Q(tags__nombre__icontains=gfilter)).distinct().order_by('-time')
+        else:
+            posts = Blog.objects.all()
+        if gcate:
+            posts = posts.filter(categoria=gcate).order_by('-time')
+        if gstatus:
+            posts = posts.filter(status=gstatus)
+        form = filter_form({'search': gfilter, 'categoria': gcate, 'status':gstatus})
+    return render(request, template_name, {'blogs':posts, 'form':form ,'status':STATUS_CHOICES})
 
 
 class BlogDetail(DetailView):

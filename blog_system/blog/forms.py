@@ -40,3 +40,15 @@ class categoria_form(ModelForm):
 class tags_form(ModelForm):
     class Meta:
         model = Tags
+
+
+class filter_form(forms.Form):
+    STATUS = (
+        ('', (u'-------')),
+        (u'D', (u'Draft')),
+        (u'P', (u'Public')),
+        (u'H', (u'Hidden')),
+    )
+    search = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Buscar..', 'class':'form-control'}))
+    categoria = forms.ModelChoiceField(Categorias.objects.all(), widget=forms.Select(attrs={'class':'form-control'}))
+    status = forms.ChoiceField(choices=STATUS, widget=forms.Select(attrs={'class':'form-control'}))

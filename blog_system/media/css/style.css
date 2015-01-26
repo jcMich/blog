@@ -156,4 +156,17 @@ form input.btn-danger{
 .blog-nav form input[type="text"]::-webkit-input-placeholder {
   color: #cdddeb;
 }
+.filtersearch{
+    float: right;
+}
+.filtersearch tr{
+    padding-right-right: 40px;
+}
+.filtersearch td{
+    padding: 0px 10px 0px 10px;
+}
+
+
+
+
 
