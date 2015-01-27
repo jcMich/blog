@@ -21,7 +21,7 @@ urlpatterns = patterns('',
                        url(r'^ckeditor/', include('ckeditor.urls')),
                        url(r'^addpost/$', 'blog.views.addpost', name='nuevo_post'),
                        # url(r'^addpost/$', AddPost.as_view(), name='nuevo_post'),
-                       # url(r'^addcategoria/$', 'blog.views.addCategoria', name='addCategoria'),
+                       url(r'^admin/categories/$', 'blog.views.categories', name='categories'),
                        url(r'^month/(?P<year>\d+)/(?P<month>\w+)/$', 'blog.views.month', name='month'),
                        url(r'^editposts/$','blog.views.editposts', name='editposts'),
                        url(r'^edit/(?P<slug>.*)/$', 'blog.views.addpost', name='edit')

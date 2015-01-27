@@ -1,0 +1,55 @@
+{% extends 'admin.html' %}
+{% load bootstrap %}
+<!-- Container -->
+{% block content %}
+    {% if categories %}
+        <div class="text-center">
+            <h1>Categorias</h1>
+        </div>
+        <div class="container">
+        <div class="row">
+            <table class="table table-striped">
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Borrar</th>
+                </tr>
+            {% for category in categories%}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><p class="name">{{ category.nombre }}</p></td>
+                    <td><div><p>{{ category.descripcion}}</p></div></td>
+                    <td><input type="submit" value="Eliminar" class="btn btn-danger"></td>
+                </tr>
+            {% endfor %}
+            </table>
+        </div>
+        <script type="text/javascript">
+        $(document).ready(function(){
+            $(".btn-danger").on("click", function(){
+                var categoryName = $(this).closest("tr").find("p.name").text();
+                if(confirm("Se borra la categoria " + categoryName
+                    + " y todo los post relacionados estas seguro")){
+                        $.ajax({
+                            type: "POST",
+                            url: "/admin/categories/",
+                            data: {
+                                csrfmiddlewaretoken: '{{ csrf_token }}',
+                                categoria: categoryName
+                            },
+                            success: function(result){
+                                console.log("Borrado exitosamente")
+                            },
+                            error: function(xhr, result, err){
+                                console.log(xhr)
+                            }
+                        });
+                }
+            });
+        });
+        </script>
+    {% else %}
+    <div class="text-center"><p>¡ERROR! no tiene los permisos necesarios, Contacte al Administrador </p></div>
+    {% endif %}
+{% endblock %}

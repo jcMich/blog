@@ -9,9 +9,9 @@ from django.core.mail import EmailMultiAlternatives
 from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
-from endless_pagination.decorators import page_template
 from django.db.models import Q
 import json
+
 
 class Home(ListView):
     model = Blog
@@ -137,6 +137,15 @@ def editposts(request, template_name='editposts.html'):
             posts = posts.filter(status=gstatus)
         form = filter_form({'search': gfilter, 'categoria': gcate, 'status': gstatus})
     return render(request, template_name, {'blogs': posts, 'form': form, 'status': STATUS_CHOICES})
+
+
+def categories(request, template_name="categories.html"):
+    categories = Categorias.objects.all()
+    if request.POST and request.is_ajax():
+        category = Categorias.objects.get(nombre=request.POST.get('categoria'))
+        category.delete()
+        return HttpResponseRedirect('/admin/categories/')
+    return render(request, template_name, {'categories': categories})
 
 
 class BlogDetail(DetailView):

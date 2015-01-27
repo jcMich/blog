@@ -1,66 +1,9 @@
+{% extends 'admin.html' %}
 {% load bootstrap %}
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <link rel="icon" href="../../favicon.ico">
-
-        <title>Blog Template for Bootstrap</title>
-
-        <link rel="stylesheet" href="/media/css/font-awesome.min.css">
-        <link rel="stylesheet" href="/media/css/bootstrap.min.css">
-        <!-- Template -->
-        <script type="text/javascript" src="/media/js/jquery-1.11.2.min.js"></script>
-        <script type="text/javascript" src="/media/js/bootstrap.min.js"></script>
-        <!-- Style -->
-        <!-- Favicon -->
-        <link rel="shortcut icon" href="/media/img/favicon.ico">
-
-
-        <!-- Custom styles for this template -->
-        <link href="{% static 'css/blog.css'%}" rel="stylesheet">
-        <link rel="stylesheet" href="/media/css/style.css">
-
-    </head>
-
-    <body>
-
-<body>
-<!-- Header -->
-<div class="blog-masthead hidden-print">
-    <div class="container">
-        <nav class="blog-nav">
-            <a class="blog-nav-item active" href="/">Home</a>
-            <a class="blog-nav-item" href="#">New features</a>
-            <a class="blog-nav-item" href="#">Press</a>
-            <a class="blog-nav-item" href="#">New hires</a>
-            <a class="blog-nav-item" href="{% url 'about' %}">About</a>
-            <!--<form class="navbar-form" role="search">
-                <div class="input-group">
-                    <input type="text" class="form-control input-sm" name="search" id="search-nav-input" placeholder="Buscar">
-                    <span class="input-group-btn">
-                    <button type="submit" class="btn btn-sm" title="Buscar"><i class="fa fa-search"></i></button>
-                    </span>
-                </div>
-            </form>-->
-            {% if user.is_authenticated %}
-            <a class="blog-nav-item" href="{% url 'logout' %}" style="float: right">Logout</a>
-            {% endif %}
-            {% if user.is_superuser %}
-            <a class="blog-nav-item" href="{% url 'nuevo_post' %}" style="float: right">Nueva Publicacón</a>
-            {% endif %}
-        </nav>
-    </div>
-</div>
-<!-- End Headder -->
 <!-- Container -->
+{% block content %}
 <div class="container">
-    {% if user.is_superuser %}
+    {% if user.is_superuser and blogs %}
         <div class="text-center">
             <h1>Publicaciones</h1>
         </div>
@@ -93,7 +36,7 @@
                 </form>
                 <table class="table table-striped">
                     <tr>
-                        <th>Img</th>
+                        <th>Imagen</th>
                         <th>Información</th>
                         <th>Coment</th>
                         <th>Categoria</th>
@@ -159,7 +102,6 @@
                     {% endfor %}
                 </table>
         </div>
-        <!-- Script -->
         <script type="text/javascript">
         $(document).ready(function(){
             // Guardar estados del formulario.
@@ -207,7 +149,8 @@
                         id: $this.siblings("input:hidden").val(),
                         comentario: $this.closest("tr").find("#id_comentar").prop('checked'),
                         categoria: $this.closest("tr").find("#id_categorias option:selected").text(),
-                        estado: $this.closest("tr").find("#id_status option:selected").val()                    },
+                        estado: $this.closest("tr").find("#id_status option:selected").val()
+                    },
                     success: function(result){
                         $this.removeClass("btn-primary");
                         $this.addClass("btn-default");
@@ -220,18 +163,8 @@
             });
         });
         </script>
-        <!-- End Javascript -->
     {% else %}
     <div class="text-center"><p>¡ERROR! no tiene los permisos necesarios, Contacte al Administrador </p></div>
     {% endif %}
 </div>
-<br>
-<!-- Container -->
-    <footer class="blog-footer">
-        <p>Blog template by <a href="https://www.deipi.com">Deipi.com</a>.</p>
-        <p>
-            <a href="#">Back to top</a>
-        </p>
-    </footer>
-</body>
-</html>
+{% endblock %}

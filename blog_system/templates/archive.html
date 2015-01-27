@@ -18,7 +18,10 @@
                     {{ block.super }}
                     <script type="text/javascript" src="/media/js/jquery-1.11.2.min.js"></script>
                     <script src="{{ STATIC_URL }}endless_pagination/js/endless-pagination.js"></script>
-                    <script>$.endlessPaginate({paginateOnScroll: true});</script>
+                    <script>$.endlessPaginate({
+                        paginateOnScroll: true,
+                        paginateOnScrollMargin: 60
+                    });</script>
                 {% endblock %}
             </div>
         </div>
