@@ -57,20 +57,19 @@ class AddPost(CreateView):
         if form.is_valid():
             pass
 
-@page_template('indexpage.html')  # just add this decorator
-def month(request, year, month, template_name='index.html', extra_context=None):
+
+def month(request, year, month, template_name='archive.html', page_template='archive_page.html'):
     def month_names(month):
         return {
             "Enero": 1, "Febrero": 2, "Marzo": 3, "Abril": 4, "Mayo": 5, "Junio": 6,
-            "Julio": 7, "Agosto": 8, "Septiembre": 9, "Octubre": 10, "Noviembre": 11, "Diciembre": 12
-            }[month]
+            "Julio": 7, "Agosto": 8, "Septiembre": 9, "Octubre": 10, "Noviembre": 11, "Diciembre": 12}[month]
     context = {
-        'blogs': Blog.objects.filter(time__year=int(year), time__month=month_names(month)).filter(status='P').order_by('-time')
+        'blogs': Blog.objects.filter(time__year=int(year), time__month=month_names(month)).filter(status='P').order_by('-time'),
+        'page_template': page_template,
     }
-    if extra_context is not None:
-        context.update(extra_context)
-    return render_to_response(
-        template_name, context, context_instance=RequestContext(request))
+    if request.is_ajax():
+        template_name = page_template
+    return render_to_response(template_name, context, context_instance=RequestContext(request))
 
 
 def addpost(request, template_name='newpost.html', slug=None):

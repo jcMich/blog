@@ -1,21 +1,6 @@
-{% extends 'base.html' %}
-{% block snippets %}
-        <title>{{ Title }}</title>
-        <meta property="og:locale" content="{{ Locale }}"/>
-        <meta property="og:type" content="{{ Type }}"/>
-        <meta property="og:title" content="{{ Title }}"/>
-        <meta property="og:description" content="{{ Descripcion }}"/>
-        <meta property="og:url" content="{{ Url }}"/>
-        <meta property="og:image" content="{{ Image }}"/>
-{% endblock %}
-{% block contenido %}
-    <div class="col-sm-9 blog-main">
-        <div class="row">
-            <div class="blog-post">
-                {% if categoria %}
-                     <h1>{{ categoria|title }}</h1>
-                {% endif %}
+        		{% load endless %}
                 <!--  POST  -->
+                {% paginate blogs %}
                 {% for blog in blogs %}
                     <div class="col-md-6">
                         <div class="post-entry">
@@ -60,33 +45,5 @@
                         </div>
                     </div>
                 {% endfor %}
+                {% show_more %}
                 <!--  END POST  -->
-            </div>
-        </div>
-        <nav>
-            <ul class="pagination">
-                {% if page_obj.has_previous %}
-                <li>
-                    <a href="/?page={{ page_obj.previous_page_number}}{% if category %}&category={{ category }}
-                    {% endif %} " aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-                </li>
-                {% endif %}
-                {% for b in page_obj.paginator.page_range %}
-                    {% if b == page_obj.number %}
-                    <li class="active"><a href="/?page={{ b }}{% if category%}&category={{ category }}{% endif %}">{{ b }} <span class="sr-only">(current)</span></a></li>
-                    {% else %}
-                    <li><a href="/?page={{ b }}{% if category%}&category={{ category }}{% endif %} ">{{ b }}</a></li>
-                    {% endif %}
-                {% endfor %}
-                {% if page_obj.has_next %}
-                <li>
-                    <a href="/?page={{ page_obj.next_page_number }}{% if category%}&category={{ category }}{% endif %} " aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
-    </div>
-
- {% endblock %}
