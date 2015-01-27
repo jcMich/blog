@@ -7,49 +7,80 @@
             <h1>Categorias</h1>
         </div>
         <div class="container">
-        <div class="row">
-            <table class="table table-striped">
-                <tr>
-                    <th>#</th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Borrar</th>
-                </tr>
-            {% for category in categories%}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td><p class="name">{{ category.nombre }}</p></td>
-                    <td><div><p>{{ category.descripcion}}</p></div></td>
-                    <td><input type="submit" value="Eliminar" class="btn btn-danger"></td>
-                </tr>
-            {% endfor %}
-            </table>
+            <div class="row">
+                <table class="table table-striped">
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Borrar</th>
+                    </tr>
+                {% for category in categories%}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><p class="name">{{ category.nombre }}</p></td>
+                        <td><div><p>{{ category.descripcion}}</p></div></td>
+                        <td><input type="submit" value="Eliminar" class="btn btn-danger"></td>
+                    </tr>
+                {% endfor %}
+                </table>
+            </div>
+            <div>
+                <input class="btn btn-default" type="button" id="show-agregar" value="Agregar Categoria">
+            </div>
+            <div id="modalform">
+            <form method="POST">
+                    {% csrf_token %}
+                    {{ form|bootstrap }}
+                    <input type="submit" id="agregar" value="Agregar" class="btn btn-primary">
+                    <a id="cancel-cate">Cancelar</a>
+            </form>
+            </div>
         </div>
         <script type="text/javascript">
         $(document).ready(function(){
             $(".btn-danger").on("click", function(){
-                var categoryName = $(this).closest("tr").find("p.name").text();
+                var $row = $(this).closest("tr");
+                var categoryName = $row.find("p.name").text();
                 if(confirm("Se borra la categoria " + categoryName
                     + " y todo los post relacionados estas seguro")){
-                        $.ajax({
-                            type: "POST",
-                            url: "/admin/categories/",
-                            data: {
-                                csrfmiddlewaretoken: '{{ csrf_token }}',
-                                categoria: categoryName
-                            },
-                            success: function(result){
-                                console.log("Borrado exitosamente")
-                            },
-                            error: function(xhr, result, err){
-                                console.log(xhr)
-                            }
-                        });
+                    $.ajax({
+                        type: "POST",
+                        url: "/admin/categories/",
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            categoria: categoryName
+                        },
+                        success: function(result){
+                            $row.remove();
+                        },
+                        error: function(xhr, result, err){
+                            console.log(xhr)
+                        }
+                    });
                 }
+            });
+            $("#show-agregar").on("click", function(){
+                $("#modalform").show("slow");
+            });
+            $("#agregar").on("click", function(){
+                var fieldVoid = false;
+                $(this).closest("form").find("input, textarea").not(":submit").each(function () {
+                    var $this = $(this);
+                    if ($.trim($this.val()) == "") {
+                        $this.css("border-color", "#f00");
+                        fieldVoid = true;
+                    }
+                });
+                if (fieldVoid == true)
+                    return false;
+                else
+                    $("#modalform").hide("slow");
             });
         });
         </script>
     {% else %}
     <div class="text-center"><p>¡ERROR! no tiene los permisos necesarios, Contacte al Administrador </p></div>
     {% endif %}
+
 {% endblock %}

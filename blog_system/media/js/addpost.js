@@ -67,7 +67,7 @@ jQuery(document).ready(function () {
     });
     /* Categorias.
     ----------------------------------------*/
-    $("#id_categoria").after("<div><a id='categoria'>Agregar</a></div>");
+    $formBlog.find("#id_categoria").after("<div><a id='categoria'>Agregar</a></div>");
     $formBlog.before("<div id='modalform'><form class='new_cate' role='form'> \
         <div class='form-group'><label class='control-label' for='id_nombre'>Nombre</label> \
         <input class='form-control' id='id_nombre' maxlength='30' name='nombre' type='text'></div> \
@@ -95,7 +95,8 @@ jQuery(document).ready(function () {
         });
         if (fieldVoid){
             return false;
-        } else {            $.ajax({
+        } else {
+            $.ajax({
                 type: "POST",
                 url: "/addpost/",
                 data: {
@@ -116,16 +117,6 @@ jQuery(document).ready(function () {
                         console.log(xhr, err);
                 }
             });
-           /* $.post($(this).attr('action'), $(this).serialize(), function(data){
-                // $("body").after(data);
-            },'json');
-            var categoria = $("div#modalform #id_nombre").val();
-            $("#id_categoria").append("<option value='" + categoria + "'>" + categoria + "</option>");
-            $("#id_categoria").val(categoria);
-            $modalform.hide("slow");
-            $modalform.find("input:text, textarea").each(function(){
-                $(this).val("");
-            });*/
         }
     });
     /* FileField

@@ -141,11 +141,18 @@ def editposts(request, template_name='editposts.html'):
 
 def categories(request, template_name="categories.html"):
     categories = Categorias.objects.all()
+    form = categoria_form(request.POST or None)
     if request.POST and request.is_ajax():
         category = Categorias.objects.get(nombre=request.POST.get('categoria'))
         category.delete()
+        print("Borrado")
         return HttpResponseRedirect('/admin/categories/')
-    return render(request, template_name, {'categories': categories})
+    if form.is_valid():
+        nombre = form.cleaned_data['nombre']
+        descripcion = form.cleaned_data['descripcion']
+        cate, created = Categorias.objects.get_or_create(nombre=nombre, descripcion=descripcion)
+        return HttpResponseRedirect('/admin/categories/')
+    return render(request, template_name, {'categories': categories, 'form': form})
 
 
 class BlogDetail(DetailView):
