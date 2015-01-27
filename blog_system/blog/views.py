@@ -57,15 +57,15 @@ class AddPost(CreateView):
         if form.is_valid():
             pass
 
-@page_template('index.html')  # just add this decorator
+@page_template('indexpage.html')  # just add this decorator
 def month(request, year, month, template_name='index.html', extra_context=None):
     def month_names(month):
         return {
-            "Enero":1, "Febrero":2, "Marzo":3, "Abril":4, "Mayo":5, "Junio":6,
-            "Julio":7, "Agosto":8,"Septiembre":9, "Octubre":10, "Noviembre":11, "Diciembre":12
+            "Enero": 1, "Febrero": 2, "Marzo": 3, "Abril": 4, "Mayo": 5, "Junio": 6,
+            "Julio": 7, "Agosto": 8, "Septiembre": 9, "Octubre": 10, "Noviembre": 11, "Diciembre": 12
             }[month]
     context = {
-        'blogs':Blog.objects.filter(time__year=int(year), time__month=month_names(month)).filter(status='P').order_by('-time')
+        'blogs': Blog.objects.filter(time__year=int(year), time__month=month_names(month)).filter(status='P').order_by('-time')
     }
     if extra_context is not None:
         context.update(extra_context)
@@ -75,21 +75,19 @@ def month(request, year, month, template_name='index.html', extra_context=None):
 
 def addpost(request, template_name='newpost.html', slug=None):
     # strics in a POST or rendes empty form
-    cform = categoria_form(request.POST or None)
     try:
         post = Blog.objects.get(slug=slug)
     except:
         post = False
-    if slug == None:
-        form = addpostForm(request.POST or None, request.FILES or None, initial={'status':'D'})
+    if slug is None:
+        form = addpostForm(request.POST or None, request.FILES or None, initial={'status': 'D'})
     else:
         form = addpostForm(request.POST or None, request.FILES or None, instance=post)
-    if cform.is_valid():
-        nombre = cform.cleaned_data['nombre']
-        descripcion = cform.cleaned_data['descripcion']
-        cate = Categorias.objects.get_or_create(nombre=nombre, descripcion=descripcion)
-        cate.save()
-        return HttpResponse( json.dumps({"Success":"Success"}), content_type="application/json")
+    if request.POST and request.is_ajax():
+        nombre = request.POST.get('nombre')
+        descripcion = request.POST.get('descripcion')
+        cate, created = Categorias.objects.get_or_create(nombre=nombre, descripcion=descripcion)
+        return HttpResponse(json.dumps({"Success": created}), content_type="application/json")
     if form.is_valid():
         blog = form.save(commit=False)
         tags = unicode(form.cleaned_data['tags'])
@@ -103,13 +101,14 @@ def addpost(request, template_name='newpost.html', slug=None):
         blog.save()
         blog.tags = lst_tgs
         blog.save()
-        if slug != None:
+        if slug is not None:
             return HttpResponseRedirect("/editposts/")
         elif request.POST.get("save_exit"):
             return HttpResponseRedirect('/')
         elif request.POST.get("save_continue"):
             return HttpResponseRedirect('')
-    return render(request, template_name, {'form':form, 'cform': cform, 'post':post})
+    return render(request, template_name, {'form': form, 'post': post})
+
 
 def editposts(request, template_name='editposts.html'):
     form = filter_form()
@@ -124,7 +123,7 @@ def editposts(request, template_name='editposts.html'):
         post.categoria = Categorias.objects.get(nombre=newcate)
         post.status = newstatus
         post.save()
-        return HttpResponse( json.dumps({"Success":"Success"}), content_type="application/json")
+        return HttpResponse(json.dumps({"Success": "Success"}), content_type="application/json")
     if request.method == 'GET':
         gfilter = request.GET.get('search')
         gcate = request.GET.get('categoria')
@@ -137,8 +136,8 @@ def editposts(request, template_name='editposts.html'):
             posts = posts.filter(categoria=gcate).order_by('-time')
         if gstatus:
             posts = posts.filter(status=gstatus)
-        form = filter_form({'search': gfilter, 'categoria': gcate, 'status':gstatus})
-    return render(request, template_name, {'blogs':posts, 'form':form ,'status':STATUS_CHOICES})
+        form = filter_form({'search': gfilter, 'categoria': gcate, 'status': gstatus})
+    return render(request, template_name, {'blogs': posts, 'form': form, 'status': STATUS_CHOICES})
 
 
 class BlogDetail(DetailView):

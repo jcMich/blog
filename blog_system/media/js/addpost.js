@@ -6,7 +6,7 @@ jQuery(document).ready(function () {
 
     /*Motor de tags
     ----------------------------------------------*/
-    $tags.siblings("p.help-block").remove()
+    $tags.siblings("p.help-block").remove();
     $tags.css("display", "none");
     $tags.after("<input class=' form-control' id='id_tags_add' name='id_tags_tag' type='text'>");
     $tags.after("<ul id='id_tags_list' class='id_tags_list'></ul>");
@@ -58,7 +58,7 @@ jQuery(document).ready(function () {
         for (var i = 0; i < $tags.length ; i++) {
 
             var temp = $tags[i].innerHTML.substr(0, $tags[i].innerHTML.indexOf("<"));
-            if (i == 0)
+            if (i === 0)
                 tag_list += temp.toLowerCase();
             else
                 tag_list += "," + temp.toLowerCase();
@@ -67,7 +67,14 @@ jQuery(document).ready(function () {
     });
     /* Categorias.
     ----------------------------------------*/
-    $("#id_categoria").after("<div><a id='categoria'>Agregar</a></div>")
+    $("#id_categoria").after("<div><a id='categoria'>Agregar</a></div>");
+    $formBlog.before("<div id='modalform'><form class='new_cate' role='form'> \
+        <div class='form-group'><label class='control-label' for='id_nombre'>Nombre</label> \
+        <input class='form-control' id='id_nombre' maxlength='30' name='nombre' type='text'></div> \
+        <div class='form-group'><label class='control-label' for='id_descripcion'>Descripcion</label> \
+        <textarea class='form-control' cols='40' id='id_descripcion' name='descripcion' rows='10'></textarea>\
+        </div><input class='btn-u' type='submit' id='save_data' value='Agregar'><a id='cancel-cate'>Cacelar</a></form></div>"
+    );
     var $modalform = $("div#modalform");
     $modalform.hide();
     $("#categoria").on("click", function () {
@@ -76,29 +83,49 @@ jQuery(document).ready(function () {
     $("#cancel-cate").on("click", function () {
         $modalform.hide("slow");
     });
-   $("form.new_cate").on("submit", function (event) {
+    $("form.new_cate").on("submit", function (event) {
         event.preventDefault();
         var fieldVoid = false;
         $(this).find("input, textarea").not(":submit").each(function () {
-            var $this = $(this)
+            var $this = $(this);
             if ($.trim($this.val()) === "") {
-                $this.css("border-color", "#f00")
+                $this.css("border-color", "#f00");
                 fieldVoid = true;
             }
         });
         if (fieldVoid){
             return false;
-        } else {
-            $.post($(this).attr('action'), $(this).serialize(), function(data){
+        } else {            $.ajax({
+                type: "POST",
+                url: "/addpost/",
+                data: {
+                    csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
+                    nombre: $(this).find("#id_nombre").val(),
+                    descripcion: $(this).find("#id_descripcion").val(),
+                },
+                success: function(result){
+                    var categoria = $("div#modalform #id_nombre").val();
+                    $("#id_categoria").append("<option value='" + categoria + "'>" + categoria + "</option>");
+                    $("#id_categoria").val(categoria);
+                    $modalform.hide("slow");
+                    $modalform.find("input:text, textarea").each(function(){
+                        $(this).val("");
+                    });
+                },
+                error: function(xhr, result, err){
+                        console.log(xhr, err);
+                }
+            });
+           /* $.post($(this).attr('action'), $(this).serialize(), function(data){
                 // $("body").after(data);
             },'json');
             var categoria = $("div#modalform #id_nombre").val();
-            $("#id_categoria").append("<option value='" + categoria + "'>" + categoria + "</option>")
+            $("#id_categoria").append("<option value='" + categoria + "'>" + categoria + "</option>");
             $("#id_categoria").val(categoria);
             $modalform.hide("slow");
             $modalform.find("input:text, textarea").each(function(){
                 $(this).val("");
-            })
+            });*/
         }
     });
     /* FileField

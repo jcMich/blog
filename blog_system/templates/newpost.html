@@ -54,6 +54,7 @@
                     <legend>Crear una Entrada</legend>
                 </div>
                 <div class="row">
+                {% comment %}
                     <div id="modalform">
                         <form action="." method="POST" class="form-horizontal new_cate" role="form" onsubmit="return false">
                             {% csrf_token %}
@@ -62,6 +63,7 @@
                             <a id="cancel-cate">Cacelar<a>
                         </form>
                     </div>
+                {% endcomment %}
                     <div class="col-lg-11">
                         <form action="" method="POST" class="form-horizontal" role="form" enctype='multipart/form-data'>
                             {% csrf_token %}
