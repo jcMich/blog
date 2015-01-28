@@ -131,6 +131,8 @@ MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
 
 MEDIA_URL = '/media/'
 
+CKEDITOR_UPLOAD_PATH = "photos/"
+
 STATIC_ROOT = os.path.join(PROJECT_PATH, 'colstatic')
 
 STATIC_URL = '/static/'
@@ -159,8 +161,6 @@ SITE_TITLE = 'Blog Dubalu'
 SITE_URL = 'http://www.dubalu.com'
 SITE_IMAGE ='http://www.deipi.com/static/images/html/deipi/deipi_logo.png?'
 
-
-CKEDITOR_UPLOAD_PATH = MEDIA_URL + 'ckeditor/'
 CKEDITOR_CONFIGS = {
     'basic_ckeditor': {
         'toolbar': 'Basic',

@@ -248,5 +248,5 @@ def about(request):
             msg.attach_alternative(html_context, "text/html")
             msg.send()
             return HttpResponseRedirect('/')
-        return render_to_response('about.html', {'form': form}, context_instance= RequestContext(request))
+        return render_to_response('about.html', {'form': form}, context_instance=RequestContext(request))
     return render_to_response('about.html', {'form': ContactForm()}, context_instance=RequestContext(request))

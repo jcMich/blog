@@ -63,6 +63,7 @@
                 <!--  END POST  -->
             </div>
         </div>
+        {% if page_obj.paginator.num_pages > 1 %}</p>
         <nav>
             <ul class="pagination">
                 {% if page_obj.has_previous %}
@@ -87,6 +88,7 @@
                 {% endif %}
             </ul>
         </nav>
+        {% endif %}
     </div>
 
  {% endblock %}
