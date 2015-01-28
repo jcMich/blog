@@ -1,7 +1,7 @@
 # Create your views here.
 from django.views.generic import ListView, DetailView, CreateView
 from .models import Blog, comentarios, Tags, Categorias, STATUS_CHOICES
-from django.shortcuts import render_to_response, render, get_object_or_404
+from django.shortcuts import render_to_response, render
 from forms import ComentarioForm, ContactForm, LoginForm, addpostForm, categoria_form, filter_form
 from django.template import RequestContext
 from django.utils.text import slugify
@@ -140,12 +140,18 @@ def editposts(request, template_name='editposts.html'):
 
 
 def categories(request, template_name="categories.html"):
-    categories = Categorias.objects.all()
+    categories = Categorias.objects.exclude(nombre="Default")
     form = categoria_form(request.POST or None)
     if request.POST and request.is_ajax():
         category = Categorias.objects.get(nombre=request.POST.get('categoria'))
+        default = Categorias.objects.get_or_create(nombre="Default", descripcion="Default")
+        try:
+            post = Blog.objects.get(categoria=category)
+            post.categoria = default[0]
+            post.save()
+        except:
+            pass
         category.delete()
-        print("Borrado")
         return HttpResponseRedirect('/admin/categories/')
     if form.is_valid():
         nombre = form.cleaned_data['nombre']

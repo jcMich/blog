@@ -12,18 +12,22 @@ STATUS_CHOICES = (
 
 
 class Categorias(models.Model):
-    nombre  = models.CharField(max_length=30, primary_key=True, unique=True)
+    nombre = models.CharField(max_length=30, primary_key=True, unique=True)
     descripcion = models.TextField()
+
     class Meta:
         verbose_name_plural = "Categorias"
+
     def __unicode__(self):
         return "%s" % (self.nombre)
 
 
 class Tags(models.Model):
     nombre = models.CharField(max_length=30)
+
     class Meta:
         verbose_name_plural = 'Tags'
+
     def __unicode__(self):
         return "%s" % (self.nombre)
 
