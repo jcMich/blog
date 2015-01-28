@@ -1,5 +1,49 @@
-/*
---------------------------------------*/
+/* Admin tools
+______________________________________*/
+div.admin-tools{
+    background: none repeat scroll 0 0 #000;
+    border: 2px solid #cdddeb;
+    border-radius: 10px 0px 0px 10px;
+    right: -5px;
+    top: 10%;
+    margin: auto;
+    min-width: 5%;
+    position: fixed;
+    text-align: center;
+    z-index: 15;
+}
+div.admin-tools a{
+    text-decoration:none;
+    font-weight: bold;
+    color: #cdddeb;
+}
+div.admin-tools a:hover{
+    text-decoration:none;
+}
+div.admin-tools .fa-cog{
+    font-size: 24px;
+    color: #cdddeb;
+    margin: 10px;
+}
+div.admin-tools:hover > ul{
+    display: block;
+    width: auto;
+}
+div.admin-tools ul{
+    list-style-type: none;
+    padding: 0px;
+    display: none;
+}
+div.admin-tools li {
+    text-align: left;
+    padding: 5px 10px 0px 10px;
+    margin: 0px;
+}
+div.admin-tools li:hover {
+    background-color:#555;
+}
+
+/* Imagenes */
 div.post-thumb img{
     width: 100%;
 }

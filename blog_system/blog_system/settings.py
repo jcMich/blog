@@ -131,7 +131,7 @@ MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
 
 MEDIA_URL = '/media/'
 
-CKEDITOR_UPLOAD_PATH = "photos/"
+CKEDITOR_UPLOAD_PATH = "photos/ckeditor/"
 
 STATIC_ROOT = os.path.join(PROJECT_PATH, 'colstatic')
 
