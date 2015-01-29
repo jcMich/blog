@@ -2,37 +2,41 @@
 ______________________________________*/
 div.admin-tools{
     background: none repeat scroll 0 0 #000;
-    border: 2px solid #cdddeb;
     border-radius: 10px 0px 0px 10px;
-    right: -5px;
-    top: 10%;
-    margin: auto;
-    min-width: 5%;
-    position: fixed;
+    border: 2px solid #cdddeb;
     text-align: center;
+    position: fixed;
+    margin: auto;
+    right: -5px;
+    width: auto;
+    top: 10%;
     z-index: 15;
 }
+div.admin-tools ul{
+    list-style-type: none;
+    padding: 0;
+    max-height: 0;
+    transition: max-height 0.5s ease-out;
+    overflow: hidden;
+    list-style-type: none;
+}
+div.admin-tools:hover ul{
+    max-height: 500px;
+    transition: max-height 0.5s ease-in;
+}
 div.admin-tools a{
-    text-decoration:none;
+    font-size: 9pt;
     font-weight: bold;
+    text-decoration:none;
     color: #cdddeb;
 }
 div.admin-tools a:hover{
     text-decoration:none;
 }
 div.admin-tools .fa-cog{
-    font-size: 24px;
+    font-size: 14pt;
     color: #cdddeb;
     margin: 10px;
-}
-div.admin-tools:hover > ul{
-    display: block;
-    width: auto;
-}
-div.admin-tools ul{
-    list-style-type: none;
-    padding: 0px;
-    display: none;
 }
 div.admin-tools li {
     text-align: left;
