@@ -44,11 +44,12 @@
     </div>
     {% if user.is_superuser %}
     <div class="admin-tools">
-        <i class="fa fa-cog"> Admin</i>
+        <i class="fa fa-cog"></i>
         <ul class="admin-items">
             <li><a href="{% url 'nuevo_post' %}">Nuevo Post</a></li>
             <li><a href="{% url 'editposts' %}">Publicaciones</a></li>
             <li><a href="{% url 'categories' %}">Categorias</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
         </ul>
     </div>
     {% endif %}
