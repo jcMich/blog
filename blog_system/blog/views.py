@@ -219,7 +219,7 @@ class LoginView(FormView):
 class BlogDetail(DetailView):
     model = Blog
     template_name = 'article.html'
-    context_object_name = 'blog'
+    context_object_name = 'post'
 
     def get_context_data(self, **kwargs):
         ctx = super(BlogDetail, self).get_context_data(**kwargs)
