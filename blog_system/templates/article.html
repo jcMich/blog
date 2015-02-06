@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 {% load bootstrap %}
 {% block snippets %}
-        <title>{{ blog.title }}</title>
+        <title>{{ post.title }}</title>
         <meta property="og:locale" content="{{ Locale }}"/>
         <meta property="og:type" content="Article"/>
-        <meta property="og:title" content="{{ blog.title }}"/>
+        <meta property="og:title" content="{{ post.title }}"/>
         {% autoescape off %}
-        <meta property="og:description" content="{{ blog.perex|striptags }}"/>
+        <meta property="og:description" content="{{ post.perex|striptags }}"/>
         {% endautoescape %}
-        <meta property="og:url" content="{{ Url }}{{ blog.get_absolute_url }}"/>
-        <meta property="og:image" content="{{ Url }}{{ blog.imagen.url }}"/>
-    {% for tag in blog.tags.all %}
+        <meta property="og:url" content="{{ Url }}{{ post.get_absolute_url }}"/>
+        <meta property="og:image" content="{{ Url }}{{ post.imagen.url }}"/>
+    {% for tag in post.tags.all %}
         <meta property="article:tag" content="{{ tag }}"/>
     {% endfor %}
 {% endblock %}
@@ -18,18 +18,18 @@
     <div class="col-lg-9" itemscope itemref="publusher" itemtype="http://schema.org/Article">
         <div class="main-content">
             <article id="post-1" class="post post-content">
-                <h1 class="entry-title" itemprop='name'>{{ blog.title }}</h1>
+                <h1 class="entry-title" itemprop='name'>{{ post.title }}</h1>
                 <div class="utilities">
                     <div class="firma">
                         <span class="nombre" itemprop='creator'>Dubalu Factura Redacción </span><span>|</span>
-                        <span class="nombre" itemprop='articleSection'> {{ blog.categoria}} </span><span>|</span>
-                        <span class="fecha" itemprop='datePublished '>{{ blog.time|date:"d/m/y" }} - <strong>{{ blog.time|time:"H:i" }}</strong>
+                        <span class="nombre" itemprop='articleSection'> {{ post.categoria}} </span><span>|</span>
+                        <span class="fecha" itemprop='datePublished '>{{ post.time|date:"d/m/y" }} - <strong>{{ post.time|time:"H:i" }}</strong>
                         </span>
                     </div>
                     <div class="compartirNoticia hidden-print">
                         <ul class="redesSociales">
                             <li>
-                                <a class="twitter" title="Comparte en Twitter" target="_blank" href="http://twitter.com/share?text={{ blog.title }}&url={{ Url }}{{ blog.get_absolute_url }}">
+                                <a class="twitter" title="Comparte en Twitter" target="_blank" href="http://twitter.com/share?text={{ post.title }}&url={{ Url }}{{ post.get_absolute_url }}">
                                     <span class="fa-stack">
                                       <i class="fa fa-circle fa-stack-2x"></i>
                                       <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
@@ -37,7 +37,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="facebook" target="_blank" href="http://www.facebook.com/sharer.php?u={{ Url }}{{ blog.get_absolute_url }}" title="Comparte en Facebook">
+                                <a class="facebook" target="_blank" href="http://www.facebook.com/sharer.php?u={{ Url }}{{ post.get_absolute_url }}" title="Comparte en Facebook">
                                     <span class="fa-stack">
                                       <i class="fa fa-circle fa-stack-2x"></i>
                                       <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
@@ -45,7 +45,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a id="googleplus" class="googlePlus" target="_blank" title="Comparte en Google+"  href="https://plus.google.com/share?url={{ Url }}{{ blog.get_absolute_url }}">
+                                <a id="googleplus" class="googlePlus" target="_blank" title="Comparte en Google+"  href="https://plus.google.com/share?url={{ Url }}{{ post.get_absolute_url }}">
                                     <span class="fa-stack">
                                       <i class="fa fa-circle fa-stack-2x"></i>
                                       <i class="fa fa-google-plus fa-stack-1x fa-inverse"></i>
@@ -70,7 +70,7 @@
                                     </span>
                                 </a>
                             </li>
-                            {% if blog.comentar %}
+                            {% if post.comentar %}
                                 <li class="comentario">
                                     <div class="comenta">
                                         <div class="comentarios">
@@ -85,16 +85,16 @@
                 <div>
 
                 </div>
-                <div class="post-thumb"><img itemprop='image' src="{{ blog.imagen.url }}" class="img-responsive center-block" alt="04"></div>
+                <div class="post-thumb"><img itemprop='image' src="{{ post.imagen.url }}" class="img-responsive center-block" alt="04"></div>
                 <div class="entry-content" itemprop="articleBody">
                     {% autoescape off %}
-                        {{ blog.content|safe}}
+                        {{ post.content|safe}}
                     {% endautoescape %}
                 </div>
             </article>
         </div>
         <!--  Comments  -->
-        {% if blog.comentar%}
+        {% if post.comentar%}
         <div class="post comments">
             <h2>Comentarios</h2>
                 {% for comentario in comentarios %}
