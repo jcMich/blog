@@ -108,7 +108,7 @@ class CreateCategory(FormView):
         descripcion = form.cleaned_data['descripcion']
         cate, created = Categories.objects.get_or_create(nombre=nombre, descripcion=descripcion)
         cate.save()
-        return super(CreateCategory, self).form_valid(form)
+        return HttpResponse(json.dumps({"Nombre": nombre, "Descripcion": descripcion}), content_type="application/json")
 
 
 class AddPost(CreateView):
