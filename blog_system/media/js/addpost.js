@@ -104,11 +104,10 @@ jQuery(document).ready(function () {
                 data: {
                     csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
                     nombre: self.find("#id_nombre").val(),
-                    descripcion: self.find("#id_description").val(),
+                    descripcion: self.find("#id_descripcion").val(),
                 },
                 success: function(result){
                     var category = $("div#modalform #id_nombre").val();
-                    console.log(category)
                     $("#id_categoria").append("<option value='" + category + "'>" + category + "</option>");
                     $("#id_categoria").val(category);
                     $modalform.hide("slow");

@@ -36,7 +36,6 @@
                 {% endif %}
                 {% if post %}
                 <script type="text/javascript">
-                console.log("works");
                 $(document).ready(function(){
                     var $taglis =  $("#id_tags_list");
                     {% for tag in post.tags.all %}

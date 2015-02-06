@@ -21,9 +21,6 @@ urlpatterns = patterns('',
                        url(r'^entries/$', AdminEntries.as_view(), name='edit_entries'),
                        url(r'^categories/$', AdminCategories.as_view(), name='categories'),
                        url(r'^category/add/$', CreateCategory.as_view(), name='create_category'),
-                       # url(r'^categories/$', 'blog.views.categories', name='categories'),
-#                       url(r'^month/(?P<year>\d+)/(?P<month>\w+)/$', Month.as_view, name='month'), create_cate
                        url(r'^month/(?P<year>\d+)/(?P<month>\w+)/$', Month.as_view(), name='month'),
-                       # url(r'^editposts/$', 'blog.views.editposts', name='editposts'),
                        url(r'^post/edit/(?P<slug>.*)/$', EditPost.as_view(), name='edit'),
 )

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, View
 from django.core.urlresolvers import reverse
 from .models import Blog, comentarios, Tags, Categories, STATUS_CHOICES
 from django.shortcuts import render_to_response, render
@@ -103,12 +103,20 @@ class CreateCategory(FormView):
     form_class = categories_form
     template_name = 'edit_entry.html'
 
-    def form_valid(self, form):
-        nombre = form.cleaned_data['nombre']
-        descripcion = form.cleaned_data['descripcion']
-        cate, created = Categories.objects.get_or_create(nombre=nombre, descripcion=descripcion)
-        cate.save()
-        return super(CreateCategory, self).form_valid(form)
+    def post(self, request, *args, **kwargs):
+        if self.request.is_ajax():
+            name = request.POST.get('nombre')
+            description = request.POST.get('descripcion')
+            cate, created = Categories.objects.get_or_create(nombre=name, descripcion=description)
+            cate.save()
+            return HttpResponse(json.dumps({"Nombre": name, "Descripcion": description}), content_type="application/json")
+        else:
+            form = categories_form(request.POST or None)
+            if form.is_valid():
+                nombre = form.cleaned_data['nombre']
+                descripcion = form.cleaned_data['descripcion']
+                cate, created = Categories.objects.get_or_create(nombre=nombre, descripcion=descripcion)
+            return HttpResponseRedirect(reverse('categories'))
 
 
 class AddPost(CreateView):
