@@ -3,7 +3,7 @@
 <!-- Container -->
 {% block content %}
 <div class="container">
-    {% if user.is_superuser and posts %}
+    {% if user.is_superuser %}
         <div class="text-center">
             <h1>Publicaciones</h1>
         </div>
@@ -43,17 +43,20 @@
                         <th>Estado</th>
                         <th>Guardar</th>
                     </tr>
-                    {% for blog in posts %}
-                    <tr class="infopost" id="post_{{ blog.pk }}">
+                    {% if not posts %}
+                    <tr><th>No Entries<th></tr>
+                    {% endif %}
+                    {% for post in posts %}
+                    <tr class="infopost" id="post_{{ post.pk }}">
                         <td>
-                            <img src="{{ blog.imagen.url }}" id='postimg' width="100px" height="100px">
+                            <img src="{{ post.imagen.url }}" id='postimg' width="100px" height="100px">
                         </td>
                         <td>
                             <div class="title">
-                                <a href="{% url 'edit' blog.slug %}">{{ blog.title|truncatechars:60 }}</a>
+                                <a href="{% url 'edit' post.slug %}">{{ post.title|truncatechars:60 }}</a>
                             </div>
                             {% autoescape off %}
-                                <div class="perex">{{ blog.perex|truncatechars:150 }}</div>
+                                <div class="perex">{{ post.perex|truncatechars:150 }}</div>
                             {% endautoescape %}
                            <ul class="tags_list">
                             {% for tag in blog.tags.all %}
@@ -63,7 +66,7 @@
                         </td>
                         <td>
                             <center>
-                                {% if blog.comentar == True %}
+                                {% if post.comentar == True %}
                                 <input class="comentar" id="id_comment" name="comentar" type="checkbox" checked>
                                 {% else %}
                                 <input class="comentar" id="id_comment" name="comentar" type="checkbox">
@@ -73,7 +76,7 @@
                         <td>
                             <select class ="form-control categorias" name="categorias" id="id_category">
                                 {% for categoria in categorias %}
-                                    {% if categoria == blog.categoria %}
+                                    {% if categoria == post.categoria %}
                                     <option selected value="{{ categoria }}">{{ categoria }}</option>
                                     {% else %}
                                     <option value="{{ categoria }}">{{ categoria }}</option>
@@ -85,7 +88,7 @@
                             <select class ="form-control status" name="status" id="id_status">
                                 {% autoescape off %}
                                 {% for state in status %}
-                                    {% if state.0 == blog.status %}
+                                    {% if state.0 == post.status %}
                                     <option selected value="{{ state.0}}">{{ state.1 }}</option>
                                     {% else %}
                                     <option value="{{ state.0 }}">{{ state.1 }}</option>
@@ -95,7 +98,7 @@
                             </select>
                         </td>
                         <td>
-                            <input type="hidden" value="{{ blog.id }}">
+                            <input type="hidden" value="{{ post.id }}">
                             <input class="btn btn-default savedata" type="submit" value="Guardar" disabled="true">
                         </td>
                     </tr>
