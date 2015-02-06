@@ -1,33 +1,33 @@
         		{% load endless %}
                 <!--  POST  -->
-                {% paginate blogs %}
-                {% for blog in blogs %}
+                {% paginate posts %}
+                {% for post in posts %}
                     <div class="col-md-6">
                         <div class="post-entry">
                             <div class="post-body entry-content" id="post-body">
                                 <span>
                                     <div class="entry-image">
-                                        <a href="/blog/{{ blog.slug }}">
-                                            <img class="thumb img-responsive" src="{{ blog.imagen.url }}" style="max-height:200px;">
+                                        <a href="{% url 'post' post.slug %}">
+                                            <img class="thumb img-responsive" src="{{ post.imagen.url }}" style="max-height:200px;">
                                         </a>
                                     </div>
                                 </span>
                                 <div class="article-container">
                                     <div class="inner-content">
                                         <div class="article-category">
-                                            <a href="/?category={{ blog.categoria }}" rel="tag"> {{blog.categoria}} </a>
+                                            <a href="/?category={{ post.categoria }}" rel="tag"> {{post.categoria}} </a>
                                         </div>
                                         <div class="clr"></div>
                                         <div class="post-date">
-                                            <span class="post-month">{{blog.time|date:"M"}}</span>
-                                            <strong class="post-day">{{blog.time|date:"d"}}</strong>
+                                            <span class="post-month">{{post.time|date:"M"}}</span>
+                                            <strong class="post-day">{{post.time|date:"d"}}</strong>
                                         </div>
                                         <div class="inner-shadow">
-                                        <h2 class="article-title"><a href="/blog/{{ blog.slug }}">{{ blog.title }}</a></h2>
+                                        <h2 class="article-title"><a href="{% url 'post' post.slug %}">{{ post.title }}</a></h2>
                                         </div>
                                         <div class="body-post">
                                             {% autoescape off %}
-                                                {{ blog.perex|truncatechars:150 }}
+                                                {{ post.perex|truncatechars:150 }}
                                             {% endautoescape %}
                                         </div>
                                     </div>
