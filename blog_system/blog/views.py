@@ -21,7 +21,7 @@ MONTHS_DIC = {
 
 class Home(ListView):
     model = Blog
-    context_object_name = 'blogs'
+    context_object_name = 'posts'
     paginate_by = 8
     page_kwarg = 'page'
     template_name = 'index.html'
@@ -42,7 +42,7 @@ class Home(ListView):
 
 
 class Month(AjaxListView):
-    context_object_name = "blogs"
+    context_object_name = "posts"
     model = Blog
 
     def get_queryset(self):
