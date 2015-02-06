@@ -2,7 +2,7 @@
 {% load bootstrap %}
 <!-- Container -->
 {% block content %}
-    {% if categories %}
+    {% if True %}
         <div class="text-center">
             <h1>Categorias</h1>
         </div>
@@ -15,7 +15,7 @@
                         <th>Descripción</th>
                         <th>Borrar</th>
                     </tr>
-                {% for category in categories%}
+                {% for category in categories %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td><p class="name">{{ category.nombre }}</p></td>
@@ -46,16 +46,15 @@
                     + " y todo los post relacionados estas seguro")){
                     $.ajax({
                         type: "POST",
-                        url: "/admin/categories/",
                         data: {
                             csrfmiddlewaretoken: '{{ csrf_token }}',
-                            categoria: categoryName
+                            category: categoryName
                         },
                         success: function(result){
                             $row.remove();
                         },
                         error: function(xhr, result, err){
-                            console.log(xhr)
+                            console.log(xhr);
                         }
                     });
                 }

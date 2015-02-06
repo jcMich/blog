@@ -1,25 +1,26 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import, unicode_literals
 import os
 from datetime import datetime
 from django.db import models
 from django.utils.text import slugify
 
 STATUS_CHOICES = (
-    (u'D', (u'Draft')),
-    (u'P', (u'Public')),
-    (u'H', (u'Hidden')),
+    ('D', 'Draft'),
+    ('P', 'Public'),
+    ('H', 'Hidden'),
 )
 
 
-class Categorias(models.Model):
+class Categories(models.Model):
     nombre = models.CharField(max_length=30, primary_key=True, unique=True)
     descripcion = models.TextField()
 
     class Meta:
-        verbose_name_plural = "Categorias"
+        verbose_name_plural = "Categories"
 
-    def __unicode__(self):
-        return "%s" % (self.nombre)
+    def __str__(self):
+        return self.nombre.encode('utf-8')
 
 
 class Tags(models.Model):
@@ -28,8 +29,8 @@ class Tags(models.Model):
     class Meta:
         verbose_name_plural = 'Tags'
 
-    def __unicode__(self):
-        return "%s" % (self.nombre)
+    def __str__(self):
+        return self.nombre
 
 
 class Blog(models.Model):
@@ -45,10 +46,11 @@ class Blog(models.Model):
     content = models.TextField()
     imagen = models.ImageField(upload_to=url)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
-    categoria = models.ForeignKey(Categorias)
+    categoria = models.ForeignKey(Categories)
     comentar = models.BooleanField(default=False)
     tags = models.ManyToManyField(Tags)
     tags.help_text = None
+#        return reverse('blog', args={'slud': self.slug})
 
     def get_absolute_url(self):
         return '/blog/%s' % self.slug

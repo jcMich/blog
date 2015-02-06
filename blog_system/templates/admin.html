@@ -40,7 +40,7 @@
             <a class="blog-nav-item" href="#">New features</a>
             <a class="blog-nav-item" href="#">Press</a>
             <a class="blog-nav-item" href="#">New hires</a>
-            <a class="blog-nav-item" href="{% url 'about' %}">About</a>
+            <a class="blog-nav-item" href="#">About</a>
             <!--<form class="navbar-form" role="search">
                 <div class="input-group">
                     <input type="text" class="form-control input-sm" name="search" id="search-nav-input" placeholder="Buscar">
@@ -55,10 +55,10 @@
 
     {% if user.is_superuser %}
     <div class="admin-tools">
-        <i class="fa fa-cog"> Admin</i>
+        <i class="fa fa-cog"></i>
         <ul class="admin-items">
-            <li><a href="{% url 'nuevo_post' %}">Nuevo Post</a></li>
-            <li><a href="{% url 'editposts' %}">Publicaciones</a></li>
+            <li><a href="{% url 'new_post' %}">Nuevo Post</a></li>
+            <li><a href="{% url 'edit_entries' %}">Publicaciones</a></li>
             <li><a href="{% url 'categories' %}">Categorias</a></li>
         </ul>
     </div>

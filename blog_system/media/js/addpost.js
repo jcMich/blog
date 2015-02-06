@@ -67,17 +67,17 @@ jQuery(document).ready(function () {
     });
     /* Categorias.
     ----------------------------------------*/
-    $formBlog.find("#id_categoria").after("<div><a id='categoria'>Agregar</a></div>");
-    $formBlog.before("<div id='modalform'><form class='new_cate' role='form'> \
-        <div class='form-group'><label class='control-label' for='id_nombre'>Nombre</label> \
-        <input class='form-control' id='id_nombre' maxlength='30' name='nombre' type='text'></div> \
-        <div class='form-group'><label class='control-label' for='id_descripcion'>Descripcion</label> \
-        <textarea class='form-control' cols='40' id='id_descripcion' name='descripcion' rows='10'></textarea>\
+    $formBlog.find("#id_categoria").after("<div><a id='category'>Agregar</a></div>");
+    /*$formBlog.before("<div id='modalform'><form class='new_cate' role='form'> \
+        <div class='form-group'><label class='control-label' for='id_name'>Nombre</label> \
+        <input class='form-control' id='id_name' maxlength='30' name='nombre' type='text'></div> \
+        <div class='form-group'><label class='control-label' for='id_description'>Descripcion</label> \
+        <textarea class='form-control' cols='40' id='id_description' name='descripcion' rows='10'></textarea>\
         </div><input class='btn-u' type='submit' id='save_data' value='Agregar'><a id='cancel-cate'>Cacelar</a></form></div>"
-    );
+    );*/
     var $modalform = $("div#modalform");
     $modalform.hide();
-    $("#categoria").on("click", function () {
+    $("#category").on("click", function () {
         $modalform.show("slow");
     });
     $("#cancel-cate").on("click", function () {
@@ -85,8 +85,10 @@ jQuery(document).ready(function () {
     });
     $("form.new_cate").on("submit", function (event) {
         event.preventDefault();
-        var fieldVoid = false;
-        $(this).find("input, textarea").not(":submit").each(function () {
+        var fieldVoid = false,
+            self = $(this);
+
+        self.find("input, textarea").not(":submit").each(function () {
             var $this = $(this);
             if ($.trim($this.val()) === "") {
                 $this.css("border-color", "#f00");
@@ -98,16 +100,17 @@ jQuery(document).ready(function () {
         } else {
             $.ajax({
                 type: "POST",
-                url: "/addpost/",
+                url: self.attr("action"),
                 data: {
                     csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
-                    nombre: $(this).find("#id_nombre").val(),
-                    descripcion: $(this).find("#id_descripcion").val(),
+                    nombre: self.find("#id_nombre").val(),
+                    descripcion: self.find("#id_description").val(),
                 },
                 success: function(result){
-                    var categoria = $("div#modalform #id_nombre").val();
-                    $("#id_categoria").append("<option value='" + categoria + "'>" + categoria + "</option>");
-                    $("#id_categoria").val(categoria);
+                    var category = $("div#modalform #id_nombre").val();
+                    console.log(category)
+                    $("#id_categoria").append("<option value='" + category + "'>" + category + "</option>");
+                    $("#id_categoria").val(category);
                     $modalform.hide("slow");
                     $modalform.find("input:text, textarea").each(function(){
                         $(this).val("");
