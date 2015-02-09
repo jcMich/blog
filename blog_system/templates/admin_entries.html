@@ -9,6 +9,7 @@
         </div>
         <div class="row">
                 <form name="filterform">
+                {% csrf_token %}
                 <table class="filtersearch">
                     <tr>
                         <td>
@@ -107,71 +108,7 @@
         </div>
         <script type="text/javascript">
         $(document).ready(function(){
-            // Guardar estados del formulario.
-            var posts = [];
-            $("tr.infopost").each(function(){
-                var $this = $(this);
-                temp = [
-                    $this.attr("id"),
-                    $this.find("#id_comment").prop("checked"),
-                    $this.find("#id_category option:selected").text(),
-                    $this.find("#id_status option:selected").text()
-                ];
-                posts.push(temp);
-            });
-            var $buttons = $("input.savedata");
-            $(".categorias, .status, .comentar").on("change", function(){
-                var $row = $(this).closest("tr");
-                for (var i = 0; i < posts.length; i++) {
-                    if( posts[i][0] == $row.attr("id")){
-                        if (
-                            (posts[i][1] != $row.find("#id_comment").prop("checked")) ||
-                            (posts[i][2] != $row.find("#id_category option:selected").text()) ||
-                            (posts[i][3] != $row.find("#id_status option:selected").text())
-                        ){
-                            $row.find("input.savedata")
-                            .removeAttr("disabled")
-                            .addClass("btn-primary");
-                        } else {
-                            $row.find("input.savedata")
-                            .attr("disabled", "true")
-                            .removeClass("btn-primary")
-                            .addClass("btn-default");
-                        }
-                    }
-                };
-            });
-            $buttons.on("click", function(event){
-                event.preventDefault();
-                var $this = $(this);
-                $.ajax({
-                    type: "POST",
-                    url: "/entries/",
-                    data: {
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                        id: $this.siblings("input:hidden").val(),
-                        comentario: $this.closest("tr").find("#id_comment").prop('checked'),
-                        categoria: $this.closest("tr").find("#id_category option:selected").text(),
-                        estado: $this.closest("tr").find("#id_status option:selected").val()
-                    },
-                    success: function(result){
-                        $this.removeClass("btn-primary");
-                        $this.addClass("btn-default");
-                        var $row = $this.closest("tr");
-                        for (var i = 0; i < posts.length; i++) {
-                            if( posts[i][0] == $row.attr("id")){
-                                posts[i][1] = $row.find("#id_comment").prop("checked");
-                                posts[i][2] = $row.find("#id_category option:selected").text();
-                                posts[i][3] = $row.find("#id_status option:selected").text();
-                            }
-                        };
-                    },
-                    error: function(xhr, result, err){
-                        console.log("ERROR")
-                    }
-                });
-                $this.attr("disabled", "true");
-            });
+            entries_status();
         });
         </script>
     {% else %}

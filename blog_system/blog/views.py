@@ -110,13 +110,12 @@ class CreateCategory(FormView):
             cate, created = Categories.objects.get_or_create(nombre=name, descripcion=description)
             cate.save()
             return HttpResponse(json.dumps({"Nombre": name, "Descripcion": description}), content_type="application/json")
-        else:
-            form = categories_form(request.POST or None)
-            if form.is_valid():
-                nombre = form.cleaned_data['nombre']
-                descripcion = form.cleaned_data['descripcion']
-                cate, created = Categories.objects.get_or_create(nombre=nombre, descripcion=descripcion)
-            return HttpResponseRedirect(reverse('categories'))
+
+    def form_valid(self, form):
+        nombre = form.cleaned_data['nombre']
+        descripcion = form.cleaned_data['descripcion']
+        cate, created = Categories.objects.get_or_create(nombre=nombre, descripcion=descripcion)
+        return HttpResponseRedirect(reverse('categories'))
 
 
 class AddPost(CreateView):
@@ -227,7 +226,7 @@ class LoginView(FormView):
 class BlogDetail(DetailView):
     model = Blog
     template_name = 'article.html'
-    context_object_name = 'blog'
+    context_object_name = 'post'
 
     def get_context_data(self, **kwargs):
         ctx = super(BlogDetail, self).get_context_data(**kwargs)
@@ -243,9 +242,7 @@ class BlogDetail(DetailView):
             comentario.nombre = form.cleaned_data['nombre']
             comentario.cuerpo = form.cleaned_data['cuerpo']
             comentario.save()
-            return HttpResponseRedirect('/blog/%s' % self.kwargs['slug'])
-        else:
-            return HttpResponseRedirect('/blog/%s' % self.kwargs['slug'])
+            return HttpResponseRedirect(reverse('post/detail/', kwargs={'slug': self.kwargs['slug']}))
 
 
 def log_out(request):

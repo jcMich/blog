@@ -1,6 +1,14 @@
 jQuery(document).ready(function () {
+
+    var ID_MODAL_FORM = "modalform",
+        ID_NAME = "id_nombre",// id tags
+        ID_DESCRIPTION = "id_descripcion",
+        ID_CATEGORIES = "id_categoria",
+        ID_IMAGE = "id_imagen",
+        ID_TAGS = "id_tags";
+
     // Se inicializan los campos inciales.
-    var $tags = $("#id_tags");
+    var $tags = $( "#" + ID_TAGS );
     var $tags_elements = $tags.children("option");
     var $formBlog = $("#id_title").closest("form");
 
@@ -63,21 +71,14 @@ jQuery(document).ready(function () {
             else
                 tag_list += "," + temp.toLowerCase();
         }
-        $("#id_tags").val(tag_list);
+        $( "#" + ID_TAGS ).val(tag_list);
     });
     /* Categorias.
     ----------------------------------------*/
-    $formBlog.find("#id_categoria").after("<div><a id='category'>Agregar</a></div>");
-    /*$formBlog.before("<div id='modalform'><form class='new_cate' role='form'> \
-        <div class='form-group'><label class='control-label' for='id_name'>Nombre</label> \
-        <input class='form-control' id='id_name' maxlength='30' name='nombre' type='text'></div> \
-        <div class='form-group'><label class='control-label' for='id_description'>Descripcion</label> \
-        <textarea class='form-control' cols='40' id='id_description' name='descripcion' rows='10'></textarea>\
-        </div><input class='btn-u' type='submit' id='save_data' value='Agregar'><a id='cancel-cate'>Cacelar</a></form></div>"
-    );*/
-    var $modalform = $("div#modalform");
+    $formBlog.find( "#id_categoria" ).after("<div><a id='add_category'>Agregar</a></div>");
+    var $modalform = $( "div#" + ID_MODAL_FORM );
     $modalform.hide();
-    $("#category").on("click", function () {
+    $("#add_category").on("click", function () {
         $modalform.show("slow");
     });
     $("#cancel-cate").on("click", function () {
@@ -100,16 +101,16 @@ jQuery(document).ready(function () {
         } else {
             $.ajax({
                 type: "POST",
-                url: self.attr("action"),
+                url: self.attr( "action" ),
                 data: {
                     csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
-                    nombre: self.find("#id_nombre").val(),
-                    descripcion: self.find("#id_descripcion").val(),
+                    nombre: self.find( "#" + ID_NAME ).val(),
+                    descripcion: self.find( "#" + ID_DESCRIPTION ).val(),
                 },
                 success: function(result){
-                    var category = $("div#modalform #id_nombre").val();
-                    $("#id_categoria").append("<option value='" + category + "'>" + category + "</option>");
-                    $("#id_categoria").val(category);
+                    var category = $("div#" + ID_MODAL_FORM + " #" + ID_NAME ).val();
+                    $( "#" + ID_CATEGORIES ).append("<option value='" + category + "'>" + category + "</option>");
+                    $( "#" + ID_CATEGORIES ).val(category);
                     $modalform.hide("slow");
                     $modalform.find("input:text, textarea").each(function(){
                         $(this).val("");
@@ -124,10 +125,10 @@ jQuery(document).ready(function () {
     /* FileField
     ----------------------------*/
     if ( $formBlog.length > 0) {
-        var $imagen = $("#id_imagen");
-        $imagen.before("<input class='btn btn-default' type='button' value='Imagen' style='float:left'><input type='text' placeholder='Buscar...' class='form-control' id='id_imagen_add' style='width: 500px; float:left;'></input>");
+        var $imagen = $( "#" + ID_IMAGE);
+        $imagen.before("<input class='btn btn-default' type='button' value='Imagen' style='float:left'><input type='text' placeholder='Buscar...' class='form-control' id='id_img_add' style='width: 500px; float:left;'></input>");
         $imagen.hide();
-        var $fakeimage = $("#id_imagen_add");
+        var $fakeimage = $("#id_img_add");
         $fakeimage.on( "click", function(){
             $imagen.click();
         });
@@ -140,5 +141,128 @@ jQuery(document).ready(function () {
             $fakeimage.val($this.val());
         });
     }
+
+
+    /* Categories tampletes
+    -------------------------*/
+
+    $(".del_category").on("click", function(){
+        var $row = $(this).closest("tr");
+        var categoryName = $row.find("p.name").text();
+        if(confirm("Se borra la categoria " + categoryName
+            + " y todo los post relacionados estas seguro")){
+            $.ajax({
+                type: "POST",
+                data: {
+                    csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
+                    category: categoryName
+                },
+                success: function(result){
+                    $row.remove();
+                },
+                error: function(xhr, result, err){
+                    console.log(xhr);
+                }
+            });
+        }
+    });
+    $("#show-add").on("click", function(){
+        $("#" + ID_MODAL_FORM ).show("slow");
+    });
+    $("#add_category").on("click", function(){
+        var fieldVoid = false;
+        $(this).closest("form").find("input, textarea").not(":submit").each(function () {
+            var $this = $(this);
+            if ($.trim($this.val()) == "") {
+                $this.css("border-color", "#f00");
+                fieldVoid = true;
+            }
+        });
+        if (fieldVoid == true)
+              return false;
+        else
+            $("#" + ID_MODAL_FORM ).hide("slow");
+    });
 });
 
+
+/* Entries Update Manage
+----------------------*/
+// Notice that this is function is outside of the JQuery's "$('Document').ready(function(){});"
+    function entries_status(){
+        var posts = [];
+        $("tr.infopost").each(function(){
+            var $this = $(this);
+            temp = [
+                $this.attr("id"),
+                $this.find("#id_comment").prop("checked"),
+                $this.find("#id_category option:selected").text(),
+                $this.find("#id_status option:selected").text()
+            ];
+            posts.push(temp);
+        });
+        var $buttons = $("input.savedata");
+        $(".categorias, .status, .comentar").on("change", function(){
+            var $row = $(this).closest("tr");
+            for (var i = 0; i < posts.length; i++) {
+                if( posts[i][0] == $row.attr("id")){
+                    if (
+                        (posts[i][1] != $row.find("#id_comment").prop("checked")) ||
+                        (posts[i][2] != $row.find("#id_category option:selected").text()) ||
+                        (posts[i][3] != $row.find("#id_status option:selected").text())
+                    ){
+                        $row.find("input.savedata")
+                        .removeAttr("disabled")
+                        .addClass("btn-primary");
+                    } else {
+                        $row.find("input.savedata")
+                        .attr("disabled", "true")
+                        .removeClass("btn-primary")
+                        .addClass("btn-default");
+                    }
+                }
+            };
+        });
+        $buttons.on("click", function(event){
+            event.preventDefault();
+            var $this = $(this);
+            $.ajax({
+                type: "POST",
+                url: "/entries/",
+                data: {
+                    csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
+                    id: $this.siblings("input:hidden").val(),
+                    comentario: $this.closest("tr").find("#id_comment").prop('checked'),
+                    categoria: $this.closest("tr").find("#id_category option:selected").text(),
+                    estado: $this.closest("tr").find("#id_status option:selected").val()
+                },
+                success: function(result){
+                    $this.removeClass("btn-primary");
+                    $this.addClass("btn-default");
+                    var $row = $this.closest("tr");
+                    for (var i = 0; i < posts.length; i++) {
+                        if( posts[i][0] == $row.attr("id")){
+                            posts[i][1] = $row.find("#id_comment").prop("checked");
+                            posts[i][2] = $row.find("#id_category option:selected").text();
+                            posts[i][3] = $row.find("#id_status option:selected").text();
+                        }
+                    };
+                },
+                error: function(xhr, result, err){
+                    console.log(xhr)
+                }
+            });
+            $this.attr("disabled", "true");
+        });
+    }
+
+
+    /* Social Share
+    --------------------------*/
+    function social_share( CLASS_NAME ) {
+        $( CLASS_NAME ).find("a").on("click", function(e) {
+            e.preventDefault();
+            window.open($(this).attr('href'), 'Share', 'height=450, width=550, top=' + ($(window).height() / 2 - 275) + ', left=' + ($(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
+            return false;
+        });
+    }

@@ -27,7 +27,7 @@
                         </span>
                     </div>
                     <div class="compartirNoticia hidden-print">
-                        <ul class="redesSociales">
+                        <ul class="redesSociales social_share">
                             <li>
                                 <a class="twitter" title="Comparte en Twitter" target="_blank" href="http://twitter.com/share?text={{ post.title }}&url={{ Url }}{{ post.get_absolute_url }}">
                                     <span class="fa-stack">
@@ -122,16 +122,11 @@
                     </form>
                 </div>
         </div>
+        <script type="text/javascript">
+        window.onload = function() {
+            social_share(".social_share");
+        };
+        </script>
         {% endif %}
     </div>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("div.main-content img").removeAttr("style");
-        $('.redesSociales').find("a").click(function(e) {
-            e.preventDefault();
-            window.open($(this).attr('href'), 'twitter', 'height=450, width=550, top=' + ($(window).height() / 2 - 275) + ', left=' + ($(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
-            return false;
-        });
-    });
-</script>
 {% endblock %}
