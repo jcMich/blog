@@ -27,9 +27,9 @@
                         </span>
                     </div>
                     <div class="compartirNoticia hidden-print">
-                        <ul class="redesSociales social_share">
+                        <ul class="redesSociales social-share">
                             <li>
-                                <a class="twitter" title="Comparte en Twitter" target="_blank" href="http://twitter.com/share?text={{ post.title }}&url={{ Url }}{{ post.get_absolute_url }}">
+                                <a class="twitter" title="Comparte en Twitter" data-social-network="twitter" target="_blank">
                                     <span class="fa-stack">
                                       <i class="fa fa-circle fa-stack-2x"></i>
                                       <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
@@ -37,7 +37,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="facebook" target="_blank" href="http://www.facebook.com/sharer.php?u={{ Url }}{{ post.get_absolute_url }}" title="Comparte en Facebook">
+                                <a class="facebook" target="_blank" title="Comparte en Facebook" data-social-network="facebook">
                                     <span class="fa-stack">
                                       <i class="fa fa-circle fa-stack-2x"></i>
                                       <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
@@ -45,7 +45,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a id="googleplus" class="googlePlus" target="_blank" title="Comparte en Google+"  href="https://plus.google.com/share?url={{ Url }}{{ post.get_absolute_url }}">
+                                <a class="googlePlus" target="_blank" title="Comparte en Google+" data-social-network="googleplus">
                                     <span class="fa-stack">
                                       <i class="fa fa-circle fa-stack-2x"></i>
                                       <i class="fa fa-google-plus fa-stack-1x fa-inverse"></i>
@@ -95,7 +95,7 @@
         </div>
         <!--  Comments  -->
         {% if post.comentar%}
-        <div class="post comments">
+        <div class="post comments hidden-print">
             <h2>Comentarios</h2>
                 {% for comentario in comentarios %}
                 <div class="media comment">
@@ -124,7 +124,7 @@
         </div>
         <script type="text/javascript">
         window.onload = function() {
-            social_share(".social_share");
+            social_links();
         };
         </script>
         {% endif %}
