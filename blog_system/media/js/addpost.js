@@ -269,22 +269,12 @@ jQuery(document).ready(function () {
     var get_social_network = {
         'facebook': "http://www.facebook.com/sharer.php?u=" + document.URL,
         'twitter':  "http://twitter.com/share?text=" + document.title + "&url=" + document.URL,
-        'googleplus': "https://plus.google.com/share?url=" + document.URL
+        'gplus': "https://plus.google.com/share?url=" + document.URL
     };
 
-    function social_links( CLASS_NAME ) {
-        if ( !CLASS_NAME ) { CLASS_NAME = ".social-share" };
-        $( CLASS_NAME ).find( "a" ).on("click", function(e) {
-            e.preventDefault();
-            var SITE = this.getAttribute("data-social-network");
-            window.open(get_social_network[ SITE.toLowerCase() ], SITE, 'height=450, width=550, top=' + ($(window).height() / 2 - 275) + ', left=' + ($(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
-            return false;
-        });
-    }
-    function social_share( object, SITE ) {
-        $( object ).on("click", function(e) {
-            e.preventDefault();
-            window.open(get_social_network[ SITE.toLowerCase() ], SITE, 'height=450, width=500, top=' + ($(window).height() / 2 - 275) + ', left=' + ($(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
-            return false;
-        });
+    var social_share = function( object, SITE ) {
+        if ( get_social_network[ SITE.toLowerCase() ]) {
+            window.open(get_social_network[ SITE.toLowerCase() ], SITE.toUpperCase(), 'height=450, width=500, top=' + ($(window).height() / 2 - 225) + ', left=' + ($(window).width() / 2 - 225));
+        }
+        return false;
     }

@@ -27,9 +27,9 @@
                         </span>
                     </div>
                     <div class="compartirNoticia hidden-print">
-                        <ul class="redesSociales social-share">
+                        <ul class="redesSociales">
                             <li>
-                                <a class="twitter" title="Comparte en Twitter" data-social-network="twitter" target="_blank">
+                                <a class="twitter" title="Comparte en Twitter" onclick="social_share(this, 'twitter')" target="_blank">
                                     <span class="fa-stack">
                                       <i class="fa fa-circle fa-stack-2x"></i>
                                       <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
@@ -37,7 +37,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="facebook" target="_blank" title="Comparte en Facebook" data-social-network="facebook">
+                                <a class="facebook" target="_blank" title="Comparte en Facebook" onclick="social_share(this, 'facebook')">
                                     <span class="fa-stack">
                                       <i class="fa fa-circle fa-stack-2x"></i>
                                       <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
@@ -45,7 +45,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="googlePlus" target="_blank" title="Comparte en Google+" data-social-network="googleplus">
+                                <a class="googlePlus" target="_blank" title="Comparte en Google+" onclick="social_share(this, 'gplus')">
                                     <span class="fa-stack">
                                       <i class="fa fa-circle fa-stack-2x"></i>
                                       <i class="fa fa-google-plus fa-stack-1x fa-inverse"></i>
