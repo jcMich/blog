@@ -8,8 +8,8 @@
             <h1>Publicaciones</h1>
         </div>
         <div class="row">
+        {% csrf_token %}
                 <form name="filterform">
-                {% csrf_token %}
                 <table class="filtersearch">
                     <tr>
                         <td>

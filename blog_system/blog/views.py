@@ -93,9 +93,9 @@ class AdminEntries(ListView):
             else:
                 self.queryset = Blog.objects.all().order_by('-time')
             if filter_category:
-                self.queryset = Blog.objects.all().filter(categoria=filter_category)
+                self.queryset = self.queryset.filter(categoria=filter_category)
             if filter_status:
-                self.queryset = Blog.objects.all().filter(status=filter_status)
+                self.queryset = self.queryset.filter(status=filter_status)
             return super(AdminEntries, self).get(request, *args, **kwargs)
 
 
