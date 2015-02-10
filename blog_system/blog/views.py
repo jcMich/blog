@@ -99,26 +99,6 @@ class AdminEntries(ListView):
             return super(AdminEntries, self).get(request, *args, **kwargs)
 
 
-class CreateCategory(FormView):
-    form_class = categories_form
-    template_name = 'edit_entry.html'
-
-    def post(self, request, *args, **kwargs):
-        form = categories_form(request.POST)
-        if self.request.is_ajax() and form.is_valid():
-            name = form.cleaned_data['nombre']
-            description = form.cleaned_data['descripcion']
-            cate, created = Categories.objects.get_or_create(nombre=name, descripcion=description)
-            cate.save()
-            return HttpResponse(json.dumps({"Nombre": name, "Descripcion": description}), content_type="application/json")
-
-    def form_valid(self, form):
-        nombre = form.cleaned_data['nombre']
-        descripcion = form.cleaned_data['descripcion']
-        cate, created = Categories.objects.get_or_create(nombre=nombre, descripcion=descripcion)
-        return HttpResponseRedirect(reverse('categories'))
-
-
 class Post(View):
     form_class = addpostForm
     template_name = 'edit_entry.html'
@@ -188,13 +168,23 @@ class AdminCategories(ListView):
                     pass
                 category.delete()
                 return HttpResponse(json.dumps({"Success": "Success"}), content_type="application/json")
-        else:
-            form = categories_form(request.POST or None)
-            if form.is_valid():
-                nombre = form.cleaned_data['nombre']
-                descripcion = form.cleaned_data['descripcion']
-                cate, created = Categories.objects.get_or_create(nombre=nombre, descripcion=descripcion)
-            return HttpResponseRedirect(reverse('categories'))
+
+
+class CreateCategory(View):
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.is_ajax():
+            return HttpResponseRedirect(reverse('home'))
+        return super(CreateCategory, self).dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        form = categories_form(request.POST)
+        if self.request.is_ajax() and form.is_valid():
+            name = form.cleaned_data['nombre']
+            description = form.cleaned_data['descripcion']
+            cate, created = Categories.objects.get_or_create(nombre=name, descripcion=description)
+            cate.save()
+            return HttpResponse(json.dumps({"Nombre": name, "Descripcion": description}), content_type="application/json")
 
 
 class LoginView(FormView):

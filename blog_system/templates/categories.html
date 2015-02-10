@@ -29,7 +29,7 @@
                 <input class="btn btn-default" type="button" id="show-add" value="Agregar Categoria">
             </div>
             <div id="modalform">
-            <form method="POST">
+            <form action="{% url 'create_category' %}" class='new-cate' role='form'>
                     {% csrf_token %}
                     {{ form|bootstrap }}
                     <input type="submit" id="btn-add-category" value="Agregar" class="btn btn-primary">

@@ -85,7 +85,7 @@ jQuery(document).ready(function () {
     $("#cancel-cate").on("click", function () {
         $modalform.hide("slow");
     });
-    $("form.new_cate").on("submit", function (event) {
+    $("form.new-cate").on("submit", function (event) {
         event.preventDefault();
         var fieldVoid = false,
             self = $(this);
@@ -182,10 +182,13 @@ jQuery(document).ready(function () {
                 fieldVoid = true;
             }
         });
-        if (fieldVoid == true)
-              return false;
-        else
+        if (fieldVoid == true){
+            return false;
+        }
+        else {
             $("#" + ID_MODAL_FORM ).hide("slow");
+            window.location.reload();
+        }
     });
 });
 
