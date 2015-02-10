@@ -4,6 +4,9 @@ from django import forms
 from django.forms import ModelForm
 from ckeditor.widgets import CKEditorWidget
 from .models import comentarios, Blog, Categories, Tags
+# from crispy_forms.bootstrap import AppendedText, PrependedText, AppendedPrependedText
+# from crispy_forms.helper import FormHelper
+# from crispy_forms.layout import Layout, Submit, Field, HTML, Div, ButtonHolder, Fieldset
 
 
 class ComentarioForm(forms.ModelForm):
@@ -21,6 +24,17 @@ class ContactForm(forms.Form):
 class LoginForm(forms.Form):
     username = forms.CharField(label="Usuario", widget=forms.TextInput())
     password = forms.CharField(label="Password", widget=forms.PasswordInput(render_value=False))
+
+
+class DeleteCategory(forms.Form):
+    category_name = forms.CharField()
+
+
+class UpdatePostForm(forms.Form):
+    post_id = forms.CharField()
+    comment = forms.CharField()
+    category = forms.CharField()
+    status = forms.CharField()
 
 
 class addpostForm(ModelForm):

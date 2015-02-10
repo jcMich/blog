@@ -3,6 +3,7 @@
 import os
 PROJECT_PATH = os.path.dirname(os.path.dirname(__file__))
 
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -24,6 +25,7 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = False
+
 
 SECRET_KEY = 'mx-1t#-8()r*wnba1wo)s)%xim6a66d8y7w!no%g+k(o&amp;4)4*s'
 
@@ -78,8 +80,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'bootstrap_toolkit',
     'blog',
-    'django_admin_bootstrapped.bootstrap3',
-    'django_admin_bootstrapped',
+    # 'crispy_forms'
+    # 'django_admin_bootstrapped.bootstrap3',
+    # 'django_admin_bootstrapped',
     'django.contrib.admin',
     'bootstrapform',
     'ckeditor',

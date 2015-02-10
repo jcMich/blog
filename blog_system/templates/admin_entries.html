@@ -37,12 +37,12 @@
                 </form>
                 <table class="table table-striped">
                     <tr>
-                        <th>Imagen</th>
-                        <th>Información</th>
-                        <th>Coment</th>
-                        <th>Categoria</th>
-                        <th>Estado</th>
-                        <th>Guardar</th>
+                        <th class="col-md-1">Imagen</th>
+                        <th class="col-md-6">Información</th>
+                        <th class="col-md-1">Coment</th>
+                        <th class="col-md-2">Categoria</th>
+                        <th class="col-md-1">Estado</th>
+                        <th class="col-md-1">Guardar</th>
                     </tr>
                     {% if not posts %}
                     <tr><th>No Entries<th></tr>
@@ -50,7 +50,7 @@
                     {% for post in posts %}
                     <tr class="infopost" id="post_{{ post.pk }}">
                         <td>
-                            <img src="{{ post.imagen.url }}" id='postimg' width="100px" height="100px">
+                            <img src="{{ post.imagen.url }}" class='post-image'>
                         </td>
                         <td>
                             <div class="title">
@@ -60,7 +60,7 @@
                                 <div class="perex">{{ post.perex|truncatechars:150 }}</div>
                             {% endautoescape %}
                            <ul class="tags_list">
-                            {% for tag in blog.tags.all %}
+                            {% for tag in post.tags.all %}
                                 <li class="isTag">{{ tag }}</li>
                             {% endfor %}
                             </ul>

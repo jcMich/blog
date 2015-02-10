@@ -148,16 +148,19 @@ jQuery(document).ready(function () {
 
     $(".del_category").on("click", function(){
         var $row = $(this).closest("tr");
-        var categoryName = $row.find("p.name").text();
-        if(confirm("Se borra la categoria " + categoryName
+        var category_name = $row.find("p.name").text(),
+            category_description = $row.find("p.description").text();
+
+        if(confirm("Se borra la categoria " + category_name
             + " y todo los post relacionados estas seguro")){
             $.ajax({
                 type: "POST",
                 data: {
                     csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
-                    category: categoryName
+                    category_name: category_name,
                 },
                 success: function(result){
+                    console.log(result);
                     $row.remove();
                 },
                 error: function(xhr, result, err){
@@ -189,7 +192,7 @@ jQuery(document).ready(function () {
 /* Entries Update Manage
 ----------------------*/
 // Notice that this is function is outside of the JQuery's "$('Document').ready(function(){});"
-    function entries_status(){
+    var entries_status = function(){
         var posts = [];
         $("tr.infopost").each(function(){
             var $this = $(this);
@@ -231,10 +234,10 @@ jQuery(document).ready(function () {
                 url: "/entries/",
                 data: {
                     csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
-                    id: $this.siblings("input:hidden").val(),
-                    comentario: $this.closest("tr").find("#id_comment").prop('checked'),
-                    categoria: $this.closest("tr").find("#id_category option:selected").text(),
-                    estado: $this.closest("tr").find("#id_status option:selected").val()
+                    post_id: $this.siblings("input:hidden").val(),
+                    comment: $this.closest("tr").find("#id_comment").prop('checked'),
+                    category: $this.closest("tr").find("#id_category option:selected").text(),
+                    status: $this.closest("tr").find("#id_status option:selected").val()
                 },
                 success: function(result){
                     $this.removeClass("btn-primary");
@@ -254,7 +257,7 @@ jQuery(document).ready(function () {
             });
             $this.attr("disabled", "true");
         });
-    }
+    };
 
 
     /* Social Share
@@ -277,7 +280,7 @@ jQuery(document).ready(function () {
     function social_share( object, SITE ) {
         $( object ).on("click", function(e) {
             e.preventDefault();
-            window.open(get_social_network[ SITE.toLowerCase() ], "Share", 'height=450, width=550, top=' + ($(window).height() / 2 - 275) + ', left=' + ($(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
+            window.open(get_social_network[ SITE.toLowerCase() ], "Share", 'height=450, width=500, top=' + ($(window).height() / 2 - 275) + ', left=' + ($(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
             return false;
         });
     }

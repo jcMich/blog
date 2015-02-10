@@ -118,17 +118,17 @@ ul.archive li:hover ul{
 /* Tags slim
 ------------------------*/
 
-ul.tags_list{
+ul.tags_list {
     list-style-type: none;
     padding: 0px;
     margin: 0px;
     background-color: #ff6b00;
 }
 
-table td{
+table td {
     max-width: 500px;
 }
-td li.isTag{
+td li.isTag {
     font-size: 9pt;
     position: relative;
     color: #fff;
@@ -144,57 +144,23 @@ td li.isTag{
     border-radius: 5px;
     border-radius: 5px;
 }
-
-td div.perex{
+td div.perex {
     margin: 0px;
     font-size: 9pt;
 }
 
-td div.title{
+td div.title {
     margin-bottom: 5px;
     font-weight: bold;
 }
-td #id_imagen{
+td #id_imagen {
     display: none;
 }
 
-form input.btn-danger{
+form input.btn-danger {
     float: right;
 }
-.blog-nav form{
-    float: right;
-    position: relative;
-    margin-top: 5px;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-}
-.blog-nav form input{
-    max-width: 60px;
-    background: #000;
-    color: #fff;
-    border: none;
-    padding: 0px;
-    margin: 0px;
-    font-size: 14px;
-}
-.blog-nav form input:focus{
-    max-width: 200px;
-}
-.blog-nav form button{
-    color: #cdddeb;
-    background: #000;
-}
-.blog-nav form input[type="text"]:-moz-placeholder {
-  color: #cdddeb;
-}
-.blog-nav form input[type="text"]::-moz-placeholder {
-  color: #cdddeb;
-}
-.blog-nav form input[type="text"]:-ms-input-placeholder {
-  color: #cdddeb;
-}
-.blog-nav form input[type="text"]::-webkit-input-placeholder {
-  color: #cdddeb;
-}
+/* Admin style */
 .filtersearch{
     float: right;
 }
@@ -205,7 +171,7 @@ form input.btn-danger{
     padding: 0px 10px 0px 10px;
 }
 
-
-
-
+img.post-image {
+    width: 100%;
+}
 

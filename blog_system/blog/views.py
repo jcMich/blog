@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, View
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.core.urlresolvers import reverse
 from .models import Blog, comentarios, Tags, Categories, STATUS_CHOICES
-from django.shortcuts import render_to_response, render
-from .forms import ComentarioForm, ContactForm, LoginForm, addpostForm, categories_form, filter_form
+from .forms import ComentarioForm, UpdatePostForm, LoginForm, addpostForm, categories_form, filter_form, DeleteCategory
 from django.utils.text import slugify
 from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect, HttpResponse
@@ -72,13 +71,14 @@ class AdminEntries(ListView):
         return ctx
 
     def post(self, request, *args, **kwargs):
-        if self.request.is_ajax():
-            postid = request.POST.get('id')
-            newcate = request.POST.get('categoria')
-            newstatus = request.POST.get('estado')
-            coment = request.POST.get('comentario') == 'true'
+        form = UpdatePostForm(request.POST)
+        if self.request.is_ajax() and form.is_valid():
+            postid = form.cleaned_data['post_id']
+            newcate = form.cleaned_data['category']
+            newstatus = form.cleaned_data['status']
+            comment = form.cleaned_data['comment'] == 'true'
             post = Blog.objects.get(pk=postid)
-            post.comentar = coment
+            post.comentar = comment
             post.categoria = Categories.objects.get(nombre=newcate)
             post.status = newstatus
             post.save()
@@ -89,7 +89,7 @@ class AdminEntries(ListView):
             filter_category = request.GET.get('category')
             filter_status = request.GET.get('status')
             if filter_search:
-                self.queryset = Blog.objects.filter(Q(content__icontains=filter_search) | Q(tags__nombre__icontains=filter_search)).distinct().order_by('-time')
+                self.queryset = Blog.objects.filter(Q(title__icontains=filter_search) | Q(tags__nombre__icontains=filter_search)).distinct().order_by('-time')
             else:
                 self.queryset = Blog.objects.all().order_by('-time')
             if filter_category:
@@ -104,9 +104,10 @@ class CreateCategory(FormView):
     template_name = 'edit_entry.html'
 
     def post(self, request, *args, **kwargs):
-        if self.request.is_ajax():
-            name = request.POST.get('nombre')
-            description = request.POST.get('descripcion')
+        form = categories_form(request.POST)
+        if self.request.is_ajax() and form.is_valid():
+            name = form.cleaned_data['nombre']
+            description = form.cleaned_data['descripcion']
             cate, created = Categories.objects.get_or_create(nombre=name, descripcion=description)
             cate.save()
             return HttpResponse(json.dumps({"Nombre": name, "Descripcion": description}), content_type="application/json")
@@ -190,16 +191,18 @@ class AdminCategories(ListView):
 
     def post(self, request, *args, **kwargs):
         if self.request.is_ajax():
-            category = Categories.objects.get(nombre=request.POST.get('category'))
-            default = Categories.objects.get_or_create(nombre="Default", descripcion="Default")
-            try:
-                post = Blog.objects.get(categoria=category)
-                post.categoria = default[0]
-                post.save()
-            except:
-                pass
-            category.delete()
-            return HttpResponse(json.dumps({"Success": "Success"}), content_type="application/json")
+            form = DeleteCategory(request.POST)
+            if form.is_valid():
+                category = Categories.objects.get(nombre=form.cleaned_data['category_name'])
+                default = Categories.objects.get_or_create(nombre="Default", descripcion="Default")
+                try:
+                    post = Blog.objects.get(categoria=category)
+                    post.categoria = default[0]
+                    post.save()
+                except:
+                    pass
+                category.delete()
+                return HttpResponse(json.dumps({"Success": "Success"}), content_type="application/json")
         else:
             form = categories_form(request.POST or None)
             if form.is_valid():

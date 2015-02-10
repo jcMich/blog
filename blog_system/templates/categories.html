@@ -19,7 +19,7 @@
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td><p class="name">{{ category.nombre }}</p></td>
-                        <td><div><p>{{ category.descripcion}}</p></div></td>
+                        <td><div><p class="description">{{ category.descripcion}}</p></div></td>
                         <td><input type="submit" value="Eliminar" class="btn btn-danger del_category"></td>
                     </tr>
                 {% endfor %}
