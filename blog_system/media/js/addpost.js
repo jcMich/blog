@@ -41,7 +41,7 @@ jQuery(document).ready(function () {
         var key = $thisInput.val().substr($thisInput.val().length - 1);
         if ((key == ",") && $thisInput.val().length > 1) {
             if (!checkIfExist($thisInput))
-                $tags_list.append("<li class='isTag'>" + $.trim($thisInput.val().slice(0, -1).toLowerCase()) + "<b class='delete'> ×</b></li>");
+                $tags_list.append("<li class='isTag'>" + $.trim($thisInput.val().replace(/,/g, '').toLowerCase()) + "<b class='delete'> ×</b></li>");
             $thisInput.val("");
         } else if (key == ",") {
             $thisInput.val("");
@@ -51,8 +51,9 @@ jQuery(document).ready(function () {
     $("#id_tags_add").on("blur", function () {
         var $thisInput = $(this);
         if ($thisInput.val() !== "") {
-            if (checkIfExist)
-                $tags_list.append("<li class='isTag'>" + $thisInput.val() + "<b class='delete'> ×</b></li>");
+            if (!checkIfExist($thisInput))
+                var new_tag = $thisInput.val();
+                $tags_list.append("<li class='isTag'>" + $thisInput.val().replace(/,/g, '').toLowerCase() + "<b class='delete'> ×</b></li>");
             $thisInput.val("");
         }
     });
@@ -172,7 +173,7 @@ jQuery(document).ready(function () {
     $("#show-add").on("click", function(){
         $("#" + ID_MODAL_FORM ).show("slow");
     });
-    $("#add_category").on("click", function(){
+    $("#btn-add-category").on("click", function(){
         var fieldVoid = false;
         $(this).closest("form").find("input, textarea").not(":submit").each(function () {
             var $this = $(this);
@@ -280,7 +281,7 @@ jQuery(document).ready(function () {
     function social_share( object, SITE ) {
         $( object ).on("click", function(e) {
             e.preventDefault();
-            window.open(get_social_network[ SITE.toLowerCase() ], "Share", 'height=450, width=500, top=' + ($(window).height() / 2 - 275) + ', left=' + ($(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
+            window.open(get_social_network[ SITE.toLowerCase() ], SITE, 'height=450, width=500, top=' + ($(window).height() / 2 - 275) + ', left=' + ($(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
             return false;
         });
     }

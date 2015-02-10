@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, View
 from django.core.urlresolvers import reverse
 from .models import Blog, comentarios, Tags, Categories, STATUS_CHOICES
 from .forms import ComentarioForm, UpdatePostForm, LoginForm, addpostForm, categories_form, filter_form, DeleteCategory
@@ -119,18 +119,21 @@ class CreateCategory(FormView):
         return HttpResponseRedirect(reverse('categories'))
 
 
-class AddPost(CreateView):
+class Post(View):
     form_class = addpostForm
-    initial = {'status': 'D'}
     template_name = 'edit_entry.html'
 
     def get_context_data(self, **kwargs):
-        ctx = super(AddPost, self).get_context_data(**kwargs)
+        ctx = super(Post, self).get_context_data(**kwargs)
         ctx['category_form'] = categories_form()
         return ctx
 
+    def get_object(self, queryset=None):
+        post = Blog.objects.all()
+        return post
+
     def form_valid(self, form):
-        post = form.save(commit=False)
+        self.post = form.save(commit=False)
         tags = unicode(form.cleaned_data['tags'])
         tags = tags.split(',')
         lst_tgs = []
@@ -138,41 +141,23 @@ class AddPost(CreateView):
             t = Tags.objects.get_or_create(nombre=tag)
             lst_tgs.append(t[0])
         slg = slugify(form.cleaned_data['title'])
-        post.slug = slg
-        post.save()
-        post.tags = lst_tgs
-        post.save()
-        return HttpResponseRedirect(reverse('home'))
+        self.post.slug = slg
+        self.post.save()
+        self.post.tags = lst_tgs
+        self.post.save()
+        return HttpResponseRedirect(reverse('edit_entries'))
 
 
-class EditPost(UpdateView):
-    form_class = addpostForm
-    template_name = 'edit_entry.html'
+class AddPost(Post, CreateView):
+    initial = {'status': 'D'}
+
+
+class EditPost(Post, UpdateView):
     context_object_name = 'post'
 
     def get_object(self, queryset=None):
-        obj = Blog.objects.get(slug=self.kwargs['slug'])
-        return obj
-
-    def get_context_data(self, **kwargs):
-        ctx = super(EditPost, self).get_context_data(**kwargs)
-        ctx['category_form'] = categories_form()
-        return ctx
-
-    def form_valid(self, form):
-        self.obj = form.save(commit=False)
-        tags = unicode(form.cleaned_data['tags'])
-        tags = tags.split(',')
-        lst_tgs = []
-        for tag in tags:
-            t = Tags.objects.get_or_create(nombre=tag)
-            lst_tgs.append(t[0])
-        slg = slugify(form.cleaned_data['title'])
-        self.obj.slug = slg
-        self.obj.save()
-        self.obj.tags = lst_tgs
-        self.obj.save()
-        return HttpResponseRedirect(reverse('edit_entries'))
+        post = Blog.objects.get(slug=self.kwargs['slug'])
+        return post
 
 
 class AdminCategories(ListView):
