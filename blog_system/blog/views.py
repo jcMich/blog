@@ -59,14 +59,14 @@ class Month(AjaxListView):
 class AdminEntries(ListView):
     model = Blog
     context_object_name = 'posts'
-    paginate_by = 8
+    paginate_by = 16
     page_kwarg = 'page'
     template_name = 'admin_entries.html'
 
     def get_context_data(self, **kwargs):
         ctx = super(AdminEntries, self).get_context_data(**kwargs)
         request_get = self.request.GET.copy()
-        if (request_get.has_key('page')):
+        if 'page' in request_get:
             del request_get['page']
         ctx['get_query'] = request_get
         ctx['status'] = STATUS_CHOICES
