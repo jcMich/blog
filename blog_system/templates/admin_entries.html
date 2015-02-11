@@ -9,32 +9,8 @@
         </div>
         <div class="row">
         {% csrf_token %}
-                <form name="filterform">
-                <table class="filtersearch">
-                    <tr>
-                        <td>
-                            <div class="form-group">
-                                {{ form.search }}
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-group">
-                                {{ form.category }}
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-group">
-                                {{ form.status }}
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-group">
-                                <input type="submit" class="btn btn-default" value="Filtrar">
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-                </form>
+                {% load crispy_forms_tags %}
+                    {% crispy form %}
                 <table class="table table-striped">
                     <tr>
                         <th class="col-md-1">Imagen</th>

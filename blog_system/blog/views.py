@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, View
 from django.core.urlresolvers import reverse
 from .models import Blog, comentarios, Tags, Categories, STATUS_CHOICES
-from .forms import ComentarioForm, UpdatePostForm, LoginForm, addpostForm, categories_form, filter_form, DeleteCategory
+from .forms import ComentarioForm, UpdatePostForm, LoginForm, PostForm, CategoryForm, filter_form, DeleteCategory
 from django.utils.text import slugify
 from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect, HttpResponse
@@ -100,12 +100,12 @@ class AdminEntries(ListView):
 
 
 class Post(View):
-    form_class = addpostForm
+    form_class = PostForm
     template_name = 'edit_entry.html'
 
     def get_context_data(self, **kwargs):
         ctx = super(Post, self).get_context_data(**kwargs)
-        ctx['category_form'] = categories_form()
+        ctx['category_form'] = CategoryForm()
         return ctx
 
     def get_object(self, queryset=None):
@@ -142,12 +142,13 @@ class EditPost(Post, UpdateView):
 
 class AdminCategories(ListView):
     model = Categories
-    context_object_name = 'categories'
+    context_object_name = 'model'
     template_name = 'categories.html'
 
     def get_context_data(self, **kwargs):
         ctx = super(AdminCategories, self).get_context_data(**kwargs)
-        ctx['form'] = categories_form()
+        ctx['form'] = CategoryForm()
+        ctx['js_functions'] = 'category_template()'
         return ctx
 
     def get_queryset(self):
@@ -155,19 +156,18 @@ class AdminCategories(ListView):
         return qs.exclude(nombre="Default")
 
     def post(self, request, *args, **kwargs):
-        if self.request.is_ajax():
-            form = DeleteCategory(request.POST)
-            if form.is_valid():
-                category = Categories.objects.get(nombre=form.cleaned_data['category_name'])
-                default = Categories.objects.get_or_create(nombre="Default", descripcion="Default")
-                try:
-                    post = Blog.objects.get(categoria=category)
-                    post.categoria = default[0]
-                    post.save()
-                except:
-                    pass
-                category.delete()
-                return HttpResponse(json.dumps({"Success": "Success"}), content_type="application/json")
+        form = DeleteCategory(request.POST)
+        if self.request.is_ajax() and form.is_valid():
+            category = Categories.objects.get(nombre=form.cleaned_data['category_name'])
+            default = Categories.objects.get_or_create(nombre="Default", descripcion="Default")
+            try:
+                post = Blog.objects.get(categoria=category)
+                post.categoria = default[0]
+                post.save()
+            except:
+                pass
+            category.delete()
+            return HttpResponse(json.dumps({"Success": "Success"}), content_type="application/json")
 
 
 class CreateCategory(View):
@@ -178,7 +178,7 @@ class CreateCategory(View):
         return super(CreateCategory, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        form = categories_form(request.POST)
+        form = CategoryForm(request.POST)
         if self.request.is_ajax() and form.is_valid():
             name = form.cleaned_data['nombre']
             description = form.cleaned_data['descripcion']

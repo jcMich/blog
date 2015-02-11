@@ -80,7 +80,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'bootstrap_toolkit',
     'blog',
-    # 'crispy_forms'
+    'crispy_forms',
     # 'django_admin_bootstrapped.bootstrap3',
     # 'django_admin_bootstrapped',
     'django.contrib.admin',
@@ -165,9 +165,12 @@ SITE_URL = 'http://www.dubalu.com'
 SITE_IMAGE ='http://www.deipi.com/static/images/html/deipi/deipi_logo.png?'
 
 CKEDITOR_CONFIGS = {
+
     'basic_ckeditor': {
         'toolbar': 'Basic',
-        'height': '100px',
+        'toolbarCanCollapse': False,
+        'height': '100%',
+        'width': '100%',
     },
     'full_ckeditor': {
         'full': True,
@@ -183,7 +186,8 @@ CKEDITOR_CONFIGS = {
         'toolbarLocation': 'top',
         'defaultLanguage': 'es',
         'toolbarCanCollapse': False,
-        #'uiColor': '#666565'
+        'width': '100%',
+        # 'uiColor': '#666565'
     },
 }
 

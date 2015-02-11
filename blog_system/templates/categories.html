@@ -1,25 +1,25 @@
 {% extends 'admin.html' %}
-{% load bootstrap %}
 <!-- Container -->
 {% block content %}
+{% load crispy_forms_tags %}
     {% if True %}
         <div class="text-center">
-            <h1>Categorias</h1>
+            <h1>ListView</h1>
         </div>
         <div class="container">
             <div class="row">
                 <table class="table table-striped">
                     <tr>
-                        <th>#</th>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th>Borrar</th>
+                        <th class="col-md-1">#</th>
+                        <th class="col-md-5">Nombre</th>
+                        <th class="col-md-5">Descripción</th>
+                        <th class="col-md-1">Borrar</th>
                     </tr>
-                {% for category in categories %}
+                {% for element in model %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td><p class="name">{{ category.nombre }}</p></td>
-                        <td><div><p class="description">{{ category.descripcion}}</p></div></td>
+                        <td><p class="name">{{ element.nombre }}</p></td>
+                        <td><div><p class="description">{{ element.descripcion}}</p></div></td>
                         <td><input type="submit" value="Eliminar" class="btn btn-danger del_category"></td>
                     </tr>
                 {% endfor %}
@@ -29,14 +29,10 @@
                 <input class="btn btn-default" type="button" id="show-add" value="Agregar Categoria">
             </div>
             <div id="modalform">
-            <form action="{% url 'create_category' %}" class='new-cate' role='form'>
-                    {% csrf_token %}
-                    {{ form|bootstrap }}
-                    <input type="submit" id="btn-add-category" value="Agregar" class="btn btn-primary">
-                    <a id="cancel-cate">Cancelar</a>
-            </form>
+                {% crispy form %}
             </div>
         </div>
+        <script type="text/javascript">{{ js_functions }}</script>
     {% else %}
     <div class="text-center"><p>¡ERROR! no tiene los permisos necesarios, Contacte al Administrador </p></div>
     {% endif %}

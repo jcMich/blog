@@ -162,16 +162,12 @@ form input.btn-danger {
 }
 /* Admin style */
 .filtersearch{
-    float: right;
+    background-color: #ccc;
 }
-.filtersearch tr{
-    padding-right-right: 40px;
-}
-.filtersearch td{
-    padding: 0px 10px 0px 10px;
-}
-
 img.post-image {
     width: 100%;
+}
+form.new-cate {
+    margin: 10px;
 }
 

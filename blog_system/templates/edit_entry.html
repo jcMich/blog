@@ -1,6 +1,6 @@
 {% extends 'admin.html' %}
-{% load bootstrap %}
 {% block content %}
+{% load crispy_forms_tags %}
         <!-- Container -->
         <div class="container">
             {% if user.is_superuser %}
@@ -8,31 +8,13 @@
                     <legend>Crear una Entrada</legend>
                 </div>
                 <div class="row">
-                    <div class="col-lg-11">
-                        <form action="" method="POST" class="form-horizontal" role="form" enctype='multipart/form-data'>
-                            {% csrf_token %}
-                            {{ form.media }}
-                            {{ form|bootstrap_horizontal }}
-                            <div class="col-lg-offset-2">
-                                <input class="btn btn-primary" type="submit" name="save_exit" value="Agregar y Salir">
-                            {% if post == False %}
-                                <input class="btn btn-default" type="submit" name="save_continue" value="Agregar y Continua">
-                                <a href="/"><input class="btn btn-danger" type="button" value="Cancelar"></a>
-                            {% else %}
-                                <a href="{% url 'home' %}"><input class="btn btn-danger" type="button" value="Cancelar"></a>
-                            {% endif %}
-                            </div>
-                        </form>
-                    </div>
+                    {% crispy form %}
                 </div>
                 {% if category_form %}
                 <div id="modalform">
-                    <form action="{% url 'create_category' %}" class='new-cate' role='form'>
-                    {{ category_form|bootstrap }}
-                    <input class='btn-u' type='submit' id='save_data' value='Agregar'>
-                    <a id='cancel-cate'>Cacelar</a>
-                    </form>
+                    {% crispy category_form %}
                 </div>
+                <script type="text/javascript">$(document).ready(function(){category_post()});</script>
                 {% endif %}
                 {% if post %}
                 <script type="text/javascript">

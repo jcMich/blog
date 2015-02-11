@@ -2,11 +2,12 @@
 from __future__ import absolute_import, unicode_literals
 from django import forms
 from django.forms import ModelForm
+from django.core.urlresolvers import reverse
 from ckeditor.widgets import CKEditorWidget
 from .models import comentarios, Blog, Categories, Tags
 # from crispy_forms.bootstrap import AppendedText, PrependedText, AppendedPrependedText
-# from crispy_forms.helper import FormHelper
-# from crispy_forms.layout import Layout, Submit, Field, HTML, Div, ButtonHolder, Fieldset
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Submit, Field, HTML, Div, ButtonHolder, Fieldset, Button
 
 
 class ComentarioForm(forms.ModelForm):
@@ -37,11 +38,68 @@ class UpdatePostForm(forms.Form):
     status = forms.CharField()
 
 
-class addpostForm(ModelForm):
+class PostForm(ModelForm):
     content = forms.CharField(widget=CKEditorWidget(config_name='full_ckeditor'))
     perex = forms.CharField(widget=CKEditorWidget(config_name='basic_ckeditor'))
     tags = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'inserta aqui los tags separados por , '}))
     comentar = forms.BooleanField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(PostForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.layout = Layout(
+            HTML('{{ form.media }}'),
+            Div(
+                Field('title'),
+            ),
+            Div(
+                Div(
+                    HTML('{{ form.perex.label_tag }}'),  # In the end of the Form a js code erese a class.
+                    css_class='control-label col-lg-2 requiredField'
+                ),
+                Div(
+                    HTML('{{ form.perex }}'),
+                    css_class='col-lg-8'
+                ),
+                css_class='row',
+
+            ),
+            Div(
+                Div(
+                    HTML('{{ form.content.label_tag }}'),
+                    css_class='control-label col-lg-2 requiredField'
+                ),
+                Div(
+                    HTML('{{ form.content }}'),
+                    css_class='col-lg-8'
+                ),
+                css_class='row',
+            ),
+            Div(
+                Field('imagen'),
+            ),
+            Div(
+                Field('status'),
+            ),
+            Div(
+                Field('categoria'),
+            ),
+            Div(
+                Field('comentar'),
+            ),
+            Div(
+                Field('tags'),
+            ),
+            Div(
+                Submit('submit', 'Guardar y Salir'),
+                Button('Cancelar', 'Cancelar', css_class='btn btn-danger'),
+                css_class='col-lg-9 col-lg-offset-1'
+            ),
+            HTML("<script>document.getElementById('id_perex').parentNode.removeAttribute('style')</script>")
+        )
 
     class Meta:
         model = Blog
@@ -49,7 +107,22 @@ class addpostForm(ModelForm):
         # widgets = {'tags':forms.TextInput()}
 
 
-class categories_form(ModelForm):
+class CategoryForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(CategoryForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_class = 'new-cate'
+        self.helper.form_action = reverse('create_category')
+        self.helper.layout = Layout(
+            Div(
+                Field('nombre'),
+                Field('descripcion'),
+                Submit('submit', 'Agregar', css_id='save_data'),
+                Button('Cancelar', 'Cancelar', css_class='btn btn-default', css_id='cancel-cate'),
+            ),
+        )
+
     class Meta:
         model = Categories
 
@@ -61,11 +134,37 @@ class tags_form(ModelForm):
 
 class filter_form(forms.Form):
     STATUS = (
-        ('', ('-------')),
+        ('', '-------'),
         ('D', 'Draft'),
         ('P', 'Public'),
         ('H', 'Hidden'),
     )
-    search = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Buscar..', 'class': 'form-control'}))
-    category = forms.ModelChoiceField(Categories.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
-    status = forms.ChoiceField(choices=STATUS, widget=forms.Select(attrs={'class': 'form-control'}))
+    search = forms.CharField(required=False)
+    category = forms.ModelChoiceField(Categories.objects.all(), required=False)
+    status = forms.ChoiceField(choices=STATUS, required=False)
+
+    helper = FormHelper()
+    helper.form_method = "GET"
+    helper.disable_csrf = True
+    helper.form_show_labels = False
+    helper.layout = Layout(
+        Div(
+            Div(
+                Field('search', placeholder='Buscar...', css_class='form-control'),
+                css_class="col-md-4"
+            ),
+            Div(
+                Field('category', css_class='form-control'),
+                css_class="col-md-4"
+            ),
+            Div(
+                Field('status', css_class='form-control'),
+                css_class="col-md-2"
+            ),
+            Div(
+                Submit('submit', 'Filtrar', css_class="col-md-12"),
+                css_class="col-md-2"
+            ),
+            css_class="col-md-8 col-md-offset-4"
+        )
+    )

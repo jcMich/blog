@@ -1,5 +1,5 @@
-jQuery(document).ready(function () {
-
+    /* Global variables go here
+    ----------------------------------------------*/
     var ID_MODAL_FORM = "modalform",
         ID_NAME = "id_nombre",// id tags
         ID_DESCRIPTION = "id_descripcion",
@@ -7,12 +7,15 @@ jQuery(document).ready(function () {
         ID_IMAGE = "id_imagen",
         ID_TAGS = "id_tags";
 
+
+jQuery(document).ready(function () {
+
     // Se inicializan los campos inciales.
     var $tags = $( "#" + ID_TAGS );
     var $tags_elements = $tags.children("option");
     var $formBlog = $("#id_title").closest("form");
 
-    /*Motor de tags
+    /* Motor de tags
     ----------------------------------------------*/
     $tags.siblings("p.help-block").remove();
     $tags.css("display", "none");
@@ -74,55 +77,6 @@ jQuery(document).ready(function () {
         }
         $( "#" + ID_TAGS ).val(tag_list);
     });
-    /* Categorias.
-    ----------------------------------------*/
-    $formBlog.find( "#id_categoria" ).after("<div><a id='add_category'>Agregar</a></div>");
-    var $modalform = $( "div#" + ID_MODAL_FORM );
-    $modalform.hide();
-    $("#add_category").on("click", function () {
-        $modalform.show("slow");
-    });
-    $("#cancel-cate").on("click", function () {
-        $modalform.hide("slow");
-    });
-    $("form.new-cate").on("submit", function (event) {
-        event.preventDefault();
-        var fieldVoid = false,
-            self = $(this);
-
-        self.find("input, textarea").not(":submit").each(function () {
-            var $this = $(this);
-            if ($.trim($this.val()) === "") {
-                $this.css("border-color", "#f00");
-                fieldVoid = true;
-            }
-        });
-        if (fieldVoid){
-            return false;
-        } else {
-            $.ajax({
-                type: "POST",
-                url: self.attr( "action" ),
-                data: {
-                    csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
-                    nombre: self.find( "#" + ID_NAME ).val(),
-                    descripcion: self.find( "#" + ID_DESCRIPTION ).val(),
-                },
-                success: function(result){
-                    var category = $("div#" + ID_MODAL_FORM + " #" + ID_NAME ).val();
-                    $( "#" + ID_CATEGORIES ).append("<option value='" + category + "'>" + category + "</option>");
-                    $( "#" + ID_CATEGORIES ).val(category);
-                    $modalform.hide("slow");
-                    $modalform.find("input:text, textarea").each(function(){
-                        $(this).val("");
-                    });
-                },
-                error: function(xhr, result, err){
-                        console.log(xhr, err);
-                }
-            });
-        }
-    });
     /* FileField
     ----------------------------*/
     if ( $formBlog.length > 0) {
@@ -144,9 +98,60 @@ jQuery(document).ready(function () {
     }
 
 
-    /* Categories tampletes
-    -------------------------*/
 
+});
+
+/* Categorias.
+ ----------------------------------------*/
+var category_post = function() {
+    var $formBlog = $("#id_title").closest("form");
+    $formBlog.find( "#id_categoria" ).after("<div><a id='add_category'>Agregar</a></div>");
+    var $modalform = $( "div#" + ID_MODAL_FORM );
+    $modalform.hide();
+    $("#add_category").on("click", function () {
+        $modalform.show("slow");
+    });
+    $("#cancel-cate").on("click", function () {
+        $modalform.hide("slow");
+    });
+    $("form.new-cate").on("submit", function (event) {
+        event.preventDefault();
+        var fieldVoid = false,
+            $form = $(this);
+
+        $form.find("input, textarea").not(":submit").each(function () {
+            var $this = $(this);
+            if ($.trim($this.val()) === "") {
+                $this.css("border-color", "#f00");
+                fieldVoid = true;
+            }
+        });
+        if (fieldVoid){
+            return false;
+        } else {
+            $.ajax({
+                type: "POST",
+                url: $form.attr( "action" ),
+                data: $form.serialize(),
+                success: function(result){
+                    var category = $("div#" + ID_MODAL_FORM + " #" + ID_NAME ).val();
+                    $( "#" + ID_CATEGORIES ).append("<option value='" + category + "'>" + category + "</option>");
+                    $( "#" + ID_CATEGORIES ).val(category);
+                    $modalform.hide("slow");
+                    $modalform.find("input:text, textarea").each(function(){
+                        $(this).val("");
+                    });
+                }
+            });
+        }
+    });
+};
+
+/* Category template script
+_________________________*/
+var category_template = function() {
+    var $modalform = $( "div#" + ID_MODAL_FORM );
+    $modalform.hide();
     $(".del_category").on("click", function(){
         var $row = $(this).closest("tr");
         var category_name = $row.find("p.name").text(),
@@ -173,24 +178,34 @@ jQuery(document).ready(function () {
     $("#show-add").on("click", function(){
         $("#" + ID_MODAL_FORM ).show("slow");
     });
-    $("#btn-add-category").on("click", function(){
-        var fieldVoid = false;
-        $(this).closest("form").find("input, textarea").not(":submit").each(function () {
+    $("#cancel-cate").on("click", function () {
+        $modalform.hide("slow");
+    });
+    $("form.new-cate").on("submit", function(){
+        event.preventDefault();
+        var fieldVoid = false,
+            $form = $(this);
+        $form.find("input, textarea").not(":submit").each(function () {
             var $this = $(this);
-            if ($.trim($this.val()) == "") {
+            if ($.trim($this.val()) === "") {
                 $this.css("border-color", "#f00");
                 fieldVoid = true;
             }
         });
-        if (fieldVoid == true){
+        if (fieldVoid){
             return false;
-        }
-        else {
-            $("#" + ID_MODAL_FORM ).hide("slow");
-            window.location.reload();
+        } else {
+            $.ajax({
+                type: "POST",
+                url: $form.attr( "action" ),
+                data: $form.serialize(),
+                success: function(result){
+                    window.location.reload();
+                }
+            });
         }
     });
-});
+};
 
 
 /* Entries Update Manage
@@ -277,4 +292,5 @@ jQuery(document).ready(function () {
             window.open(get_social_network[ SITE.toLowerCase() ], SITE.toUpperCase(), 'height=450, width=500, top=' + ($(window).height() / 2 - 225) + ', left=' + ($(window).width() / 2 - 225));
         }
         return false;
-    }
+    };
+
