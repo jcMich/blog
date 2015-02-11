@@ -80,6 +80,31 @@
                     </tr>
                     {% endfor %}
                 </table>
+                {% if page_obj.paginator.num_pages > 1 %}
+                    <nav>
+                        <ul class="pagination">
+                            {% if page_obj.has_previous %}
+                            <li>
+                                <a href="/entries/?{{get_query.urlencode}}&page={{ page_obj.previous_page_number}}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                            </li>
+                            {% endif %}
+                            {% for b in page_obj.paginator.page_range %}
+                                {% if b == page_obj.number %}
+                                <li class="active"><a href="/entries/?{{get_query.urlencode}}&page={{ b }}">{{ b }} <span class="sr-only">(current)</span></a></li>
+                                {% else %}
+                                <li><a href="/entries/?{{get_query.urlencode}}&page={{ b }}">{{ b }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                            {% if page_obj.has_next %}
+                            <li>
+                                <a href="/entries/?{{get_query.urlencode}}&page={{ page_obj.next_page_number }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
         </div>
         <script type="text/javascript">
         $(document).ready(function(){

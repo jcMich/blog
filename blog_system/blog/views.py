@@ -44,6 +44,9 @@ class Month(AjaxListView):
     context_object_name = "posts"
     model = Blog
 
+    template_name = 'archive.html'
+    page_template = 'archive_page.html'
+
     def get_queryset(self):
         year = self.kwargs['year']
         month = self.kwargs['month']
@@ -52,17 +55,20 @@ class Month(AjaxListView):
         else:
             return Blog.objects.all()
 
-    template_name = 'archive.html'
-    page_template = 'archive_page.html'
-
 
 class AdminEntries(ListView):
     model = Blog
     context_object_name = 'posts'
+    paginate_by = 8
+    page_kwarg = 'page'
     template_name = 'admin_entries.html'
 
     def get_context_data(self, **kwargs):
         ctx = super(AdminEntries, self).get_context_data(**kwargs)
+        request_get = self.request.GET.copy()
+        if (request_get.has_key('page')):
+            del request_get['page']
+        ctx['get_query'] = request_get
         ctx['status'] = STATUS_CHOICES
         if self.request.GET.get('search') or self.request.GET.get('category') or self.request.GET.get('status'):
             ctx['form'] = filter_form({'search': self.request.GET.get('search'), 'category': self.request.GET.get('category'), 'status': self.request.GET.get('status')})
