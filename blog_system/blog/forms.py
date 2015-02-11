@@ -17,9 +17,21 @@ class ComentarioForm(forms.ModelForm):
 
 
 class ContactForm(forms.Form):
-    Email = forms.EmailField(widget=forms.TextInput())
-    Titulo = forms.CharField(widget=forms.TextInput())
-    Texto = forms.CharField(widget=forms.Textarea())
+    email = forms.EmailField(widget=forms.TextInput())
+    title = forms.CharField(widget=forms.TextInput())
+    text = forms.CharField(widget=forms.Textarea())
+
+    helper = FormHelper()
+    helper.layout = Layout(
+        Div(
+            Fieldset(
+                'email',
+                'title',
+                'text',
+            ),
+            Submit('submit', 'Enviar'),
+        ),
+    )
 
 
 class LoginForm(forms.Form):
