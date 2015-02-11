@@ -10,9 +10,11 @@
 
 var category_post = function() {
     // Se inicializan los campos inciales.
-    var $formBlog = $("#id_title").closest("form");
-    var $tags = $( "#" + ID_TAGS );
-    var $formBlog = $("#id_title").closest("form");
+    var $formBlog = $("#id_title").closest("form"),
+        $tags = $( "#" + ID_TAGS ),
+        $formBlog = $("#id_title").closest("form");
+
+    $('div.django-ckeditor-widget').removeAttr('style');
 
     /* Motor de tags
     ----------------------------------------------*/

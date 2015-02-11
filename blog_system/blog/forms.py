@@ -69,26 +69,23 @@ class PostForm(ModelForm):
             ),
             Div(
                 Div(
-                    HTML('{{ form.perex.label_tag }}'),  # In the end of the Form a js code erese a class.
-                    css_class='control-label col-lg-2 requiredField'
+                    HTML('<label class="control-label col-lg-2">{{ form.perex.label }}</label>'),  # In the end of the Form a js code erese a class.
                 ),
                 Div(
                     HTML('{{ form.perex }}'),
                     css_class='col-lg-8'
                 ),
-                css_class='row',
-
+                css_class='form-group',
             ),
             Div(
                 Div(
-                    HTML('{{ form.content.label_tag }}'),
-                    css_class='control-label col-lg-2 requiredField'
+                    HTML('<label class="control-label col-lg-2">{{ form.content.label }}</label>'),
                 ),
                 Div(
                     HTML('{{ form.content }}'),
                     css_class='col-lg-8'
                 ),
-                css_class='row',
+                css_class='form-group',
             ),
             Div(
                 Field('imagen'),
@@ -110,7 +107,6 @@ class PostForm(ModelForm):
                 Button('Cancelar', 'Cancelar', css_class='btn btn-danger'),
                 css_class='col-lg-9 col-lg-offset-1'
             ),
-            HTML("<script>document.getElementById('id_perex').parentNode.removeAttribute('style')</script>")
         )
 
     class Meta:
@@ -163,19 +159,19 @@ class filter_form(forms.Form):
         Div(
             Div(
                 Field('search', placeholder='Buscar...', css_class='form-control'),
-                css_class="col-md-4"
+                css_class="col-xs-4"
             ),
             Div(
                 Field('category', css_class='form-control'),
-                css_class="col-md-4"
+                css_class="col-xs-4"
             ),
             Div(
                 Field('status', css_class='form-control'),
-                css_class="col-md-2"
+                css_class="col-xs-2"
             ),
             Div(
                 Submit('submit', 'Filtrar', css_class="col-md-12"),
-                css_class="col-md-2"
+                css_class="col-xs-2"
             ),
             css_class="col-md-8 col-md-offset-4"
         )
