@@ -43,7 +43,6 @@ class Home(ListView):
 class Month(AjaxListView):
     context_object_name = "posts"
     model = Blog
-
     template_name = 'archive.html'
     page_template = 'archive_page.html'
 
@@ -154,6 +153,7 @@ class AdminCategories(ListView):
     def get_context_data(self, **kwargs):
         ctx = super(AdminCategories, self).get_context_data(**kwargs)
         ctx['form'] = CategoryForm()
+        ctx['template_title'] = self.model._meta.object_name
         ctx['js_functions'] = 'category_template()'
         return ctx
 
