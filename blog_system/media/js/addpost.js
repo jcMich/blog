@@ -1,4 +1,4 @@
-    /* Global variables go here
+    /* Global
     ----------------------------------------------*/
     var ID_MODAL_FORM = "modalform",
         ID_NAME = "id_nombre",// id tags
@@ -8,11 +8,10 @@
         ID_TAGS = "id_tags";
 
 
-jQuery(document).ready(function () {
-
+var category_post = function() {
     // Se inicializan los campos inciales.
+    var $formBlog = $("#id_title").closest("form");
     var $tags = $( "#" + ID_TAGS );
-    var $tags_elements = $tags.children("option");
     var $formBlog = $("#id_title").closest("form");
 
     /* Motor de tags
@@ -96,15 +95,8 @@ jQuery(document).ready(function () {
             $fakeimage.val($this.val());
         });
     }
-
-
-
-});
-
-/* Categorias.
- ----------------------------------------*/
-var category_post = function() {
-    var $formBlog = $("#id_title").closest("form");
+    /*Categories form
+    ________________________________*/
     $formBlog.find( "#id_categoria" ).after("<div><a id='add_category'>Agregar</a></div>");
     var $modalform = $( "div#" + ID_MODAL_FORM );
     $modalform.hide();
