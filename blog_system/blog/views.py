@@ -44,6 +44,8 @@ class Home(ListView):
 class Month(AjaxListView):
     context_object_name = "posts"
     model = Blog
+    template_name = 'archive.html'
+    page_template = 'archive_page.html'
 
     def get_queryset(self):
         year = self.kwargs['year']
@@ -53,17 +55,25 @@ class Month(AjaxListView):
         else:
             return Blog.objects.all()
 
-    template_name = 'blog/../templates/archive.html'
+
+    template_name = 'blog/archive.html'
     page_template = 'blog/archive_page.html'
 
 
 class AdminEntries(ListView):
     model = Blog
     context_object_name = 'posts'
-    template_name = 'blog/../templates/admin_entries.html'
+    paginate_by = 8
+    page_kwarg = 'page'
+    template_name = 'blog/admin_entries.html'
+
 
     def get_context_data(self, **kwargs):
         ctx = super(AdminEntries, self).get_context_data(**kwargs)
+        request_get = self.request.GET.copy()
+        if 'page' in request_get:
+            del request_get['page']
+        ctx['get_query'] = request_get
         ctx['status'] = STATUS_CHOICES
         if self.request.GET.get('search') or self.request.GET.get('category') or self.request.GET.get('status'):
             ctx['form'] = filter_form({'search': self.request.GET.get('search'), 'category': self.request.GET.get('category'), 'status': self.request.GET.get('status')})
@@ -149,6 +159,7 @@ class AdminCategories(ListView):
     def get_context_data(self, **kwargs):
         ctx = super(AdminCategories, self).get_context_data(**kwargs)
         ctx['form'] = CategoryForm()
+        ctx['template_title'] = self.model._meta.object_name
         ctx['js_functions'] = 'category_template()'
         return ctx
 

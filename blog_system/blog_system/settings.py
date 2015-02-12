@@ -78,17 +78,13 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bootstrap_toolkit',
-    'blog',
-    'crispy_forms',
     # 'django_admin_bootstrapped.bootstrap3',
     # 'django_admin_bootstrapped',
     'django.contrib.admin',
-    'bootstrapform',
     'ckeditor',
-    'endless_pagination'
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'endless_pagination',
+    'blog',
+    'crispy_forms',
 )
 
 
