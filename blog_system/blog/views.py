@@ -44,8 +44,8 @@ class Home(ListView):
 class Month(AjaxListView):
     context_object_name = "posts"
     model = Blog
-    template_name = 'archive.html'
-    page_template = 'archive_page.html'
+    template_name = 'blog/archive.html'
+    page_template = 'blog/archive_page.html'
 
     def get_queryset(self):
         year = self.kwargs['year']

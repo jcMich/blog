@@ -1,5 +1,4 @@
 {% extends 'blog/base.html' %}
-{% load bootstrap %}
 {% block snippets %}
         <title>{{ post.title }}</title>
         <meta property="og:locale" content="{{ Locale }}"/>
@@ -116,7 +115,7 @@
                     <form action="" method="post" id="comments-form" class="comment-form" novalidate="novalidate">
                         <div class="row">
                             {% csrf_token %}
-                            {{ comentariosForm|bootstrap }}
+                            {{ comentariosForm.as_p }}
                             <input type="submit" value="Enviar"/>
                         </div>
                     </form>

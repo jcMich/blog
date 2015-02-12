@@ -1,5 +1,4 @@
 {% extends 'blog/admin.html' %}
-{% load bootstrap %}
 {% block content %}
         <!-- Container -->
         <div class="container">
@@ -12,7 +11,7 @@
                         <form action="" method="POST" class="form-horizontal" role="form" enctype='multipart/form-data'>
                             {% csrf_token %}
                             {{ form.media }}
-                            {{ form|bootstrap_horizontal }}
+                            {{ form.as_p }}
                             <div class="col-lg-offset-2">
                                 <input class="btn btn-primary" type="submit" name="save_exit" value="Agregar y Salir">
                             {% if post == False %}
