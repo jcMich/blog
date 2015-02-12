@@ -1,0 +1,79 @@
+{% load bootstrap %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="icon" href="#">
+
+        <title>Blog Template for Bootstrap</title>
+
+        <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <!-- Template -->
+        <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/addpost.js' %}"></script>
+        <!-- Style -->
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="{% static 'img/facebook.png' %}">
+
+
+        <!-- Custom styles for this template -->
+        <link href="{% static 'css/blog.css'%}" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    </head>
+
+    <body>
+
+<body>
+<!-- Header -->
+<div class="blog-masthead hidden-print">
+    <div class="container">
+        <nav class="blog-nav">
+            <a class="blog-nav-item active" href="{% url 'home' %}">Home</a>
+            <a class="blog-nav-item" href="#">New features</a>
+            <a class="blog-nav-item" href="#">Press</a>
+            <a class="blog-nav-item" href="#">New hires</a>
+            <a class="blog-nav-item" href="#">About</a>
+            <!--<form class="navbar-form" role="search">
+                <div class="input-group">
+                    <input type="text" class="form-control input-sm" name="search" id="search-nav-input" placeholder="Buscar">
+                    <span class="input-group-btn">
+                    <button type="submit" class="btn btn-sm" title="Buscar"><i class="fa fa-search"></i></button>
+                    </span>
+                </div>
+            </form>-->
+        </nav>
+    </div>
+</div>
+
+    {% if user.is_superuser %}
+    <div class="admin-tools">
+        <i class="fa fa-cog"></i>
+        <ul class="admin-items">
+            <li><a href="{% url 'new_post' %}">Nuevo Post</a></li>
+            <li><a href="{% url 'edit_entries' %}">Publicaciones</a></li>
+            <li><a href="{% url 'categories' %}">Categorias</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </div>
+    {% endif %}
+<!-- End Headder -->
+    {% block content %}
+
+    {% endblock %}
+<!-- Footer -->
+    <footer class="blog-footer">
+        <p>Blog template by <a href="https://www.deipi.com">Deipi.com</a>.</p>
+        <p>
+            <a href="#">Back to top</a>
+        </p>
+    </footer>
+</body>
+</html>

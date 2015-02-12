@@ -1,0 +1,94 @@
+{% extends 'blog/base.html' %}
+{% block snippets %}
+        <title>{{ Title }}</title>
+        <meta property="og:locale" content="{{ Locale }}"/>
+        <meta property="og:type" content="{{ Type }}"/>
+        <meta property="og:title" content="{{ Title }}"/>
+        <meta property="og:description" content="{{ Descripcion }}"/>
+        <meta property="og:url" content="{{ Url }}"/>
+        <meta property="og:image" content="{{ Image }}"/>
+{% endblock %}
+{% block contenido %}
+    <div class="col-sm-9 blog-main">
+        <div class="row">
+            <div class="blog-post">
+                {% if categoria %}
+                     <h1>{{ categoria|title }}</h1>
+                {% endif %}
+                <!--  POST  -->
+                {% for post in posts %}
+                    <div class="col-md-6">
+                        <div class="post hentry">
+                            <div class="post-body entry-content" id="post-body">
+                                <span>
+                                    <div class="entry-image">
+                                        <a href="{% url 'post' post.slug %}">
+                                            <img class="thumb img-responsive" src="{{ post.imagen.url }}" style="max-height:200px;">
+                                        </a>
+                                    </div>
+                                </span>
+                                <div class="article-container">
+                                    <div class="inner-content">
+                                        <div class="article-category">
+                                            <a href="{% url 'home' %}?category={{ post.categoria }}" rel="tag"> {{post.categoria}} </a>
+                                        </div>
+                                        <div class="clr"></div>
+                                        <div class="post-date">
+                                            <span class="post-month">{{post.time|date:"M"}}</span>
+                                            <strong class="post-day">{{post.time|date:"d"}}</strong>
+                                        </div>
+                                        <div class="inner-shadow">
+                                        <h2 class="article-title"><a href="{% url 'post' post.slug %}">{{ post.title }}</a></h2>
+                                        </div>
+                                        <div class="body-post">
+                                            {% autoescape off %}
+                                                {{ post.perex|truncatechars:150 }}
+                                            {% endautoescape %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="clearfix"></div>
+                            </div>
+                            <div class="post-footer">
+                                <div class="post-footer-line post-footer-line-1"></div>
+                                <div class="clr"></div>
+                                <div class="post-footer-line post-footer-line-2"></div>
+                                <div class="post-footer-line post-footer-line-3">
+                                    <span class="post-location"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <!--  END POST  -->
+            </div>
+        </div>
+        {% if page_obj.paginator.num_pages > 1 %}
+            <nav>
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                    <li>
+                        <a href="{% url 'home' %}?page={{ page_obj.previous_page_number}}{% if category %}&category={{ category }}
+                        {% endif %} " aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                    </li>
+                    {% endif %}
+                    {% for b in page_obj.paginator.page_range %}
+                        {% if b == page_obj.number %}
+                        <li class="active"><a href="{% url 'home' %}?page={{ b }}{% if category%}&category={{ category }}{% endif %}">{{ b }} <span class="sr-only">(current)</span></a></li>
+                        {% else %}
+                        <li><a href="{% url 'home' %}?page={{ b }}{% if category%}&category={{ category }}{% endif %} ">{{ b }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                    <li>
+                        <a href="{% url 'home' %}?page={{ page_obj.next_page_number }}{% if category%}&category={{ category }}{% endif %} " aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+
+ {% endblock %}

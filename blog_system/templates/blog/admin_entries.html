@@ -1,0 +1,94 @@
+{% extends 'blog/admin.html' %}
+{% load bootstrap %}
+<!-- Container -->
+{% block content %}
+<div class="container">
+    {% if user.is_superuser %}
+        <div class="text-center">
+            <h1>Publicaciones</h1>
+        </div>
+        <div class="row">
+        {% csrf_token %}
+                {% load crispy_forms_tags %}
+                    {% crispy form %}
+                <table class="table table-striped">
+                    <tr>
+                        <th class="col-md-1">Imagen</th>
+                        <th class="col-md-6">Información</th>
+                        <th class="col-md-1">Coment</th>
+                        <th class="col-md-2">Categoria</th>
+                        <th class="col-md-1">Estado</th>
+                        <th class="col-md-1">Guardar</th>
+                    </tr>
+                    {% if not posts %}
+                    <tr><th>No Entries<th></tr>
+                    {% endif %}
+                    {% for post in posts %}
+                    <tr class="infopost" id="post_{{ post.pk }}">
+                        <td>
+                            <img src="{{ post.imagen.url }}" class='post-image'>
+                        </td>
+                        <td>
+                            <div class="title">
+                                <a href="{% url 'edit' post.slug %}">{{ post.title|truncatechars:60 }}</a>
+                            </div>
+                            {% autoescape off %}
+                                <div class="perex">{{ post.perex|truncatechars:150 }}</div>
+                            {% endautoescape %}
+                           <ul class="tags_list">
+                            {% for tag in post.tags.all %}
+                                <li class="isTag">{{ tag }}</li>
+                            {% endfor %}
+                            </ul>
+                        </td>
+                        <td>
+                            <center>
+                                {% if post.comentar == True %}
+                                <input class="comentar" id="id_comment" name="comentar" type="checkbox" checked>
+                                {% else %}
+                                <input class="comentar" id="id_comment" name="comentar" type="checkbox">
+                                {% endif %}
+                            </center>
+                        </td>
+                        <td>
+                            <select class ="form-control categorias" name="categorias" id="id_category">
+                                {% for categoria in categorias %}
+                                    {% if categoria == post.categoria %}
+                                    <option selected value="{{ categoria }}">{{ categoria }}</option>
+                                    {% else %}
+                                    <option value="{{ categoria }}">{{ categoria }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <select class ="form-control status" name="status" id="id_status">
+                                {% autoescape off %}
+                                {% for state in status %}
+                                    {% if state.0 == post.status %}
+                                    <option selected value="{{ state.0}}">{{ state.1 }}</option>
+                                    {% else %}
+                                    <option value="{{ state.0 }}">{{ state.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                                {% endautoescape %}
+                            </select>
+                        </td>
+                        <td>
+                            <input type="hidden" value="{{ post.id }}">
+                            <input class="btn btn-default savedata" type="submit" value="Guardar" disabled="true">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+        </div>
+        <script type="text/javascript">
+        $(document).ready(function(){
+            entries_status();
+        });
+        </script>
+    {% else %}
+    <div class="text-center"><p>¡ERROR! no tiene los permisos necesarios, Contacte al Administrador </p></div>
+    {% endif %}
+</div>
+{% endblock %}

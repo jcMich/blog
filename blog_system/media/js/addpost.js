@@ -155,7 +155,7 @@ var category_template = function() {
                 type: "POST",
                 data: {
                     csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
-                    category_name: category_name,
+                    category_name: category_name
                 },
                 success: function(result){
                     console.log(result);
@@ -242,7 +242,7 @@ var category_template = function() {
             var $this = $(this);
             $.ajax({
                 type: "POST",
-                url: "/entries/",
+                url: "/blog/entries/",
                 data: {
                     csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
                     post_id: $this.siblings("input:hidden").val(),

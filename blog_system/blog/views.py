@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, View
 from django.core.urlresolvers import reverse
 from .models import Blog, comentarios, Tags, Categories, STATUS_CHOICES
@@ -21,9 +22,9 @@ MONTHS_DIC = {
 class Home(ListView):
     model = Blog
     context_object_name = 'posts'
-    paginate_by = 8
+    paginate_by = 2
     page_kwarg = 'page'
-    template_name = 'index.html'
+    template_name = 'blog/../templates/index.html'
 
     def get_context_data(self, **kwargs):
         ctx = super(Home, self).get_context_data(**kwargs)
@@ -52,14 +53,14 @@ class Month(AjaxListView):
         else:
             return Blog.objects.all()
 
-    template_name = 'archive.html'
-    page_template = 'archive_page.html'
+    template_name = 'blog/../templates/archive.html'
+    page_template = 'blog/archive_page.html'
 
 
 class AdminEntries(ListView):
     model = Blog
     context_object_name = 'posts'
-    template_name = 'admin_entries.html'
+    template_name = 'blog/../templates/admin_entries.html'
 
     def get_context_data(self, **kwargs):
         ctx = super(AdminEntries, self).get_context_data(**kwargs)
@@ -99,12 +100,12 @@ class AdminEntries(ListView):
             return super(AdminEntries, self).get(request, *args, **kwargs)
 
 
-class Post(View):
+class BlogEntry(View):
     form_class = PostForm
-    template_name = 'edit_entry.html'
+    template_name = 'blog/edit_entry.html'
 
     def get_context_data(self, **kwargs):
-        ctx = super(Post, self).get_context_data(**kwargs)
+        ctx = super(BlogEntry, self).get_context_data(**kwargs)
         ctx['category_form'] = CategoryForm()
         return ctx
 
@@ -128,11 +129,11 @@ class Post(View):
         return HttpResponseRedirect(reverse('edit_entries'))
 
 
-class AddPost(Post, CreateView):
+class CreateBlogEntry(BlogEntry, CreateView):
     initial = {'status': 'D'}
 
 
-class EditPost(Post, UpdateView):
+class UpdateBlogEntry(BlogEntry, UpdateView):
     context_object_name = 'post'
 
     def get_object(self, queryset=None):
@@ -143,7 +144,7 @@ class EditPost(Post, UpdateView):
 class AdminCategories(ListView):
     model = Categories
     context_object_name = 'model'
-    template_name = 'categories.html'
+    template_name = 'blog/../templates/categories.html'
 
     def get_context_data(self, **kwargs):
         ctx = super(AdminCategories, self).get_context_data(**kwargs)
@@ -201,13 +202,13 @@ class LoginView(FormView):
         return super(LoginView, self).form_valid(form)
 
 
-class BlogDetail(DetailView):
+class BlogEntryDetail(DetailView):
     model = Blog
-    template_name = 'article.html'
+    template_name = 'blog/../templates/article.html'
     context_object_name = 'post'
 
     def get_context_data(self, **kwargs):
-        ctx = super(BlogDetail, self).get_context_data(**kwargs)
+        ctx = super(BlogEntryDetail, self).get_context_data(**kwargs)
         ctx['comentarios'] = comentarios.objects.filter(Blog__slug=self.kwargs['slug']).order_by('-fecha_pub')
         ctx['comentariosForm'] = ComentarioForm()
         return ctx
@@ -226,3 +227,13 @@ class BlogDetail(DetailView):
 def log_out(request):
     logout(request)
     return HttpResponseRedirect('/')
+
+
+home = Home.as_view()
+month = Month.as_view()
+admin_entries = login_required(AdminEntries.as_view())
+blog_entry_detail = BlogEntryDetail.as_view()
+create_blog_entry = login_required(CreateBlogEntry.as_view())
+update_blog_entry = login_required(UpdateBlogEntry.as_view())
+create_category = login_required(CreateCategory.as_view())
+admin_categories = login_required(AdminCategories.as_view())

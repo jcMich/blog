@@ -1,0 +1,132 @@
+{% extends 'blog/base.html' %}
+{% load bootstrap %}
+{% block snippets %}
+        <title>{{ post.title }}</title>
+        <meta property="og:locale" content="{{ Locale }}"/>
+        <meta property="og:type" content="Article"/>
+        <meta property="og:title" content="{{ post.title }}"/>
+        {% autoescape off %}
+        <meta property="og:description" content="{{ post.perex|striptags }}"/>
+        {% endautoescape %}
+        <meta property="og:url" content="{{ Url }}{{ post.get_absolute_url }}"/>
+        <meta property="og:image" content="{{ Url }}{{ post.imagen.url }}"/>
+    {% for tag in post.tags.all %}
+        <meta property="article:tag" content="{{ tag }}"/>
+    {% endfor %}
+{% endblock %}
+{% block contenido %}
+    <div class="col-lg-9" itemscope itemref="publusher" itemtype="http://schema.org/Article">
+        <div class="main-content">
+            <article id="post-1" class="post post-content">
+                <h1 class="entry-title" itemprop='name'>{{ post.title }}</h1>
+                <div class="utilities">
+                    <div class="firma">
+                        <span class="nombre" itemprop='creator'>Dubalu Factura Redacción </span><span>|</span>
+                        <span class="nombre" itemprop='articleSection'> {{ post.categoria}} </span><span>|</span>
+                        <span class="fecha" itemprop='datePublished '>{{ post.time|date:"d/m/y" }} - <strong>{{ post.time|time:"H:i" }}</strong>
+                        </span>
+                    </div>
+                    <div class="compartirNoticia hidden-print">
+                        <ul class="redesSociales">
+                            <li>
+                                <a class="twitter" title="Comparte en Twitter" onclick="social_share(this, 'twitter')" target="_blank">
+                                    <span class="fa-stack">
+                                      <i class="fa fa-circle fa-stack-2x"></i>
+                                      <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="facebook" target="_blank" title="Comparte en Facebook" onclick="social_share(this, 'facebook')">
+                                    <span class="fa-stack">
+                                      <i class="fa fa-circle fa-stack-2x"></i>
+                                      <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="googlePlus" target="_blank" title="Comparte en Google+" onclick="social_share(this, 'gplus')">
+                                    <span class="fa-stack">
+                                      <i class="fa fa-circle fa-stack-2x"></i>
+                                      <i class="fa fa-google-plus fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="mediosClasicos">
+                            <li class="envia">
+                                <a class="enviar" href="" title="Enviar noticia">
+                                    <span class="fa-stack">
+                                      <i class="fa fa-circle fa-stack-2x"></i>
+                                      <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="imprimir" title="Imprimir noticia" onclick="window.print()">
+                                    <span class="fa-stack">
+                                      <i class="fa fa-circle fa-stack-2x"></i>
+                                      <i class="fa fa-print fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            {% if post.comentar %}
+                                <li class="comentario">
+                                    <div class="comenta">
+                                        <div class="comentarios">
+                                            <a href="#">{{ comentarios.count }}</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <div>
+
+                </div>
+                <div class="post-thumb"><img itemprop='image' src="{{ post.imagen.url }}" class="img-responsive center-block" alt="04"></div>
+                <div class="entry-content" itemprop="articleBody">
+                    {% autoescape off %}
+                        {{ post.content|safe}}
+                    {% endautoescape %}
+                </div>
+            </article>
+        </div>
+        <!--  Comments  -->
+        {% if post.comentar%}
+        <div class="post comments hidden-print">
+            <h2>Comentarios</h2>
+                {% for comentario in comentarios %}
+                <div class="media comment">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object" src="http://www.twcdi.ie/images/avatars/default_set/default-avatar.png" width="64px" height="64px" alt="...">
+                         </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading">{{ comentario.nombre }}</h4>
+                        <span class="comm-date">dijo el  {{ comentario.fecha_pub|date:"d D M Y"}} - {{ comentario.fecha_pub|time:"H:i" }}</span>
+                            <p>{{ comentario.cuerpo }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="post form-comment">
+                    <h2>Deja un comentario</h2>
+                    <form action="" method="post" id="comments-form" class="comment-form" novalidate="novalidate">
+                        <div class="row">
+                            {% csrf_token %}
+                            {{ comentariosForm|bootstrap }}
+                            <input type="submit" value="Enviar"/>
+                        </div>
+                    </form>
+                </div>
+        </div>
+        <script type="text/javascript">
+        window.onload = function() {
+            social_links();
+        };
+        </script>
+        {% endif %}
+    </div>
+{% endblock %}

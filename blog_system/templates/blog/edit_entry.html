@@ -1,0 +1,32 @@
+{% extends 'blog/admin.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+        <!-- Container -->
+        <div class="container">
+            {% if user.is_superuser %}
+                <div class="text-center">
+                    <legend>Crear una Entrada</legend>
+                </div>
+                <div class="row">
+                    {% crispy form %}
+                </div>
+                {% if category_form %}
+                <div id="modalform">
+                    {% crispy category_form %}
+                </div>
+                <script type="text/javascript">$(document).ready(function(){category_post()});</script>
+                {% endif %}
+                {% if post %}
+                <script type="text/javascript">
+                $(document).ready(function(){
+                    var $taglis =  $("#id_tags_list");
+                    {% for tag in post.tags.all %}
+                        $taglis.append("<li class='isTag'>{{ tag }}<b class='delete'> ×</b></li>");
+                    {% endfor %}
+                    $("#id_tags_list").append("");
+                });
+                </script>
+                {% endif %}
+            {% endif %}
+        </div>
+{% endblock %}

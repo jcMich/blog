@@ -192,3 +192,18 @@ CKEDITOR_CONFIGS = {
 }
 
 TEMA = 'principal'
+
+# config
+
+POSTS_ENTRIES_POST_ENTRY_MODEL = 'blog.BlogEntry'
+
+
+# Defautl Views
+BLOG_ENTRIES_HOME_VIEW = 'blog.views.home'
+BLOG_ENTRIES_ENTRY_DETAIL_VIEW = 'blog.views.blog_entry_detail'
+BLOG_ENTRIES_MONTH_VIEW = 'blog.views.month'
+BLOG_ENTRIES_ENTRY_CREATE_VIEW = 'blog.views.create_blog_entry'
+BLOG_ENTRIES_ENTRY_UPDATE_VIEW = 'blog.views.update_blog_entry'
+BLOG_ENTRIES_CREATE_CATEGORY_VIEW = 'blog.views.create_category'
+BLOG_ENTRIES_ENTRIES_ADMIN_VIEW = 'blog.views.admin_entries'
+BLOG_ENTRIES_CATEGORIES_ADMIN_VIEW = 'blog.views.admin_categories'
