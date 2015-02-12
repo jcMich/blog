@@ -24,7 +24,7 @@ class Home(ListView):
     context_object_name = 'posts'
     paginate_by = 2
     page_kwarg = 'page'
-    template_name = 'blog/../templates/index.html'
+    template_name = 'blog/index.html'
 
     def get_context_data(self, **kwargs):
         ctx = super(Home, self).get_context_data(**kwargs)
@@ -154,7 +154,7 @@ class UpdateBlogEntry(BlogEntry, UpdateView):
 class AdminCategories(ListView):
     model = Categories
     context_object_name = 'model'
-    template_name = 'blog/../templates/categories.html'
+    template_name = 'blog/categories.html'
 
     def get_context_data(self, **kwargs):
         ctx = super(AdminCategories, self).get_context_data(**kwargs)
@@ -215,7 +215,7 @@ class LoginView(FormView):
 
 class BlogEntryDetail(DetailView):
     model = Blog
-    template_name = 'blog/../templates/article.html'
+    template_name = 'blog/article.html'
     context_object_name = 'post'
 
     def get_context_data(self, **kwargs):
