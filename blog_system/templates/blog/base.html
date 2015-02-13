@@ -75,7 +75,8 @@
                                     {% regroup year.list by created_at|date:"F" as month_list %}
                                     {% for month in month_list %}
                                     <li>
-                                        <a href="{% url 'month' year.grouper month.grouper %}">{{ month.grouper }} - {{ year.grouper }}</a>
+{#                                        <a href="{% url 'month' year.grouper month.grouper %}">{{ month.grouper }} - {{ year.grouper }}</a>#}
+                                        <a href="{% url 'home' %}?year={{ year.grouper }}&month={{ month.grouper }}">{{ month.grouper }} - {{ year.grouper }}</a>
                                     </li>
                                     {% endfor %}
                                 {% endfor %}

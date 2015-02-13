@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 from django import forms
+from django.contrib.auth import authenticate, login
 from django.forms import ModelForm
 from django.core.urlresolvers import reverse
 from ckeditor.widgets import CKEditorWidget
 from .models import comentarios, BlogEntry, Category, Tags
 # from crispy_forms.bootstrap import AppendedText, PrependedText, AppendedPrependedText
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Field, HTML, Div, Fieldset, Button
+from crispy_forms.layout import Layout, Submit, Field, HTML, Div, Button
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.forms import AuthenticationForm
 
 
 class ComentarioForm(forms.ModelForm):
@@ -17,9 +19,26 @@ class ComentarioForm(forms.ModelForm):
         fields = ('nombre', 'cuerpo')
 
 
-class LoginForm(forms.Form):
-    username = forms.CharField(label="Usuario", widget=forms.TextInput())
-    password = forms.CharField(label="Password", widget=forms.PasswordInput(render_value=False))
+class LoginForm(AuthenticationForm):
+    error_messages = {
+        'invalid_login': _("Porfavor ingrese un %(username)s y password correctos. "
+                           "Nota: Los campos son sensibles a mayusculas y minusculas"),
+        'inactive': _("This account is inactive."),
+    }
+
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_class = 'new-cate'
+        self.helper.form_action = reverse('create_category')
+        self.helper.layout = Layout(
+            Div(
+                Field('username'),
+                Field('password'),
+                Submit('submit', _("Log in"), css_id='save_data'),
+                Button('cancel', _("Cancel"), css_class='btn btn-default', css_id='cancel-cate'),
+            ),
+        )
 
 
 class DeleteCategory(forms.Form):

@@ -11,36 +11,44 @@ from django.utils.text import slugify
 from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
-from endless_pagination.views import AjaxListView
+from endless_pagination.views import AjaxListView, AjaxMultipleObjectTemplateResponseMixin
 from django.db.models import Q
+from django.utils.translation import ugettext_lazy as _
 import json
 
+
 MONTHS_DIC = {
-    "Enero": 1, "Febrero": 2, "Marzo": 3, "Abril": 4, "Mayo": 5, "Junio": 6,
-    "Julio": 7, "Agosto": 8, "Septiembre": 9, "Octubre": 10, "Noviembre": 11, "Diciembre": 12
+   _('January'): 1, _('February'): 2, _('March'): 3, _('April'): 4, _('May'): 5, _('June'): 6,
+   _('July'): 7, _('Agoust'): 8, _('September'): 9, _('October'): 10, _('November'): 11, _('December'): 12
 }
 
 
-class Home(ListView):
+class Home(ListView, AjaxMultipleObjectTemplateResponseMixin):
     model = BlogEntry
     context_object_name = 'posts'
-    paginate_by = 2
+    paginate_by = 6
     page_kwarg = 'page'
     template_name = 'blog/index.html'
+    page_template = 'blog/archive_entries.html'
 
     def get_context_data(self, **kwargs):
         ctx = super(Home, self).get_context_data(**kwargs)
         if self.request.GET.get('category'):
             ctx['category'] = self.request.GET.get('category')
+        if self.request.GET.get('year') and self.request.GET.get('month'):
+            ctx['endlesspagination'] = True
         return ctx
 
-    def get(self, request, *args, **kwargs):
-        c = request.GET.get('category')
+    def get_queryset(self):
+        c = self.request.GET.get('category')
+        y = self.request.GET.get('year')
+        m = self.request.GET.get('month')
         if c:
-            self.queryset = BlogEntry.objects.filter(category__name=c).filter(status='U').order_by('-created_at')
-        else:
-            self.queryset = BlogEntry.objects.filter(status='U').order_by('-created_at')
-        return super(Home, self).get(request, *args, **kwargs)
+            return BlogEntry.objects.filter(category__name=c).filter(status='U').order_by('-created_at')
+        elif y and m:
+            self.paginate_by = None
+            return BlogEntry.objects.filter(created_at__year=int(y), created_at__month=MONTHS_DIC[m])
+        return BlogEntry.objects.filter(status='U').order_by('-created_at')
 
 
 class Month(AjaxListView):
@@ -56,7 +64,7 @@ class Month(AjaxListView):
             archive_filter = BlogEntry.objects.filter(created_at__year=int(y), created_at__month=MONTHS_DIC[m])
             return archive_filter.filter(status='U').order_by('-created_at')
         else:
-            return BlogEntry.objects.all()
+            return BlogEntry.objects.all()  # agregar filtro para solo mostrar estado published
 
 
 class AdminEntries(ListView):
@@ -172,13 +180,6 @@ class AdminCategories(ListView):
         form = DeleteCategory(request.POST)
         if self.request.is_ajax() and form.is_valid():
             category = get_object_or_404(Category, name=form.cleaned_data['category_name'])
-            default = Category.objects.get_or_create(name='Default', description='Default')
-            try:
-                post = get_object_or_404(BlogEntry, category=category)
-                post.category = default[0]
-                post.save()
-            except:
-                pass
             category.delete()
             return HttpResponse(json.dumps({'Success': 'Success'}), content_type='application/json')
 
@@ -198,6 +199,8 @@ class CreateCategory(View):
             return HttpResponse(json.dumps({'name': cate.name, 'created': created}), content_type='application/json')
         return HttpResponse(json.dumps({'created': False}), content_type='application/json')
 
+from django.contrib.auth.forms import AuthenticationForm
+
 
 class LoginView(FormView):
     template_name = 'login.html'
@@ -205,11 +208,13 @@ class LoginView(FormView):
     success_url = reverse_lazy('home')
 
     def form_valid(self, form):
-        usuario = form.cleaned_data['username']
-        password = form.cleaned_data['password']
-        usuario = authenticate(username=usuario, password=password)
-        if usuario is not None and usuario.is_active:
-            login(self.request, usuario)
+        user = form.cleaned_data['username']
+        passw = form.cleaned_data['password']
+
+        user = authenticate(username=user, password=passw)
+
+        if user is not None and user.is_active:
+            login(self.request, user)
         return super(LoginView, self).form_valid(form)
 
 
@@ -237,7 +242,7 @@ class BlogEntryDetail(DetailView):
 
 def log_out(request):
     logout(request)
-    return HttpResponseRedirect('/')
+    return HttpResponseRedirect(reverse('home'))
 
 
 home = Home.as_view()

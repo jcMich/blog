@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+
 import os
 from datetime import datetime
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.text import slugify
+from django.utils.translation import ugettext_lazy as _
 
 STATUS_CHOICES = (
     ('D', 'Draft'),
@@ -34,6 +36,11 @@ class Tags(models.Model):
         return self.name
 
 
+def set_default_cat():
+        cate, created = Category.objects.get_or_create(name='Default', description='Default category on delete')
+        return cate
+
+
 class BlogEntry(models.Model):
     def url(self, filename):
         filename, ext = os.path.splitext(filename.lower())
@@ -41,23 +48,20 @@ class BlogEntry(models.Model):
         return 'photos/%s' % filename
 
     created_at = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, verbose_name=_("Title"))
     slug = models.SlugField()
-    abstract = models.TextField(unique=True)
-    content = models.TextField()
-    image = models.ImageField(upload_to=url)
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES)
-    category = models.ForeignKey(Category)
-    comment = models.BooleanField(default=False)
-    tags = models.ManyToManyField(Tags)
-    tags.help_text = None
-#        return reverse('blog', args={'slug': self.slug})
+    abstract = models.TextField(unique=True, verbose_name=_("Abstract"))
+    content = models.TextField(verbose_name=_("Content"))
+    image = models.ImageField(upload_to=url, verbose_name=_("Image"))
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name=_("Status"))
+    category = models.ForeignKey(Category, verbose_name=_("Category"), on_delete=models.SET(set_default_cat))
+    comment = models.BooleanField(default=False, verbose_name=_("Comment"))
+    tags = models.ManyToManyField(Tags, help_text=None, verbose_name=_("Tags"))
 
     def get_absolute_url(self):
-        # return reverse('post', self.slug)
-        return '/blog/%s' % self.slug
+        return reverse('post', args=[str(self.slug)])
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     class Meta:
