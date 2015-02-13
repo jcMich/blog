@@ -53,7 +53,7 @@
 </div>
 
     {% if user.is_superuser %}
-    <div class="admin-tools">
+    <div class="admin-tools hidden-print">
         <i class="fa fa-cog"></i>
         <ul class="admin-items">
             <li><a href="{% url 'new_post' %}">Nuevo Post</a></li>
@@ -71,7 +71,7 @@
     <footer class="blog-footer">
         <p>Blog template by <a href="https://www.deipi.com">Deipi.com</a>.</p>
         <p>
-            <a href="#">Back to top</a>
+            <a href="#" class="hidden-print">Back to top</a>
         </p>
     </footer>
 </body>

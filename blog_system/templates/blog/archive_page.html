@@ -8,27 +8,27 @@
                                 <span>
                                     <div class="entry-image">
                                         <a href="{% url 'post' post.slug %}">
-                                            <img class="thumb img-responsive" src="{{ post.imagen.url }}" style="max-height:200px;">
+                                            <img class="thumb img-responsive" src="{{ post.image.url }}" style="max-height:200px;">
                                         </a>
                                     </div>
                                 </span>
                                 <div class="article-container">
                                     <div class="inner-content">
                                         <div class="article-category">
-                                            <a href="{% url 'home' %}?category={{ post.categoria }}" rel="tag"> {{post.categoria}} </a>
+                                            <a href="{% url 'home' %}?category={{ post.category }}" rel="tag"> {{post.category}} </a>
 {#                                            <a href="/blog/?category={{ post.categoria }}" rel="tag"> {{post.categoria}} </a>#}
                                         </div>
                                         <div class="clr"></div>
                                         <div class="post-date">
-                                            <span class="post-month">{{post.time|date:"M"}}</span>
-                                            <strong class="post-day">{{post.time|date:"d"}}</strong>
+                                            <span class="post-month">{{post.created_ad|date:"M"}}</span>
+                                            <strong class="post-day">{{post.created_at|date:"d"}}</strong>
                                         </div>
                                         <div class="inner-shadow">
                                         <h2 class="article-title"><a href="{% url 'post' post.slug %}">{{ post.title }}</a></h2>
                                         </div>
                                         <div class="body-post">
                                             {% autoescape off %}
-                                                {{ post.perex|truncatechars:150 }}
+                                                {{ post.abstract|truncatechars:150 }}
                                             {% endautoescape %}
                                         </div>
                                     </div>

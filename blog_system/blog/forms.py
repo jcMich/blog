@@ -4,34 +4,17 @@ from django import forms
 from django.forms import ModelForm
 from django.core.urlresolvers import reverse
 from ckeditor.widgets import CKEditorWidget
-from .models import comentarios, Blog, Categories, Tags
+from .models import comentarios, BlogEntry, Category, Tags
 # from crispy_forms.bootstrap import AppendedText, PrependedText, AppendedPrependedText
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Field, HTML, Div, ButtonHolder, Fieldset, Button
+from crispy_forms.layout import Layout, Submit, Field, HTML, Div, Fieldset, Button
+from django.utils.translation import ugettext_lazy as _
 
 
 class ComentarioForm(forms.ModelForm):
     class Meta:
         model = comentarios
         fields = ('nombre', 'cuerpo')
-
-
-class ContactForm(forms.Form):
-    email = forms.EmailField(widget=forms.TextInput())
-    title = forms.CharField(widget=forms.TextInput())
-    text = forms.CharField(widget=forms.Textarea())
-
-    helper = FormHelper()
-    helper.layout = Layout(
-        Div(
-            Fieldset(
-                'email',
-                'title',
-                'text',
-            ),
-            Submit('submit', 'Enviar'),
-        ),
-    )
 
 
 class LoginForm(forms.Form):
@@ -52,9 +35,9 @@ class UpdatePostForm(forms.Form):
 
 class PostForm(ModelForm):
     content = forms.CharField(widget=CKEditorWidget(config_name='full_ckeditor'))
-    perex = forms.CharField(widget=CKEditorWidget(config_name='basic_ckeditor'))
+    abstract = forms.CharField(widget=CKEditorWidget(config_name='basic_ckeditor'))
     tags = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'inserta aqui los tags separados por , '}))
-    comentar = forms.BooleanField(required=False)
+    comment = forms.BooleanField(required=False)
 
     def __init__(self, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)
@@ -69,10 +52,10 @@ class PostForm(ModelForm):
             ),
             Div(
                 Div(
-                    HTML('<label class="control-label col-lg-2">{{ form.perex.label }}</label>'),  # In the end of the Form a js code erese a class.
+                    HTML('<label class="control-label col-lg-2">{{ form.abstract.label }}</label>'),  # In the end of the Form a js code erese a class.
                 ),
                 Div(
-                    HTML('{{ form.perex }}'),
+                    HTML('{{ form.abstract }}'),
                     css_class='col-lg-8'
                 ),
                 css_class='form-group',
@@ -88,29 +71,29 @@ class PostForm(ModelForm):
                 css_class='form-group',
             ),
             Div(
-                Field('imagen'),
+                Field('image'),
             ),
             Div(
                 Field('status'),
             ),
             Div(
-                Field('categoria'),
+                Field('category'),
             ),
             Div(
-                Field('comentar'),
+                Field('comment'),
             ),
             Div(
                 Field('tags'),
             ),
             Div(
-                Submit('submit', 'Guardar y Salir'),
-                Button('Cancelar', 'Cancelar', css_class='btn btn-danger'),
+                Submit('submit', _("Save and exit")),
+                Button('Cancel', _("Cancel"), css_class='btn btn-danger'),
                 css_class='col-lg-9 col-lg-offset-1'
             ),
         )
 
     class Meta:
-        model = Blog
+        model = BlogEntry
         exclude = {'tags', 'slug'}
         # widgets = {'tags':forms.TextInput()}
 
@@ -124,15 +107,15 @@ class CategoryForm(ModelForm):
         self.helper.form_action = reverse('create_category')
         self.helper.layout = Layout(
             Div(
-                Field('nombre'),
-                Field('descripcion'),
-                Submit('submit', 'Agregar', css_id='save_data'),
-                Button('Cancelar', 'Cancelar', css_class='btn btn-default', css_id='cancel-cate'),
+                Field('name'),
+                Field('description'),
+                Submit('submit', _("Add"), css_id='save_data'),
+                Button('Cancel', _("Cancel"), css_class='btn btn-default', css_id='cancel-cate'),
             ),
         )
 
     class Meta:
-        model = Categories
+        model = Category
 
 
 class tags_form(ModelForm):
@@ -144,11 +127,11 @@ class filter_form(forms.Form):
     STATUS = (
         ('', '-------'),
         ('D', 'Draft'),
-        ('P', 'Public'),
+        ('U', 'Published'),
         ('H', 'Hidden'),
     )
     search = forms.CharField(required=False)
-    category = forms.ModelChoiceField(Categories.objects.all(), required=False)
+    category = forms.ModelChoiceField(Category.objects.all(), required=False)
     status = forms.ChoiceField(choices=STATUS, required=False)
 
     helper = FormHelper()
@@ -158,7 +141,7 @@ class filter_form(forms.Form):
     helper.layout = Layout(
         Div(
             Div(
-                Field('search', placeholder='Buscar...', css_class='form-control'),
+                Field('search', placeholder=_("Search..."), css_class='form-control'),
                 css_class="col-xs-4"
             ),
             Div(
@@ -170,7 +153,7 @@ class filter_form(forms.Form):
                 css_class="col-xs-2"
             ),
             Div(
-                Submit('submit', 'Filtrar', css_class="col-md-12"),
+                Submit('submit', _("Filter"), css_class="col-md-12"),
                 css_class="col-xs-2"
             ),
             css_class="col-md-8 col-md-offset-4"

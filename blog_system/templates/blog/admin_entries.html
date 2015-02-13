@@ -25,14 +25,14 @@
                     {% for post in posts %}
                     <tr class="infopost" id="post_{{ post.pk }}">
                         <td>
-                            <img src="{{ post.imagen.url }}" class='post-image'>
+                            <img src="{{ post.image.url }}" class='post-image'>
                         </td>
                         <td>
                             <div class="title">
                                 <a href="{% url 'edit' post.slug %}">{{ post.title|truncatechars:60 }}</a>
                             </div>
                             {% autoescape off %}
-                                <div class="perex">{{ post.perex|truncatechars:150 }}</div>
+                                <div class="abstract">{{ post.abstract|truncatechars:150 }}</div>
                             {% endautoescape %}
                            <ul class="tags_list">
                             {% for tag in post.tags.all %}
@@ -42,7 +42,7 @@
                         </td>
                         <td>
                             <center>
-                                {% if post.comentar == True %}
+                                {% if post.comment == True %}
                                 <input class="comentar" id="id_comment" name="comentar" type="checkbox" checked>
                                 {% else %}
                                 <input class="comentar" id="id_comment" name="comentar" type="checkbox">
@@ -52,7 +52,7 @@
                         <td>
                             <select class ="form-control categorias" name="categorias" id="id_category">
                                 {% for categoria in categorias %}
-                                    {% if categoria == post.categoria %}
+                                    {% if categoria == post.category %}
                                     <option selected value="{{ categoria }}">{{ categoria }}</option>
                                     {% else %}
                                     <option value="{{ categoria }}">{{ categoria }}</option>

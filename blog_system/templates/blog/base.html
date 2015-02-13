@@ -44,7 +44,7 @@
         </div>
     </div>
     {% if user.is_superuser %}
-        <div class="admin-tools">
+        <div class="admin-tools hidden-print">
             <i class="fa fa-cog"></i>
             <ul class="admin-items">
                 <li><a href="{% url 'new_post' %}">Nuevo Post</a></li>
@@ -55,9 +55,10 @@
         </div>
     {% endif %}
     <div class="container">
-        <div class="blog-header hidden-print">
+        <div class="blog-header">
+        <div class="blog-header">
             <h1 class="blog-title">The Framework Blog</h1>
-            <p class="lead blog-description">The example template of creating a blog for the Deipi's Framework.</p>
+            <p class="lead blog-description">The blog for the Deipi's Framework.</p>
         </div>
 
         <div class="row">
@@ -69,9 +70,9 @@
                             <div class="sidebar-module">
                                 <h4>Archives</h4>
                                 <ul class="nav nav-pills nav-stacked archive">
-                                {% regroup archive by time|date:"Y" as year_list %}
+                                {% regroup archive by created_at|date:"Y" as year_list %}
                                 {% for year in year_list %}
-                                    {% regroup year.list by time|date:"F" as month_list %}
+                                    {% regroup year.list by created_at|date:"F" as month_list %}
                                     {% for month in month_list %}
                                     <li>
                                         <a href="{% url 'month' year.grouper month.grouper %}">{{ month.grouper }} - {{ year.grouper }}</a>
@@ -85,9 +86,9 @@
                 </div><!-- /.container -->
 
                 <footer class="blog-footer">
-                  <p>Blog template by <a href="https://www.deipi.com"> <span id="publusher" itemprop="publisher">Deipi.com</a>.</p>
+                  <p>Blog by <a href="https://www.deipi.com"> <span id="publusher" itemprop="publisher">Deipi.com</a>.</p>
                   <p>
-                    <a href="#">Back to top</a>
+                    <a href="#" class="hidden-print">Back to top</a>
                   </p>
                 </footer>
                 <!-- Bootstrap core JavaScript

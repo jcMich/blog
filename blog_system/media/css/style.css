@@ -144,7 +144,7 @@ td li.isTag {
     border-radius: 5px;
     border-radius: 5px;
 }
-td div.perex {
+td div.abstract {
     margin: 0px;
     font-size: 9pt;
 }
@@ -153,7 +153,7 @@ td div.title {
     margin-bottom: 5px;
     font-weight: bold;
 }
-td #id_imagen {
+td #id_image {
     display: none;
 }
 

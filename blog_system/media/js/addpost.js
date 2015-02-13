@@ -1,10 +1,10 @@
     /* Global
     ----------------------------------------------*/
     var ID_MODAL_FORM = "modalform",
-        ID_NAME = "id_nombre",// id tags
-        ID_DESCRIPTION = "id_descripcion",
-        ID_CATEGORIES = "id_categoria",
-        ID_IMAGE = "id_imagen",
+        ID_NAME = "id_name",// id tags
+        ID_DESCRIPTION = "id_description",
+        ID_CATEGORIES = "id_category",
+        ID_IMAGE = "id_image",
         ID_TAGS = "id_tags";
 
 
@@ -99,7 +99,7 @@ var category_post = function() {
     }
     /*Categories form
     ________________________________*/
-    $formBlog.find( "#id_categoria" ).after("<div><a id='add_category'>Agregar</a></div>");
+    $formBlog.find( "#id_category" ).after("<div><a id='add_category'>Agregar</a></div>");
     var $modalform = $( "div#" + ID_MODAL_FORM );
     $modalform.hide();
     $("#add_category").on("click", function () {

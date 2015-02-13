@@ -5,10 +5,10 @@
         <meta property="og:type" content="Article"/>
         <meta property="og:title" content="{{ post.title }}"/>
         {% autoescape off %}
-        <meta property="og:description" content="{{ post.perex|striptags }}"/>
+        <meta property="og:description" content="{{ post.abstract|striptags }}"/>
         {% endautoescape %}
         <meta property="og:url" content="{{ Url }}{{ post.get_absolute_url }}"/>
-        <meta property="og:image" content="{{ Url }}{{ post.imagen.url }}"/>
+        <meta property="og:image" content="{{ Url }}{{ post.image.url }}"/>
     {% for tag in post.tags.all %}
         <meta property="article:tag" content="{{ tag }}"/>
     {% endfor %}
@@ -21,8 +21,8 @@
                 <div class="utilities">
                     <div class="firma">
                         <span class="nombre" itemprop='creator'>Dubalu Factura Redacción </span><span>|</span>
-                        <span class="nombre" itemprop='articleSection'> {{ post.categoria}} </span><span>|</span>
-                        <span class="fecha" itemprop='datePublished '>{{ post.time|date:"d/m/y" }} - <strong>{{ post.time|time:"H:i" }}</strong>
+                        <span class="nombre" itemprop='articleSection'> {{ post.category}} </span><span>|</span>
+                        <span class="fecha" itemprop='datePublished '>{{ post.created_at|date:"d/m/y" }} - <strong>{{ post.created_at|time:"H:i" }}</strong>
                         </span>
                     </div>
                     <div class="compartirNoticia hidden-print">
@@ -84,7 +84,7 @@
                 <div>
 
                 </div>
-                <div class="post-thumb"><img itemprop='image' src="{{ post.imagen.url }}" class="img-responsive center-block" alt="04"></div>
+                <div class="post-thumb"><img itemprop='image' src="{{ post.image.url }}" class="img-responsive center-block" alt="04"></div>
                 <div class="entry-content" itemprop="articleBody">
                     {% autoescape off %}
                         {{ post.content|safe}}
@@ -93,7 +93,7 @@
             </article>
         </div>
         <!--  Comments  -->
-        {% if post.comentar%}
+        {% if post.comment%}
         <div class="post comments hidden-print">
             <h2>Comentarios</h2>
                 {% for comentario in comentarios %}
@@ -104,7 +104,7 @@
                          </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading">{{ comentario.nombre }}</h4>
+                        <h4 class="media-heading">{{ comentario.name }}</h4>
                         <span class="comm-date">dijo el  {{ comentario.fecha_pub|date:"d D M Y"}} - {{ comentario.fecha_pub|time:"H:i" }}</span>
                             <p>{{ comentario.cuerpo }}</p>
                     </div>

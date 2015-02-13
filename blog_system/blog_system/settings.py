@@ -185,8 +185,6 @@ CKEDITOR_CONFIGS = {
     },
 }
 
-TEMA = 'principal'
-
 # config
 
 POSTS_ENTRIES_POST_ENTRY_MODEL = 'blog.BlogEntry'

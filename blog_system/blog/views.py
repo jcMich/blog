@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, View
-from django.core.urlresolvers import reverse
-from .models import Blog, comentarios, Tags, Categories, STATUS_CHOICES
+from django.core.urlresolvers import reverse, reverse_lazy
+from .models import BlogEntry, comentarios, Tags, Category, STATUS_CHOICES
 from .forms import ComentarioForm, UpdatePostForm, LoginForm, PostForm, CategoryForm, filter_form, DeleteCategory
 from django.utils.text import slugify
 from django.views.generic.edit import FormView
@@ -20,7 +22,7 @@ MONTHS_DIC = {
 
 
 class Home(ListView):
-    model = Blog
+    model = BlogEntry
     context_object_name = 'posts'
     paginate_by = 2
     page_kwarg = 'page'
@@ -35,38 +37,34 @@ class Home(ListView):
     def get(self, request, *args, **kwargs):
         c = request.GET.get('category')
         if c:
-            self.queryset = Blog.objects.filter(categoria__nombre=c).filter(status='P').order_by('-time')
+            self.queryset = BlogEntry.objects.filter(category__name=c).filter(status='U').order_by('-created_at')
         else:
-            self.queryset = Blog.objects.filter(status='P').order_by('-time')
+            self.queryset = BlogEntry.objects.filter(status='U').order_by('-created_at')
         return super(Home, self).get(request, *args, **kwargs)
 
 
 class Month(AjaxListView):
-    context_object_name = "posts"
-    model = Blog
+    context_object_name = 'posts'
+    model = BlogEntry
     template_name = 'blog/archive.html'
     page_template = 'blog/archive_page.html'
 
     def get_queryset(self):
-        year = self.kwargs['year']
-        month = self.kwargs['month']
-        if year and month:
-            return Blog.objects.filter(time__year=int(year), time__month=MONTHS_DIC[month]).filter(status='P').order_by('-time')
+        y = self.kwargs['year']
+        m = self.kwargs['month']
+        if y and m:
+            archive_filter = BlogEntry.objects.filter(created_at__year=int(y), created_at__month=MONTHS_DIC[m])
+            return archive_filter.filter(status='U').order_by('-created_at')
         else:
-            return Blog.objects.all()
-
-
-    template_name = 'blog/archive.html'
-    page_template = 'blog/archive_page.html'
+            return BlogEntry.objects.all()
 
 
 class AdminEntries(ListView):
-    model = Blog
+    model = BlogEntry
     context_object_name = 'posts'
     paginate_by = 8
     page_kwarg = 'page'
     template_name = 'blog/admin_entries.html'
-
 
     def get_context_data(self, **kwargs):
         ctx = super(AdminEntries, self).get_context_data(**kwargs)
@@ -76,51 +74,54 @@ class AdminEntries(ListView):
         ctx['get_query'] = request_get
         ctx['status'] = STATUS_CHOICES
         if self.request.GET.get('search') or self.request.GET.get('category') or self.request.GET.get('status'):
-            ctx['form'] = filter_form({'search': self.request.GET.get('search'), 'category': self.request.GET.get('category'), 'status': self.request.GET.get('status')})
+            ctx['form'] = filter_form({'search': self.request.GET.get('search'),
+                                       'category': self.request.GET.get('category'),
+                                       'status': self.request.GET.get('status')})
         else:
             ctx['form'] = filter_form()
         return ctx
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         form = UpdatePostForm(request.POST)
         if self.request.is_ajax() and form.is_valid():
             postid = form.cleaned_data['post_id']
             newcate = form.cleaned_data['category']
             newstatus = form.cleaned_data['status']
             comment = form.cleaned_data['comment'] == 'true'
-            post = Blog.objects.get(pk=postid)
-            post.comentar = comment
-            post.categoria = Categories.objects.get(nombre=newcate)
+            post = get_object_or_404(BlogEntry, pk=postid)
+            post.comment = comment
+            post.category = get_object_or_404(Category, name=newcate)
             post.status = newstatus
             post.save()
-            return HttpResponse(json.dumps({"Success": "Success"}), content_type="application/json")
+            return HttpResponse(json.dumps({'Success': 'Success'}), content_type='application/json')
 
     def get(self, request, *args, **kwargs):
-            filter_search = request.GET.get('search')
-            filter_category = request.GET.get('category')
-            filter_status = request.GET.get('status')
-            if filter_search:
-                self.queryset = Blog.objects.filter(Q(title__icontains=filter_search) | Q(tags__nombre__icontains=filter_search)).distinct().order_by('-time')
-            else:
-                self.queryset = Blog.objects.all().order_by('-time')
-            if filter_category:
-                self.queryset = self.queryset.filter(categoria=filter_category)
-            if filter_status:
-                self.queryset = self.queryset.filter(status=filter_status)
-            return super(AdminEntries, self).get(request, *args, **kwargs)
+        filter_search = request.GET.get('search')
+        filter_category = request.GET.get('category')
+        filter_status = request.GET.get('status')
+        if filter_search:
+            self.queryset = BlogEntry.objects.filter(Q(title__icontains=filter_search) |
+                                                     Q(tags__name__icontains=filter_search)).distinct().order_by('-created_at')
+        else:
+            self.queryset = BlogEntry.objects.all().order_by('-created_at')
+        if filter_category:
+            self.queryset = self.queryset.filter(category=filter_category)
+        if filter_status:
+            self.queryset = self.queryset.filter(status=filter_status)
+        return super(AdminEntries, self).get(request, *args, **kwargs)
 
 
-class BlogEntry(View):
+class BaseBlogEntry(View):
     form_class = PostForm
     template_name = 'blog/edit_entry.html'
 
     def get_context_data(self, **kwargs):
-        ctx = super(BlogEntry, self).get_context_data(**kwargs)
-        ctx['category_form'] = CategoryForm()
-        return ctx
+        context = super(BaseBlogEntry, self).get_context_data(**kwargs)
+        context['category_form'] = CategoryForm()
+        return context
 
     def get_object(self, queryset=None):
-        post = Blog.objects.all()
+        post = BlogEntry.objects.all()
         return post
 
     def form_valid(self, form):
@@ -129,7 +130,7 @@ class BlogEntry(View):
         tags = tags.split(',')
         lst_tgs = []
         for tag in tags:
-            t = Tags.objects.get_or_create(nombre=tag)
+            t = Tags.objects.get_or_create(name=tag)
             lst_tgs.append(t[0])
         slg = slugify(form.cleaned_data['title'])
         self.post.slug = slg
@@ -139,20 +140,20 @@ class BlogEntry(View):
         return HttpResponseRedirect(reverse('edit_entries'))
 
 
-class CreateBlogEntry(BlogEntry, CreateView):
+class CreateBlogEntry(BaseBlogEntry, CreateView):
     initial = {'status': 'D'}
 
 
-class UpdateBlogEntry(BlogEntry, UpdateView):
+class UpdateBlogEntry(BaseBlogEntry, UpdateView):
     context_object_name = 'post'
 
     def get_object(self, queryset=None):
-        post = Blog.objects.get(slug=self.kwargs['slug'])
+        post = get_object_or_404(BlogEntry, slug=self.kwargs['slug'])
         return post
 
 
 class AdminCategories(ListView):
-    model = Categories
+    model = Category
     context_object_name = 'model'
     template_name = 'blog/categories.html'
 
@@ -165,25 +166,24 @@ class AdminCategories(ListView):
 
     def get_queryset(self):
         qs = super(AdminCategories, self).get_queryset()
-        return qs.exclude(nombre="Default")
+        return qs.exclude(name="Default")
 
     def post(self, request, *args, **kwargs):
         form = DeleteCategory(request.POST)
         if self.request.is_ajax() and form.is_valid():
-            category = Categories.objects.get(nombre=form.cleaned_data['category_name'])
-            default = Categories.objects.get_or_create(nombre="Default", descripcion="Default")
+            category = get_object_or_404(Category, name=form.cleaned_data['category_name'])
+            default = Category.objects.get_or_create(name='Default', description='Default')
             try:
-                post = Blog.objects.get(categoria=category)
-                post.categoria = default[0]
+                post = get_object_or_404(BlogEntry, category=category)
+                post.category = default[0]
                 post.save()
             except:
                 pass
             category.delete()
-            return HttpResponse(json.dumps({"Success": "Success"}), content_type="application/json")
+            return HttpResponse(json.dumps({'Success': 'Success'}), content_type='application/json')
 
 
 class CreateCategory(View):
-
     def dispatch(self, request, *args, **kwargs):
         if not request.is_ajax():
             return HttpResponseRedirect(reverse('home'))
@@ -192,17 +192,18 @@ class CreateCategory(View):
     def post(self, request, *args, **kwargs):
         form = CategoryForm(request.POST)
         if self.request.is_ajax() and form.is_valid():
-            name = form.cleaned_data['nombre']
-            description = form.cleaned_data['descripcion']
-            cate, created = Categories.objects.get_or_create(nombre=name, descripcion=description)
+            name = form.cleaned_data['name']
+            description = form.cleaned_data['description']
+            cate, created = Category.objects.get_or_create(name=name, description=description)
             cate.save()
-            return HttpResponse(json.dumps({"Nombre": name, "Descripcion": description}), content_type="application/json")
+            return HttpResponse(json.dumps({'Nombre': name}),
+                                content_type='application/json')
 
 
 class LoginView(FormView):
     template_name = 'login.html'
     form_class = LoginForm
-    success_url = '/'
+    success_url = reverse_lazy('home')
 
     def form_valid(self, form):
         usuario = form.cleaned_data['username']
@@ -214,7 +215,7 @@ class LoginView(FormView):
 
 
 class BlogEntryDetail(DetailView):
-    model = Blog
+    model = BlogEntry
     template_name = 'blog/article.html'
     context_object_name = 'post'
 
@@ -228,7 +229,7 @@ class BlogEntryDetail(DetailView):
         form = ComentarioForm(request.POST)
         if form.is_valid():
             comentario = form.save(commit=False)
-            comentario.Blog = Blog.objects.get(slug=self.kwargs['slug'])
+            comentario.Blog = get_object_or_404(BlogEntry, slug=self.kwargs['slug'])
             comentario.nombre = form.cleaned_data['nombre']
             comentario.cuerpo = form.cleaned_data['cuerpo']
             comentario.save()

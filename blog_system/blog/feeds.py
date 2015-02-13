@@ -1,5 +1,5 @@
 from django.contrib.syndication.views import Feed
-from blog.models import Blog
+from blog.models import BlogEntry
 
 
 class EntradasFeed(Feed):
@@ -8,7 +8,7 @@ class EntradasFeed(Feed):
     description = "Entradas al blog"
 
     def items(self):
-        return Blog.objects.order_by('-time')
+        return BlogEntry.objects.order_by('-created_at')
 
     def item_title(self, item):
         return item.title
