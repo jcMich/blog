@@ -129,7 +129,9 @@ var category_post = function() {
                 data: $form.serialize(),
                 success: function(result){
                     var category = $("div#" + ID_MODAL_FORM + " #" + ID_NAME ).val();
-                    $( "#" + ID_CATEGORIES ).append("<option value='" + category + "'>" + category + "</option>");
+                    if(result.created){
+                        $( "#" + ID_CATEGORIES ).append("<option value='" + category + "'>" + category + "</option>");
+                    }
                     $( "#" + ID_CATEGORIES ).val(category);
                     $modalform.hide("slow");
                     $modalform.find("input:text, textarea").each(function(){

@@ -191,13 +191,12 @@ class CreateCategory(View):
 
     def post(self, request, *args, **kwargs):
         form = CategoryForm(request.POST)
-        if self.request.is_ajax() and form.is_valid():
+        if form.is_valid():
             name = form.cleaned_data['name']
             description = form.cleaned_data['description']
             cate, created = Category.objects.get_or_create(name=name, description=description)
-            cate.save()
-            return HttpResponse(json.dumps({'Nombre': name}),
-                                content_type='application/json')
+            return HttpResponse(json.dumps({'name': cate.name, 'created': created}), content_type='application/json')
+        return HttpResponse(json.dumps({'created': False}), content_type='application/json')
 
 
 class LoginView(FormView):
