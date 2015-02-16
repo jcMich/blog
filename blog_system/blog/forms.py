@@ -45,14 +45,14 @@ class DeleteCategory(forms.Form):
     category_name = forms.CharField()
 
 
-class UpdatePostForm(forms.Form):
+class UpdateBlogEntryForm(forms.Form):
     post_id = forms.CharField()
     comment = forms.CharField()
     category = forms.CharField()
     status = forms.CharField()
 
 
-class PostForm(ModelForm):
+class BlogEntryForm(ModelForm):
     content = forms.CharField(widget=CKEditorWidget(config_name='full_ckeditor'))
     abstract = forms.CharField(widget=CKEditorWidget(config_name='basic_ckeditor'))
     tags = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'inserta aqui los tags separados por , '}))
