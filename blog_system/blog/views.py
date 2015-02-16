@@ -118,7 +118,6 @@ class BaseBlogEntry(FormView):
         for tag in tags:
             lst_tgs.append(Tags.objects.get_or_create(name=tag)[0])
         post.slug = slugify(form.cleaned_data['title'])
-        post.save()
         post.tags = lst_tgs
         return super(BaseBlogEntry, self).form_valid(form)
 
