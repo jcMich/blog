@@ -42,8 +42,8 @@ class BlogEntry(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100)
-    slug = models.SlugField()
-    abstract = models.TextField(unique=True)
+    slug = models.SlugField(unique=True)
+    abstract = models.TextField()
     content = models.TextField()
     image = models.ImageField(upload_to=url)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)

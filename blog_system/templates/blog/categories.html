@@ -18,8 +18,8 @@
                 {% for element in model %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td><p class="name">{{ element.name }}</p></td>
-                        <td><div><p class="description">{{ element.description}}</p></div></td>
+                        <td><p class="name">{{ element }}</p></td>
+                        <td><div><p class="description">{{ element }}</p></div></td>
                         <td><input type="submit" value="Eliminar" class="btn btn-danger del_category"></td>
                     </tr>
                 {% endfor %}
