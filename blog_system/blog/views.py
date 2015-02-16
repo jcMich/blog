@@ -11,25 +11,24 @@ from django.utils.text import slugify
 from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
-from endless_pagination.views import AjaxListView, AjaxMultipleObjectTemplateResponseMixin
+from endless_pagination.views import AjaxListView
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 import json
 
 
 MONTHS_DIC = {
-   _('January'): 1, _('February'): 2, _('March'): 3, _('April'): 4, _('May'): 5, _('June'): 6,
-   _('July'): 7, _('Agoust'): 8, _('September'): 9, _('October'): 10, _('November'): 11, _('December'): 12
+    _('January'): 1, _('February'): 2, _('March'): 3, _('April'): 4, _('May'): 5, _('June'): 6,
+    _('July'): 7, _('Agoust'): 8, _('September'): 9, _('October'): 10, _('November'): 11, _('December'): 12
 }
 
 
-class Home(ListView, AjaxMultipleObjectTemplateResponseMixin):
+class Home(AjaxListView):
     model = BlogEntry
     context_object_name = 'posts'
-    paginate_by = 6
-    page_kwarg = 'page'
+#   paginate_by = 6
     template_name = 'blog/index.html'
-    page_template = 'blog/archive_entries.html'
+    page_template = 'blog/archive_page.html'
 
     def get_context_data(self, **kwargs):
         ctx = super(Home, self).get_context_data(**kwargs)
@@ -40,6 +39,7 @@ class Home(ListView, AjaxMultipleObjectTemplateResponseMixin):
         return ctx
 
     def get_queryset(self):
+        self.page_template
         c = self.request.GET.get('category')
         y = self.request.GET.get('year')
         m = self.request.GET.get('month')
@@ -51,27 +51,9 @@ class Home(ListView, AjaxMultipleObjectTemplateResponseMixin):
         return BlogEntry.objects.filter(status='U').order_by('-created_at')
 
 
-class Month(AjaxListView):
-    context_object_name = 'posts'
-    model = BlogEntry
-    template_name = 'blog/archive.html'
-    page_template = 'blog/archive_page.html'
-
-    def get_queryset(self):
-        y = self.kwargs['year']
-        m = self.kwargs['month']
-        if y and m:
-            archive_filter = BlogEntry.objects.filter(created_at__year=int(y), created_at__month=MONTHS_DIC[m])
-            return archive_filter.filter(status='U').order_by('-created_at')
-        else:
-            return BlogEntry.objects.all()  # agregar filtro para solo mostrar estado published
-
-
 class AdminEntries(ListView):
     model = BlogEntry
     context_object_name = 'posts'
-    paginate_by = 8
-    page_kwarg = 'page'
     template_name = 'blog/admin_entries.html'
 
     def get_context_data(self, **kwargs):
@@ -246,7 +228,6 @@ def log_out(request):
 
 
 home = Home.as_view()
-month = Month.as_view()
 admin_entries = login_required(AdminEntries.as_view())
 blog_entry_detail = BlogEntryDetail.as_view()
 create_blog_entry = login_required(CreateBlogEntry.as_view())

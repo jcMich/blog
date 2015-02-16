@@ -1,4 +1,6 @@
 # Django settings for blog_system project.
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, unicode_literals
 
 import os
 PROJECT_PATH = os.path.dirname(os.path.dirname(__file__))
@@ -193,9 +195,12 @@ POSTS_ENTRIES_POST_ENTRY_MODEL = 'blog.BlogEntry'
 # Defautl Views
 BLOG_ENTRIES_HOME_VIEW = 'blog.views.home'
 BLOG_ENTRIES_ENTRY_DETAIL_VIEW = 'blog.views.blog_entry_detail'
-BLOG_ENTRIES_MONTH_VIEW = 'blog.views.month'
 BLOG_ENTRIES_ENTRY_CREATE_VIEW = 'blog.views.create_blog_entry'
 BLOG_ENTRIES_ENTRY_UPDATE_VIEW = 'blog.views.update_blog_entry'
 BLOG_ENTRIES_CREATE_CATEGORY_VIEW = 'blog.views.create_category'
 BLOG_ENTRIES_ENTRIES_ADMIN_VIEW = 'blog.views.admin_entries'
 BLOG_ENTRIES_CATEGORIES_ADMIN_VIEW = 'blog.views.admin_categories'
+
+# Endles pagination
+ENDLESS_PAGINATION_PREVIOUS_LABEL = "«"
+ENDLESS_PAGINATION_NEXT_LABEL = "»"

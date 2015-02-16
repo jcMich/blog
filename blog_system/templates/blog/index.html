@@ -16,97 +16,25 @@
                 {% if categoria %}
                      <h1>{{ categoria|title }}</h1>
                 {% endif %}
-                <!--  POST  -->
                 {% if endlesspagination %}
-                     {% load endless %}
-                     {% paginate posts %}
-                {% endif %}
-                {% for post in posts %}
-                    <div class="col-md-6">
-                        <div class="post hentry">
-                            <div class="post-body entry-content" id="post-body">
-                                <span>
-                                    <div class="entry-image">
-{#                                        <a href="{% url 'post' post.slug %}">#}
-                                        <a href="{{ post.get_absolute_url }}">
-                                            <img class="thumb img-responsive" src="{{ post.image.url }}" style="max-height:200px;">
-                                        </a>
-                                    </div>
-                                </span>
-                                <div class="article-container">
-                                    <div class="inner-content">
-                                        <div class="article-category">
-                                            <a href="{% url 'home' %}?category={{ post.category }}" rel="tag"> {{post.category}} </a>
-                                        </div>
-                                        <div class="clr"></div>
-                                        <div class="post-date">
-                                            <span class="post-month">{{post.created_at|date:"M"}}</span>
-                                            <strong class="post-day">{{post.created_at|date:"d"}}</strong>
-                                        </div>
-                                        <div class="inner-shadow">
-                                        <h2 class="article-title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
-                                        </div>
-                                        <div class="body-post">
-                                            {% autoescape off %}
-                                                {{ post.abstract|truncatechars:150 }}
-                                            {% endautoescape %}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style="clearfix"></div>
-                            </div>
-                            <div class="post-footer">
-                                <div class="post-footer-line post-footer-line-1"></div>
-                                <div class="clr"></div>
-                                <div class="post-footer-line post-footer-line-2"></div>
-                                <div class="post-footer-line post-footer-line-3">
-                                    <span class="post-location"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-                {% if endlesspagination %}
-                    {% show_more %}
+                     <!--  ENDLESS  -->
+                    {% include page_template %}
                     {% block js %}
-                    {{ block.super }}
-                    <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
-                    <script src="{{ STATIC_URL }}endless_pagination/js/endless-pagination.js"></script>
-                    <script>$.endlessPaginate({
-                        paginateOnScroll: true,
-                        paginateOnScrollMargin: 60
-                    });</script>
-                {% endblock %}
+                        {{ block.super }}
+                        <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+                        <script src="{{ STATIC_URL }}endless_pagination/js/endless-pagination.js"></script>
+                        <script>$.endlessPaginate({
+                            paginateOnScroll: true,
+                            paginateOnScrollMargin: 60
+                        });</script>
+                    {% endblock %}
+                    <!-- END ENDLESS -->
+                {% else %}
+                    {% include page_template %}
+                    <!--  END POST  -->
                 {% endif %}
-                <!--  END POST  -->
             </div>
         </div>
-        {% if not endlesspagination and page_obj.paginator.num_pages > 1 %}
-            <nav>
-                <ul class="pagination">
-                    {% if page_obj.has_previous %}
-                    <li>
-                        <a href="{% url 'home' %}?page={{ page_obj.previous_page_number}}{% if category %}&category={{ category }}
-                        {% endif %} " aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-                    </li>
-                    {% endif %}
-                    {% for b in page_obj.paginator.page_range %}
-                        {% if b == page_obj.number %}
-                        <li class="active"><a href="{% url 'home' %}?page={{ b }}{% if category%}&category={{ category }}{% endif %}">{{ b }} <span class="sr-only">(current)</span></a></li>
-                        {% else %}
-                        <li><a href="{% url 'home' %}?page={{ b }}{% if category%}&category={{ category }}{% endif %} ">{{ b }}</a></li>
-                        {% endif %}
-                    {% endfor %}
-                    {% if page_obj.has_next %}
-                    <li>
-                        <a href="{% url 'home' %}?page={{ page_obj.next_page_number }}{% if category%}&category={{ category }}{% endif %} " aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </nav>
-        {% endif %}
     </div>
 
  {% endblock %}

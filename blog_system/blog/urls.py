@@ -12,5 +12,5 @@ urlpatterns = patterns('',
                        url(r'^entries/$', settings.BLOG_ENTRIES_ENTRIES_ADMIN_VIEW, name='edit_entries'),
                        url(r'^categories/$', settings.BLOG_ENTRIES_CATEGORIES_ADMIN_VIEW, name='categories'),
                        url(r'^category/add/$', settings.BLOG_ENTRIES_CREATE_CATEGORY_VIEW, name='create_category'),
-                       url(r'^month/(?P<year>\d+)/(?P<month>\w+)/$', settings.BLOG_ENTRIES_MONTH_VIEW, name='month'),
+                     #  url(r'^month/(?P<year>\d+)/(?P<month>\w+)/$', settings.BLOG_ENTRIES_MONTH_VIEW, name='month'),
                        url(r'^post/edit/(?P<slug>.*)/$', settings.BLOG_ENTRIES_ENTRY_UPDATE_VIEW, name='edit'))

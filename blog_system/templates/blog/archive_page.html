@@ -1,6 +1,6 @@
         		{% load endless %}
                 <!--  POST  -->
-                {% paginate posts %}
+                {% paginate 4 posts %}
                 {% for post in posts %}
                     <div class="col-md-6">
                         <div class="post-entry">
@@ -20,7 +20,7 @@
                                         </div>
                                         <div class="clr"></div>
                                         <div class="post-date">
-                                            <span class="post-month">{{post.created_ad|date:"M"}}</span>
+                                            <span class="post-month">{{post.created_at|date:"M"}}</span>
                                             <strong class="post-day">{{post.created_at|date:"d"}}</strong>
                                         </div>
                                         <div class="inner-shadow">
@@ -46,5 +46,32 @@
                         </div>
                     </div>
                 {% endfor %}
-                {% show_more %}
+                {% if endlesspagination %}
+                    {% show_more %}
+                {% else %}
+                {% get_pages %}
+                <div class="col-lg-12">
+                    <nav>
+                        <ul class="pagination">
+                        {% if pages.previous %}
+                            <li>
+                            {{ pages.previous}}
+                            </li>
+                        {% endif %}
+                        {% for page in pages %}
+                            {% if page.is_current %}
+                                <li class="active">{{ page }}</li>
+                            {% else %}
+                                <li>{{ page }}</li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if pages.next %}
+                            <li>
+                            {{ pages.next }}
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+                {% endif %}
                 <!--  END POST  -->
