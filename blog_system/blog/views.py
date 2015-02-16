@@ -101,33 +101,26 @@ class AdminEntries(ListView):
         return super(AdminEntries, self).get(request, *args, **kwargs)
 
 
-class BaseBlogEntry(View):
+class BaseBlogEntry(FormView):
     form_class = PostForm
     template_name = 'blog/edit_entry.html'
+    success_url = reverse_lazy('edit_entries')
 
     def get_context_data(self, **kwargs):
         context = super(BaseBlogEntry, self).get_context_data(**kwargs)
         context['category_form'] = CategoryForm()
         return context
 
-    def get_object(self, queryset=None):
-        post = BlogEntry.objects.all()
-        return post
-
     def form_valid(self, form):
-        self.post = form.save(commit=False)
-        tags = unicode(form.cleaned_data['tags'])
-        tags = tags.split(',')
+        post = form.save(commit=False)
+        tags = unicode(form.cleaned_data['tags']).split(',')
         lst_tgs = []
         for tag in tags:
-            t = Tags.objects.get_or_create(name=tag)
-            lst_tgs.append(t[0])
-        slg = slugify(form.cleaned_data['title'])
-        self.post.slug = slg
-        self.post.save()
-        self.post.tags = lst_tgs
-        self.post.save()
-        return HttpResponseRedirect(reverse('edit_entries'))
+            lst_tgs.append(Tags.objects.get_or_create(name=tag)[0])
+        post.slug = slugify(form.cleaned_data['title'])
+        post.save()
+        post.tags = lst_tgs
+        return super(BaseBlogEntry, self).form_valid(form)
 
 
 class CreateBlogEntry(BaseBlogEntry, CreateView):
@@ -181,8 +174,6 @@ class CreateCategory(View):
             return HttpResponse(json.dumps({'name': cate.name, 'created': created}), content_type='application/json')
         return HttpResponse(json.dumps({'created': False}), content_type='application/json')
 
-from django.contrib.auth.forms import AuthenticationForm
-
 
 class LoginView(FormView):
     template_name = 'login.html'
@@ -216,10 +207,8 @@ class BlogEntryDetail(DetailView):
         if form.is_valid():
             comentario = form.save(commit=False)
             comentario.Blog = get_object_or_404(BlogEntry, slug=self.kwargs['slug'])
-            comentario.nombre = form.cleaned_data['nombre']
-            comentario.cuerpo = form.cleaned_data['cuerpo']
             comentario.save()
-            return HttpResponseRedirect(reverse('post/detail/', kwargs={'slug': self.kwargs['slug']}))
+            return HttpResponseRedirect(reverse('post', kwargs={'slug': self.kwargs['slug']}))
 
 
 def log_out(request):
