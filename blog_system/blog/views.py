@@ -26,12 +26,13 @@ MONTHS_DIC = {
 class Home(AjaxListView):
     model = BlogEntry
     context_object_name = 'posts'
-#   paginate_by = 6
+    paginate_by = 4
     template_name = 'blog/index.html'
-    page_template = 'blog/archive_page.html'
+    page_template = 'blog/blog_entries.html'
 
     def get_context_data(self, **kwargs):
         ctx = super(Home, self).get_context_data(**kwargs)
+        ctx['paginate_by'] = self.paginate_by
         if self.request.GET.get('category'):
             ctx['category'] = self.request.GET.get('category')
         if self.request.GET.get('year') and self.request.GET.get('month'):
@@ -46,7 +47,6 @@ class Home(AjaxListView):
         if c:
             return BlogEntry.objects.filter(category__name=c).filter(status='U').order_by('-created_at')
         elif y and m:
-            self.paginate_by = None
             return BlogEntry.objects.filter(created_at__year=int(y), created_at__month=MONTHS_DIC[m])
         return BlogEntry.objects.filter(status='U').order_by('-created_at')
 
