@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, View
 from django.core.urlresolvers import reverse, reverse_lazy
 from .models import BlogEntry, comentarios, Tags, Category, STATUS_CHOICES
-from .forms import ComentarioForm, UpdatePostForm, LoginForm, PostForm, CategoryForm, filter_form, DeleteCategory
+from .forms import ComentarioForm, UpdateBlogEntryForm, LoginForm, BlogEntryForm, CategoryForm, filter_form, DeleteCategory
 from django.utils.text import slugify
 from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect, HttpResponse
@@ -40,7 +40,6 @@ class Home(AjaxListView):
         return ctx
 
     def get_queryset(self):
-        self.page_template
         c = self.request.GET.get('category')
         y = self.request.GET.get('year')
         m = self.request.GET.get('month')
@@ -72,7 +71,7 @@ class AdminEntries(ListView):
         return ctx
 
     def post(self, request):
-        form = UpdatePostForm(request.POST)
+        form = UpdateBlogEntryForm(request.POST)
         if self.request.is_ajax() and form.is_valid():
             postid = form.cleaned_data['post_id']
             newcate = form.cleaned_data['category']
@@ -102,7 +101,7 @@ class AdminEntries(ListView):
 
 
 class BaseBlogEntry(FormView):
-    form_class = PostForm
+    form_class = BlogEntryForm
     template_name = 'blog/edit_entry.html'
     success_url = reverse_lazy('edit_entries')
 
@@ -142,7 +141,6 @@ class AdminCategories(ListView):
     def get_context_data(self, **kwargs):
         ctx = super(AdminCategories, self).get_context_data(**kwargs)
         ctx['form'] = CategoryForm()
-        ctx['template_title'] = self.model._meta.object_name
         ctx['js_functions'] = 'category_template()'
         return ctx
 
