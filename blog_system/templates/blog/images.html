@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	{% for image in images_list %}
+	<div style="float: left; margin: 5px">
+		<img src="{% static 'photos' %}/{{image}}" width="300px" height="300px">
+	</div>
+	{% endfor %}
+	<script type="text/javascript">
+	$("img").on("click", function(){
+		image_url = $(this).attr("src");
+		window.opener.CKEDITOR.tools.callFunction( 21, image_url );
+		window.close();
+	});
+	</script>
+</body>
+</html>
