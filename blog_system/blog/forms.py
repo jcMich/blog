@@ -53,13 +53,12 @@ class UpdateBlogEntryForm(forms.Form):
 
 
 class BlogEntryForm(ModelForm):
-    content = forms.CharField(widget=CKEditorWidget(config_name='full_ckeditor'))
-    abstract = forms.CharField(widget=CKEditorWidget(config_name='basic_ckeditor'))
+
     tags = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'inserta aqui los tags separados por , '}))
     comment = forms.BooleanField(required=False)
 
     def __init__(self, *args, **kwargs):
-        super(PostForm, self).__init__(*args, **kwargs)
+        super(BlogEntryForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
@@ -70,24 +69,10 @@ class BlogEntryForm(ModelForm):
                 Field('title'),
             ),
             Div(
-                Div(
-                    HTML('<label class="control-label col-lg-2">{{ form.abstract.label }}</label>'),  # In the end of the Form a js code erese a class.
-                ),
-                Div(
-                    HTML('{{ form.abstract }}'),
-                    css_class='col-lg-8'
-                ),
-                css_class='form-group',
+                Field('abstract', css_class='ckeditor'),
             ),
             Div(
-                Div(
-                    HTML('<label class="control-label col-lg-2">{{ form.content.label }}</label>'),
-                ),
-                Div(
-                    HTML('{{ form.content }}'),
-                    css_class='col-lg-8'
-                ),
-                css_class='form-group',
+                Field('content', css_class='ckeditor'),
             ),
             Div(
                 Field('image'),
@@ -109,6 +94,9 @@ class BlogEntryForm(ModelForm):
                 Button('Cancel', _("Cancel"), css_class='btn btn-danger'),
                 css_class='col-lg-9 col-lg-offset-1'
             ),
+            HTML('<script type="text/javascript">\
+                CKEDITOR.replace("id_abstract", {toolbar: [{name: "basicstyles", items : [ "Source", "-", "Bold","Italic", "Strike", "RemoveFormat"]}],});\
+                CKEDITOR.replace("id_content", {filebrowserImageBrowseUrl: "/blog/images/"});</script>'),
         )
 
     class Meta:

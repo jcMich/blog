@@ -112,21 +112,19 @@ class BaseBlogEntry(FormView):
 
     def form_valid(self, form):
         post = form.save(commit=False)
+        post.save()
         tags = unicode(form.cleaned_data['tags']).split(',')
         lst_tgs = []
         for tag in tags:
             lst_tgs.append(Tags.objects.get_or_create(name=tag)[0])
         post.tags = lst_tgs
+        if 'slug' not in self.kwargs:
+            post.slug = slugify(form.cleaned_data['title'])
         return super(BaseBlogEntry, self).form_valid(form)
 
 
 class CreateBlogEntry(BaseBlogEntry, CreateView):
     initial = {'status': 'D'}
-
-    def form_valid(self, form):
-        post = form.save(commit=False)
-        post.slug = slugify(form.cleaned_data['title'])
-        return super(BaseBlogEntry, self).form_valid(form)
 
 
 class UpdateBlogEntry(BaseBlogEntry, UpdateView):

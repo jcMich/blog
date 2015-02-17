@@ -81,7 +81,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'ckeditor',
     'endless_pagination',
     'blog',
     'crispy_forms',
@@ -130,8 +129,6 @@ MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
 
 MEDIA_URL = '/media/'
 
-CKEDITOR_UPLOAD_PATH = "photos/ckeditor/"
-
 STATIC_ROOT = os.path.join(PROJECT_PATH, 'colstatic')
 
 STATIC_URL = '/static/'
@@ -160,33 +157,6 @@ SITE_TITLE = 'Blog Dubalu'
 SITE_URL = 'http://www.dubalu.com'
 SITE_IMAGE ='http://www.deipi.com/static/images/html/deipi/deipi_logo.png?'
 
-CKEDITOR_CONFIGS = {
-
-    'basic_ckeditor': {
-        'toolbar': 'Basic',
-        'toolbarCanCollapse': False,
-        'height': '100%',
-        'width': '100%',
-    },
-    'full_ckeditor': {
-        'full': True,
-        # 'toolbar': [["Format", "Bold", "Italic", 'TextColor'],
-        #             ['codeSnippet', 'NumberedList', 'BulletedList', "Indent", "Outdent", 'JustifyLeft', 'JustifyCenter',
-        #                 'JustifyRight', 'JustifyBlock'],
-        #             ['HorizontalRule', 'SpecialChar', "Table", "Subscript", "Superscript"],
-        #             ['Undo', 'Redo'],
-        #             ["Source"]],
-        # 'height': 200,
-        # 'width': 480,
-        'emailProtection': 'encode',
-        'toolbarLocation': 'top',
-        'defaultLanguage': 'es',
-        'toolbarCanCollapse': False,
-        'width': '100%',
-        # 'uiColor': '#666565'
-    },
-}
-
 # config
 
 POSTS_ENTRIES_POST_ENTRY_MODEL = 'blog.BlogEntry'
@@ -200,6 +170,7 @@ BLOG_ENTRIES_ENTRY_UPDATE_VIEW = 'blog.views.update_blog_entry'
 BLOG_ENTRIES_CREATE_CATEGORY_VIEW = 'blog.views.create_category'
 BLOG_ENTRIES_ENTRIES_ADMIN_VIEW = 'blog.views.admin_entries'
 BLOG_ENTRIES_CATEGORIES_ADMIN_VIEW = 'blog.views.admin_categories'
+BLOG_IMAGES_LIST = 'blog.views.images_list'
 
 # Endles pagination
 ENDLESS_PAGINATION_PREVIOUS_LABEL = "«"
