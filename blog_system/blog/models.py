@@ -4,6 +4,8 @@ import os
 from datetime import datetime
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models import signals
+from django.dispatch import receiver
 from django.utils.text import slugify
 
 STATUS_CHOICES = (
@@ -57,11 +59,17 @@ class BlogEntry(models.Model):
         # return reverse('post', self.slug)
         return '/blog/%s' % self.slug
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     class Meta:
         ordering = ['-created_at']
+
+
+@receiver(signals.pre_save, sender=BlogEntry)
+def pre_save_format_tags(sender, **kwargs):
+    if not kwargs['instance'].slug:
+        kwargs['instance'].slug = slugify(kwargs['instance'].title)
 
 
 class comentarios(models.Model):
