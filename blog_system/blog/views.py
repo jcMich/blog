@@ -7,7 +7,6 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, V
 from django.core.urlresolvers import reverse, reverse_lazy
 from .models import BlogEntry, comentarios, Tags, Category, STATUS_CHOICES
 from .forms import ComentarioForm, UpdateBlogEntryForm, LoginForm, BlogEntryForm, CategoryForm, filter_form, DeleteCategory
-from django.utils.text import slugify
 from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
@@ -73,6 +72,7 @@ class AdminEntries(ListView):
     def post(self, request):
         form = UpdateBlogEntryForm(request.POST)
         if self.request.is_ajax() and form.is_valid():
+            # post = form.save(commit=False)
             postid = form.cleaned_data['post_id']
             newcate = form.cleaned_data['category']
             newstatus = form.cleaned_data['status']
@@ -84,20 +84,20 @@ class AdminEntries(ListView):
             post.save()
             return HttpResponse(json.dumps({'Success': 'Success'}), content_type='application/json')
 
-    def get(self, request, *args, **kwargs):
-        filter_search = request.GET.get('search')
-        filter_category = request.GET.get('category')
-        filter_status = request.GET.get('status')
+    def get_queryset(self):
+        filter_search = self.request.GET.get('search')
+        filter_category = self.request.GET.get('category')
+        filter_status = self.request.GET.get('status')
         if filter_search:
-            self.queryset = BlogEntry.objects.filter(Q(title__icontains=filter_search) |
+            queryset = BlogEntry.objects.filter(Q(title__icontains=filter_search) |
                                                      Q(tags__name__icontains=filter_search)).distinct().order_by('-created_at')
         else:
-            self.queryset = BlogEntry.objects.all().order_by('-created_at')
+            queryset = BlogEntry.objects.all().order_by('-created_at')
         if filter_category:
-            self.queryset = self.queryset.filter(category=filter_category)
+            queryset = queryset.filter(category=filter_category)
         if filter_status:
-            self.queryset = self.queryset.filter(status=filter_status)
-        return super(AdminEntries, self).get(request, *args, **kwargs)
+            queryset = queryset.filter(status=filter_status)
+        return queryset
 
 
 class BaseBlogEntry(FormView):
