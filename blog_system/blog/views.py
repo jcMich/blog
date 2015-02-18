@@ -25,7 +25,7 @@ MONTHS_DIC = {
 class Home(AjaxListView):
     model = BlogEntry
     context_object_name = 'posts'
-    paginate_by = 4
+    paginate_by = 2
     template_name = 'blog/index.html'
     page_template = 'blog/blog_entries.html'
 

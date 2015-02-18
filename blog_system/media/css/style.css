@@ -171,4 +171,7 @@ img.post-image {
 form.new-cate {
     margin: 10px;
 }
-
+div.pagination .endless_page_current{
+    color: #fff;
+    background-color: #337AB7;
+}

@@ -52,25 +52,9 @@
                 {% get_pages %}
                 <div class="col-lg-12">
                     <nav>
-                        <ul class="pagination">
-                        {% if pages.previous %}
-                            <li>
-                            {{ pages.previous}}
-                            </li>
-                        {% endif %}
-                        {% for page in pages %}
-                            {% if page.is_current %}
-                                <li class="active">{{ page }}</li>
-                            {% else %}
-                                <li>{{ page }}</li>
-                            {% endif %}
-                        {% endfor %}
-                        {% if pages.next %}
-                            <li>
-                            {{ pages.next }}
-                            </li>
-                            {% endif %}
-                        </ul>
+                    <div class="pagination">
+                        <li>{{ pages }}</li>
+                    </div>
                     </nav>
                 </div>
                 {% endif %}
