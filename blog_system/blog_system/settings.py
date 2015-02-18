@@ -156,6 +156,7 @@ SITE_TYPE = 'News blog'
 SITE_TITLE = 'Blog Dubalu'
 SITE_URL = 'http://www.dubalu.com'
 SITE_IMAGE ='http://www.deipi.com/static/images/html/deipi/deipi_logo.png?'
+SITE_TWITTER = '@twitter'
 
 # config
 

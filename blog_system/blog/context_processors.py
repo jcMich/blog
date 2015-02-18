@@ -14,6 +14,7 @@ def blog_context_processor(request):
         "Url": settings.SITE_URL,
         "Image": settings.SITE_IMAGE,
         "categorias": Category.objects.all(),
-        "archive": BlogEntry.objects.filter(status='U').order_by('-created_at')
+        "archive": BlogEntry.objects.filter(status='U').order_by('-created_at'),
+        "twitter_acount": settings.SITE_TWITTER
     }
     return context

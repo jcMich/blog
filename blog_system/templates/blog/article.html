@@ -4,11 +4,19 @@
         <meta property="og:locale" content="{{ Locale }}"/>
         <meta property="og:type" content="Article"/>
         <meta property="og:title" content="{{ post.title }}"/>
-        {% autoescape off %}
-        <meta property="og:description" content="{{ post.abstract|striptags }}"/>
-        {% endautoescape %}
         <meta property="og:url" content="{{ Url }}{{ post.get_absolute_url }}"/>
         <meta property="og:image" content="{{ Url }}{{ post.image.url }}"/>
+        <meta name="twitter:card" content="app" />
+        <meta name="twitter:site" content="{{ twitter_account }}" />
+        <meta name="twitter:title" content="{{ post.title }}" />
+        <meta name="twitter:domain" content="{{ Url }}" />
+        <meta name="twitter:creator" content="{{ twitter_account }}" />
+        <meta name="twitter:url" content="{{ Url }}{{ post.image.url }}" />
+        <meta name="twitter:image" content="{{ Url }}{{ post.image.url }}" />
+        {% autoescape off %}
+        <meta property="og:description" content="{{ post.abstract|striptags }}"/>
+        <meta name="twitter:description" content="{{ post.abstract|striptags }}" />
+        {% endautoescape %}
     {% for tag in post.tags.all %}
         <meta property="article:tag" content="{{ tag }}"/>
     {% endfor %}
