@@ -103,7 +103,6 @@ class AdminEntries(ListView):
 class BaseBlogEntry(FormView):
     form_class = BlogEntryForm
     template_name = 'blog/edit_entry.html'
-    success_url = reverse_lazy('edit_entries')
 
     def get_context_data(self, **kwargs):
         context = super(BaseBlogEntry, self).get_context_data(**kwargs)
@@ -118,9 +117,8 @@ class BaseBlogEntry(FormView):
         for tag in tags:
             lst_tgs.append(Tags.objects.get_or_create(name=tag)[0])
         post.tags = lst_tgs
-        if 'slug' not in self.kwargs:
-            post.slug = slugify(form.cleaned_data['title'])
-        return super(BaseBlogEntry, self).form_valid(form)
+        post.save()
+        return HttpResponseRedirect(reverse('home'))
 
 
 class CreateBlogEntry(BaseBlogEntry, CreateView):
